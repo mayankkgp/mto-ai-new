@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 import * as api from '../mockApi';
 
 const EnquiryContext = createContext(null);
@@ -26,8 +27,7 @@ export const EnquiryProvider = ({ children }) => {
       const data = await api.fetchEnquiries();
       setEnquiries(data);
     } catch (error) {
-      console.error('Failed to fetch enquiries:', error);
-      // In a real app, trigger a toast here
+      toast.error("Failed to load enquiries", { description: error.message });
     } finally {
       setIsGlobalLoading(false);
     }
@@ -64,9 +64,10 @@ export const EnquiryProvider = ({ children }) => {
         }
         return [...prev, JSON.parse(JSON.stringify(saved))];
       });
+      toast.success("Enquiry saved successfully");
       return saved;
     } catch (error) {
-      console.error('Failed to save enquiry:', error);
+      toast.error("Failed to save enquiry", { description: error.message });
       throw error;
     } finally {
       setIsActionLoading(false);
@@ -86,8 +87,9 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
+      toast.success(`Enquiry status updated to ${newStatus}`);
     } catch (error) {
-      console.error('Failed to update status:', error);
+      toast.error("Failed to update status", { description: error.message });
       throw error;
     } finally {
       setIsActionLoading(false);
@@ -112,8 +114,9 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
+      toast.success(`File "${file.name}" uploaded successfully`);
     } catch (error) {
-      console.error('Upload failed:', error);
+      toast.error("Upload failed", { description: error.message });
       throw error;
     } finally {
       setUploadProgress(0);
@@ -135,8 +138,9 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
+      toast.success("File deleted successfully");
     } catch (error) {
-      console.error('Delete failed:', error);
+      toast.error("Delete failed", { description: error.message });
       throw error;
     } finally {
       setIsActionLoading(false);
@@ -160,8 +164,9 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
+      toast.success("Task added successfully");
     } catch (error) {
-      console.error('Failed to add task:', error);
+      toast.error("Failed to add task", { description: error.message });
       throw error;
     } finally {
       setIsActionLoading(false);
@@ -170,7 +175,6 @@ export const EnquiryProvider = ({ children }) => {
 
   const toggleTaskCompletion = async (taskId, isCompleted) => {
     if (!activeEnquiryId) return;
-    // We don't necessarily want a global action loading for a simple toggle
     try {
       await api.updateTaskStatus(taskId, isCompleted);
       setEnquiries(prev => {
@@ -190,8 +194,9 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
+      toast.success(isCompleted ? "Task marked as completed" : "Task marked as pending");
     } catch (error) {
-      console.error('Failed to update task:', error);
+      toast.error("Failed to update task", { description: error.message });
       throw error;
     }
   };
