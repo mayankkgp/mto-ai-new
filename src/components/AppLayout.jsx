@@ -43,31 +43,28 @@ const SidebarItem = ({ item, isCollapsed, isActive, onClick }) => {
   
   return (
     <Tooltip delayDuration={0}>
-      <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          className={cn(
-            "w-full justify-start gap-4 px-4 py-nav-fluid group relative transition-colors",
-            isActive ? "text-white bg-white/10" : "text-gray-400 hover:text-white hover:bg-white/5",
-            isCollapsed && "justify-center px-0"
-          )}
-          onClick={() => onClick(item.id)}
-        >
-          <Icon className="w-[18px] h-[18px] shrink-0" />
-          {!isCollapsed && (
-            <span className="text-xs font-medium tracking-wide uppercase truncate">
-              {item.label}
-            </span>
-          )}
-          {isActive && (
-            <motion.div
-              layoutId="activeIndicator"
-              className="absolute left-0 top-0 w-1 h-full bg-[#818CF8]"
-              initial={false}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
-          )}
-        </Button>
+      <TooltipTrigger
+        className={cn(
+          "w-full flex items-center justify-start gap-4 px-4 py-nav-fluid group relative transition-colors cursor-pointer outline-none rounded-lg",
+          isActive ? "text-white bg-white/10" : "text-gray-400 hover:text-white hover:bg-white/5",
+          isCollapsed && "justify-center px-0"
+        )}
+        onClick={() => onClick(item.id)}
+      >
+        <Icon className="w-[18px] h-[18px] shrink-0" />
+        {!isCollapsed && (
+          <span className="text-xs font-medium tracking-wide uppercase truncate">
+            {item.label}
+          </span>
+        )}
+        {isActive && (
+          <motion.div
+            layoutId="activeIndicator"
+            className="absolute left-0 top-0 w-1 h-full bg-[#818CF8]"
+            initial={false}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          />
+        )}
       </TooltipTrigger>
       {isCollapsed && (
         <TooltipContent side="right" className="bg-[#151619] text-white border-white/10">
@@ -181,7 +178,7 @@ export const AppLayout = ({ children }) => {
         <MainWorkspace>
           {/* We pass isCompact and displayEnquiry down via context or props if needed */}
           {React.Children.map(children, child => {
-            if (React.isValidElement(child)) {
+            if (React.isValidElement(child) && typeof child.type !== 'string') {
               return React.cloneElement(child, { isCompact, displayEnquiry: !!activeEnquiryId });
             }
             return child;

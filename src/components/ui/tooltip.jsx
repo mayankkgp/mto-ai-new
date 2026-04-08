@@ -1,4 +1,5 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
 
@@ -16,8 +17,9 @@ function Tooltip({ ...props }) {
   return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
 }
 
-function TooltipTrigger({ ...props }) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
+function TooltipTrigger({ asChild = false, ...props }) {
+  const Comp = asChild ? Slot : TooltipPrimitive.Trigger;
+  return <Comp data-slot="tooltip-trigger" {...props} />;
 }
 
 function TooltipContent({
