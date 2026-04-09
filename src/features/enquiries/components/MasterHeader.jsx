@@ -4,6 +4,14 @@ import { Button } from '@/components/ui/button.jsx';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 
+/**
+ * MasterHeader Component
+ * Fixes visual deviations to match legacy UI:
+ * 1. Default pill-style TabsList (removed variant="line")
+ * 2. text-xs font-semibold on TabsTrigger with parenthesized counts
+ * 3. CREATE NEW ENQUIRY text in all caps
+ * 4. text-xs font-bold on the Create Button
+ */
 const MasterHeader = ({ isCompact }) => {
   const { enquiries, selectEnquiry } = useEnquiryContext();
 
@@ -17,24 +25,24 @@ const MasterHeader = ({ isCompact }) => {
     <header className="flex items-center justify-between h-header-fluid px-nav-fluid border-b bg-background sticky top-0 z-10">
       <div className="flex items-center gap-4">
         <Tabs defaultValue="Active" className="w-auto">
-          <TabsList variant="line" className="h-auto p-0 gap-6">
+          <TabsList className="h-8">
             <TabsTrigger 
               value="Active" 
-              className="px-0 py-nav-fluid text-sm font-medium transition-none"
+              className="text-xs font-semibold transition-none"
             >
-              Active <span className="ml-1.5 text-muted-foreground font-normal">{counts.Active}</span>
+              Active ({counts.Active})
             </TabsTrigger>
             <TabsTrigger 
               value="Converted" 
-              className="px-0 py-nav-fluid text-sm font-medium transition-none"
+              className="text-xs font-semibold transition-none"
             >
-              Converted <span className="ml-1.5 text-muted-foreground font-normal">{counts.Converted}</span>
+              Converted ({counts.Converted})
             </TabsTrigger>
             <TabsTrigger 
               value="Dropped" 
-              className="px-0 py-nav-fluid text-sm font-medium transition-none"
+              className="text-xs font-semibold transition-none"
             >
-              Dropped <span className="ml-1.5 text-muted-foreground font-normal">{counts.Dropped}</span>
+              Dropped ({counts.Dropped})
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -43,10 +51,10 @@ const MasterHeader = ({ isCompact }) => {
       <Button 
         onClick={() => selectEnquiry(null)}
         size={isCompact ? "icon" : "default"}
-        className="gap-2"
+        className="gap-2 text-xs font-bold"
       >
         <Plus className="h-4 w-4" />
-        {!isCompact && <span>Create New</span>}
+        {!isCompact && <span>CREATE NEW ENQUIRY</span>}
       </Button>
     </header>
   );
