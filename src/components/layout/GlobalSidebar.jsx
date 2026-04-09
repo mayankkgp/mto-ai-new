@@ -26,12 +26,7 @@ const SIDEBAR_CONFIG = {
     { id: 'tasks', label: 'Tasks', icon: CheckSquare },
     { id: 'reports', label: 'Reports', icon: BarChart2 },
     { id: 'settings', label: 'Settings', icon: Settings }
-  ],
-  user: {
-    name: "Mayank Kumar",
-    role: "Revenue Manager",
-    initials: "MK"
-  }
+  ]
 };
 
 const SidebarItem = ({ item, isCollapsed, isActive, onClick }) => {
@@ -71,7 +66,7 @@ const SidebarItem = ({ item, isCollapsed, isActive, onClick }) => {
   );
 };
 
-export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab }) => {
+export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab, user }) => {
   const BrandIcon = SIDEBAR_CONFIG.brand.icon;
 
   return (
@@ -117,13 +112,13 @@ export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiv
         <div className={cn("flex items-center gap-3", isCollapsed && "justify-center")}>
           <Avatar className="w-8 h-8 shrink-0 border border-white/10">
             <AvatarFallback className="bg-primary text-white text-[10px]">
-              {SIDEBAR_CONFIG.user.initials}
+              {user?.initials || '??'}
             </AvatarFallback>
           </Avatar>
           {!isCollapsed && (
             <div className="overflow-hidden">
-              <p className="text-xs font-semibold truncate">{SIDEBAR_CONFIG.user.name}</p>
-              <p className="text-[10px] text-gray-500 truncate">{SIDEBAR_CONFIG.user.role}</p>
+              <p className="text-xs font-semibold truncate">{user?.name || 'User'}</p>
+              <p className="text-[10px] text-gray-500 truncate">{user?.role || 'Role'}</p>
             </div>
           )}
         </div>

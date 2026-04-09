@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useEnquiryContext } from '@/contexts/EnquiryContext';
 import { TooltipProvider } from '@/components/ui/tooltip.jsx';
 import { GlobalSidebar } from './layout/GlobalSidebar.jsx';
 
@@ -14,7 +13,13 @@ const MainWorkspace = ({ children }) => {
 export const AppLayout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState('enquiries');
-  const { activeEnquiryId } = useEnquiryContext();
+  
+  // Mock user data - in a real app this might come from an AuthContext
+  const user = {
+    name: "Mayank Kumar",
+    role: "Revenue Manager",
+    initials: "MK"
+  };
 
   // Derived state for responsive behaviors
   const [isCompact, setIsCompact] = useState(false);
@@ -41,12 +46,13 @@ export const AppLayout = ({ children }) => {
           setIsCollapsed={setIsCollapsed} 
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          user={user}
         />
         <MainWorkspace>
-          {/* We pass isCompact and displayEnquiry down via context or props if needed */}
+          {/* We pass isCompact down via props if needed */}
           {React.Children.map(children, child => {
             if (React.isValidElement(child) && typeof child.type !== 'string') {
-              return React.cloneElement(child, { isCompact, displayEnquiry: !!activeEnquiryId });
+              return React.cloneElement(child, { isCompact });
             }
             return child;
           })}
