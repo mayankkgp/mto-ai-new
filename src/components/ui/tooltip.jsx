@@ -1,7 +1,7 @@
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import { Slot } from "@radix-ui/react-slot";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils.js";
 
 function TooltipProvider({ delay = 0, ...props }) {
   return (

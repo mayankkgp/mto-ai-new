@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
-import * as api from '../mockApi';
+import * as api from '../mockApi.js';
 
 const EnquiryContext = createContext(null);
 

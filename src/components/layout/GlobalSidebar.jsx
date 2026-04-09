@@ -10,10 +10,10 @@ import {
   ChevronLeft, 
   ChevronRight 
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils.js';
+import { Button } from '@/components/ui/button.jsx';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip.jsx';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar.jsx';
 
 const SIDEBAR_CONFIG = {
   brand: {

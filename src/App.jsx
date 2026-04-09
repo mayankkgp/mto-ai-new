@@ -1,7 +1,7 @@
 import React from 'react';
-import { EnquiryProvider } from './contexts/EnquiryContext';
-import { AppLayout } from './components/AppLayout';
-import { Toaster } from './components/ui/sonner';
+import { EnquiryProvider } from './contexts/EnquiryContext.jsx';
+import { AppLayout } from './components/AppLayout.jsx';
+import { Toaster } from './components/ui/sonner.jsx';
 
 export default function App() {
   return (

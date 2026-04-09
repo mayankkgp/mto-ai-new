@@ -4,7 +4,7 @@
  * * Enforces async/await patterns, try/catch error handling, and mock upload progress.
  */
 
-import { mockEnquiries } from './mockData';
+import { mockEnquiries } from './mockData.js';
 
 // Simulated network latency (in milliseconds)
 const NETWORK_DELAY = 800;

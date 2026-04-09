@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEnquiryContext } from '@/contexts/EnquiryContext';
-import { TooltipProvider } from '@/components/ui/tooltip';
-import { GlobalSidebar } from './layout/GlobalSidebar';
+import { TooltipProvider } from '@/components/ui/tooltip.jsx';
+import { GlobalSidebar } from './layout/GlobalSidebar.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
