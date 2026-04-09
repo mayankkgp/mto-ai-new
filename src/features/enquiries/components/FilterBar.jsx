@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Search, SlidersHorizontal, ChevronDown, User, Layers } from 'lucide-react';
+import { Search, SlidersHorizontal, ChevronDown, User, Layers, X } from 'lucide-react';
 import { Input } from '@/components/ui/input.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 import { mockUsers } from '@/mockData.js';
 import { Checkbox } from '@/components/ui/checkbox.jsx';
+import { cn } from '@/lib/utils.js';
 
 /**
  * Advanced Filter Menu Component
@@ -137,6 +138,9 @@ const AdvancedFilterMenu = ({ enquiries }) => {
 const FilterBar = ({ isCompact }) => {
   const { enquiries } = useEnquiryContext();
   const [search, setSearch] = useState('');
+  
+  // Mock active filters state for visual demonstration of the blueprint logic
+  const [hasActiveFilters, setHasActiveFilters] = useState(false);
 
   const revUsers = useMemo(() => {
     return mockUsers.filter(u => u.department === 'Revenue' || u.department === 'Admin');
@@ -151,8 +155,16 @@ const FilterBar = ({ isCompact }) => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search enquiries..." 
-            className="pl-9 h-8 bg-background text-xs"
+            className="pl-9 pr-8 h-8 bg-background text-xs"
           />
+          {search.length > 0 && (
+            <button 
+              onClick={() => setSearch('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200/50 transition-colors"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -161,7 +173,7 @@ const FilterBar = ({ isCompact }) => {
         {!isCompact && (
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" size="sm" className="h-8 gap-2 text-xs">
+              <Button variant="filter" className="gap-2">
                 <Layers className="h-3.5 w-3.5" />
                 <span>Type</span>
                 <ChevronDown className="h-3 w-3 opacity-50" />
@@ -185,7 +197,7 @@ const FilterBar = ({ isCompact }) => {
         {/* Rev Role Filter */}
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-2 text-xs">
+            <Button variant="filter" className="gap-2">
               <User className="h-3.5 w-3.5" />
               {!isCompact && <span>Rev Role</span>}
               <ChevronDown className="h-3 w-3 opacity-50" />
@@ -203,18 +215,34 @@ const FilterBar = ({ isCompact }) => {
           </PopoverContent>
         </Popover>
 
-        {/* Advanced Filter */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="outline" size="sm" className="h-8 gap-2 text-xs">
-              <SlidersHorizontal className="h-3.5 w-3.5" />
-              {!isCompact && <span>Filters</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="end">
-            <AdvancedFilterMenu enquiries={enquiries} />
-          </PopoverContent>
-        </Popover>
+        {/* Advanced Filter Group */}
+        <div className={cn(
+          "flex items-center rounded transition-colors", 
+          hasActiveFilters 
+            ? "bg-[#F3F4F6] text-[#374151] border border-[#E5E7EB]" 
+            : "bg-gray-100 text-gray-700"
+        )}>
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="flex items-center gap-1.5 px-2 py-1.5 rounded-l text-xs font-bold hover:bg-black/5 transition-colors shrink-0">
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+                {!isCompact && <span>Filters</span>}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <AdvancedFilterMenu enquiries={enquiries} />
+            </PopoverContent>
+          </Popover>
+          
+          {hasActiveFilters && (
+            <button 
+              onClick={() => setHasActiveFilters(false)}
+              className="px-1.5 py-1.5 border-l border-[#E5E7EB] hover:bg-black/5 transition-colors"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
