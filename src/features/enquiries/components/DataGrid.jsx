@@ -10,6 +10,7 @@ import {
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 import { mockUsers } from '@/mockData.js';
 import { cn } from '@/lib/utils.js';
+import { ArrowUpDown } from 'lucide-react';
 
 /**
  * DataGrid Component
@@ -37,12 +38,12 @@ const DataGrid = ({ isCompact }) => {
     }).filter(Boolean);
   };
 
-  // Helper: Get Urgency Color based on due date
-  const getUrgencyColor = (tasks) => {
-    if (!tasks || tasks.length === 0) return 'text-gray-400';
+  // Helper: Get Urgency Info based on due date
+  const getUrgencyInfo = (tasks) => {
+    if (!tasks || tasks.length === 0) return { text: '-', color: 'text-gray-400' };
     
     const incompleteTasks = tasks.filter(t => !t.isCompleted);
-    if (incompleteTasks.length === 0) return 'text-gray-400';
+    if (incompleteTasks.length === 0) return { text: '-', color: 'text-gray-400' };
 
     // Find earliest due date
     const earliestTask = incompleteTasks.reduce((earliest, current) => {
@@ -55,13 +56,26 @@ const DataGrid = ({ isCompact }) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    const diffTime = dueDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (dueDate < today) return 'text-red-500 font-bold'; // Overdue
-    if (dueDate.getTime() === today.getTime()) return 'text-orange-500 font-bold'; // Today
-    if (dueDate.getTime() === tomorrow.getTime()) return 'text-primary font-bold'; // Tomorrow
-    return 'text-gray-500'; // Future
+    if (diffDays < 0) {
+      return { text: `Overdue by ${Math.abs(diffDays)}d`, color: 'text-red-600 font-bold' };
+    }
+    if (diffDays === 0) {
+      return { text: 'Today', color: 'text-orange-600 font-bold' };
+    }
+    if (diffDays === 1) {
+      return { text: 'Tomorrow', color: 'text-primary font-medium' };
+    }
+    if (diffDays > 1 && diffDays <= 7) {
+      return { text: `In ${diffDays} days`, color: 'text-gray-600' };
+    }
+    
+    return { 
+      text: new Date(earliestTask.dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }), 
+      color: 'text-gray-400' 
+    };
   };
 
   // Helper: Format Date for display
@@ -94,46 +108,76 @@ const DataGrid = ({ isCompact }) => {
     <div className="flex-1 overflow-auto no-scrollbar relative">
       <Table className="border-separate border-spacing-0 min-w-[1000px]">
         <TableHeader className="sticky top-0 z-30 bg-gray-50 border-b border-gray-200">
-          <TableRow className="hover:bg-transparent border-b">
+          <TableRow className="hover:bg-transparent border-b text-gray-500">
             {/* 1. Customer (Sticky) */}
-            <TableHead className="sticky left-0 z-40 bg-gray-50 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[180px]">
-              Customer
+            <TableHead className="sticky left-0 z-40 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-200 px-table-fluid py-0.5 min-[height:801px]:py-1 text-[10px] font-bold uppercase tracking-wider min-w-[180px] group">
+              <div className="flex items-center gap-1">
+                Customer
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 2. Overview */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[250px]">
-              Overview
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider min-w-[250px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center gap-1">
+                Overview
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 3. Rev Role */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider text-center min-w-[100px]">
-              Rev Role
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-center min-w-[100px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center justify-center gap-1">
+                Rev Role
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 4. ID */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[120px]">
-              ID
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider min-w-[120px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center gap-1">
+                ID
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 5. Type */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider text-center min-w-[80px]">
-              Type
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-center min-w-[80px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center justify-center gap-1">
+                Type
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 6. Supply */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider text-center min-w-[100px]">
-              Supply
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-center min-w-[100px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center justify-center gap-1">
+                Supply
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 7. Rev Action */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[100px]">
-              Rev Action
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider min-w-[100px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center gap-1">
+                Rev Action
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 8. Sup Action */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[100px]">
-              Sup Action
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider min-w-[100px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center gap-1">
+                Sup Action
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 9. Exp Value */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider text-right min-w-[120px]">
-              Exp Value
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-right min-w-[120px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center justify-end gap-1">
+                Exp Value
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
             {/* 10. Created On */}
-            <TableHead className="px-table-fluid py-th-fluid text-[10px] font-bold uppercase tracking-wider min-w-[100px]">
-              Created On
+            <TableHead className="px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider min-w-[100px] cursor-pointer hover:bg-gray-100 transition-colors group">
+              <div className="flex items-center gap-1">
+                Created On
+                <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+              </div>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -142,8 +186,8 @@ const DataGrid = ({ isCompact }) => {
             const isActive = activeEnquiryId === enquiry.id;
             const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id));
             const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id));
-            const revUrgency = getUrgencyColor(enquiry.tasks?.revenue);
-            const supUrgency = getUrgencyColor(enquiry.tasks?.supply);
+            const revUrgency = getUrgencyInfo(enquiry.tasks?.revenue);
+            const supUrgency = getUrgencyInfo(enquiry.tasks?.supply);
 
             return (
               <TableRow 
@@ -151,13 +195,13 @@ const DataGrid = ({ isCompact }) => {
                 onClick={() => selectEnquiry(enquiry.id)}
                 className={cn(
                   "cursor-pointer transition-colors group",
-                  isActive ? "bg-[#F4F5FB]" : "hover:bg-gray-50"
+                  isActive ? "bg-[#F4F5FB] hover:bg-[#E9ECF7]" : "hover:bg-gray-50"
                 )}
               >
                 {/* 1. Customer (Sticky) */}
                 <TableCell className={cn(
-                  "sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-100 px-table-fluid py-0.5 min-[height:801px]:py-1.5 text-xs font-bold",
-                  isActive ? "bg-[#F4F5FB] border-l-[3px] border-primary" : "bg-white group-hover:bg-gray-50 border-l-[3px] border-transparent"
+                  "sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-100 px-table-fluid py-0.5 min-[height:801px]:py-1.5 text-[11px] font-semibold",
+                  isActive ? "bg-[#F4F5FB] group-hover:bg-[#E9ECF7] border-l-[3px] border-primary" : "bg-white group-hover:bg-gray-50 border-l-[3px] border-transparent"
                 )}>
                   {enquiry.customer?.name}
                 </TableCell>
@@ -200,12 +244,12 @@ const DataGrid = ({ isCompact }) => {
                   </div>
                 </TableCell>
                 {/* 7. Rev Action */}
-                <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", revUrgency)}>
-                  {enquiry.tasks?.revenue?.find(t => !t.isCompleted)?.dueDate ? formatDate(enquiry.tasks.revenue.find(t => !t.isCompleted).dueDate) : '-'}
+                <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", revUrgency.color)}>
+                  {revUrgency.text}
                 </TableCell>
                 {/* 8. Sup Action */}
-                <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", supUrgency)}>
-                  {enquiry.tasks?.supply?.find(t => !t.isCompleted)?.dueDate ? formatDate(enquiry.tasks.supply.find(t => !t.isCompleted).dueDate) : '-'}
+                <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", supUrgency.color)}>
+                  {supUrgency.text}
                 </TableCell>
                 {/* 9. Exp Value */}
                 <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-right text-[11px] font-bold text-gray-700">
