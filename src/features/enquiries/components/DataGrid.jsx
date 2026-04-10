@@ -8,6 +8,7 @@ import {
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 import DataGridRow from './DataGridRow.jsx';
 import { ArrowUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils.js';
 
 /**
  * DataGrid Component
@@ -35,7 +36,7 @@ const DataGrid = ({ isCompact, filteredEnquiries }) => {
 
   return (
     <div className="flex-1 overflow-auto no-scrollbar relative">
-      <Table className="border-separate border-spacing-0 min-w-[1000px]">
+      <Table className="border-separate border-spacing-0 min-w-[1000px] table-fixed">
         <TableHeader className="sticky top-0 z-30 bg-gray-50 border-b border-gray-200">
           <TableRow className="hover:bg-transparent border-b text-gray-500">
             {/* 1. Customer (Sticky) */}
@@ -46,7 +47,10 @@ const DataGrid = ({ isCompact, filteredEnquiries }) => {
               </div>
             </TableHead>
             {/* 2. Overview */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group min-w-[250px]">
+            <TableHead className={cn(
+              "h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group",
+              isCompact ? "w-[200px]" : "w-[25%]"
+            )}>
               <div className="flex items-center gap-1">
                 Overview
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />

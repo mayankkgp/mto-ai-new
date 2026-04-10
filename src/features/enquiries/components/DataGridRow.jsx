@@ -22,7 +22,7 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
     <TableRow 
       onClick={onSelect}
       className={cn(
-        "cursor-pointer transition-colors group",
+        "cursor-pointer transition-colors group align-top",
         isActive ? "bg-[#F4F5FB] hover:bg-[#E9ECF7]" : "hover:bg-gray-50"
       )}
     >
@@ -36,7 +36,7 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
       {/* 2. Overview */}
       <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[11px] text-gray-600">
         <div className={cn(
-          isCompact ? "max-w-[200px] line-clamp-2" : "w-[25%] max-w-0 truncate"
+          isCompact ? "whitespace-normal line-clamp-2" : "truncate"
         )}>
           {enquiry.leadOverview}
         </div>

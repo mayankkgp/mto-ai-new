@@ -10,10 +10,10 @@ import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
  * Assembles the Header, FilterBar, and DataGrid.
  */
 const EnquiryMasterPane = ({ isCompact: isCompactProp }) => {
-  const { enquiries, activeEnquiryId } = useEnquiryContext();
+  const { enquiries, activeEnquiryId, isCreating } = useEnquiryContext();
   
-  // Force compact mode if an enquiry is active (Detail Pane is open)
-  const isCompact = activeEnquiryId ? true : isCompactProp;
+  // Force compact mode if an enquiry is active or being created (Detail Pane is open)
+  const isCompact = (activeEnquiryId || isCreating) ? true : isCompactProp;
   
   const [statusTab, setStatusTab] = useState('Active');
   const [searchQuery, setSearchQuery] = useState('');

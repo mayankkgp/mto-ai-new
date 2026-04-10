@@ -19,7 +19,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop }) => {
   const getStatusClasses = (status) => {
     switch (status) {
       case 'Active':
-        return 'bg-success-light text-success-dark border-success-light';
+        return 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]';
       case 'Converted':
         return 'bg-[#F3F4F6] text-[#374151] border-[#E5E7EB]';
       case 'Dropped':

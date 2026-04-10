@@ -16,6 +16,7 @@ export const EnquiryProvider = ({ children }) => {
   const [enquiries, setEnquiries] = useState([]);
   const [activeEnquiryId, setActiveEnquiryId] = useState(null);
   const [activeEnquiry, setActiveEnquiry] = useState(null);
+  const [isCreating, setIsCreating] = useState(false);
   const [isGlobalLoading, setIsGlobalLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -49,6 +50,17 @@ export const EnquiryProvider = ({ children }) => {
 
   const selectEnquiry = (id) => {
     setActiveEnquiryId(id);
+    setIsCreating(false);
+  };
+
+  const startCreating = () => {
+    setActiveEnquiryId(null);
+    setIsCreating(true);
+  };
+
+  const closePane = () => {
+    setActiveEnquiryId(null);
+    setIsCreating(false);
   };
 
   const saveEnquiryDetails = async (formData) => {
@@ -205,11 +217,14 @@ export const EnquiryProvider = ({ children }) => {
     enquiries,
     activeEnquiry,
     activeEnquiryId,
+    isCreating,
     isGlobalLoading,
     isActionLoading,
     uploadProgress,
     loadEnquiries,
     selectEnquiry,
+    startCreating,
+    closePane,
     saveEnquiryDetails,
     updateStatus,
     handleFileUpload,

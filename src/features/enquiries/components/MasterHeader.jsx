@@ -1,8 +1,8 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { cn } from '@/lib/utils.js';
 
 /**
  * MasterHeader Component
@@ -13,7 +13,7 @@ import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
  * 4. text-xs font-bold on the Create Button
  */
 const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
-  const { enquiries, selectEnquiry } = useEnquiryContext();
+  const { enquiries, startCreating } = useEnquiryContext();
 
   const counts = {
     Active: enquiries.filter(e => e.status === 'Active').length,
@@ -24,32 +24,26 @@ const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   return (
     <header className="flex items-center justify-between h-header-fluid px-nav-fluid border-b bg-background sticky top-0 z-10">
       <div className="flex items-center gap-4">
-        <Tabs value={statusTab} onValueChange={setStatusTab} className="w-auto">
-          <TabsList className="h-8">
-            <TabsTrigger 
-              value="Active" 
-              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
+        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
+          {['Active', 'Converted', 'Dropped'].map((status) => (
+            <button
+              key={status}
+              onClick={() => setStatusTab(status)}
+              className={cn(
+                "px-4 py-1 text-xs font-semibold rounded-md transition-all",
+                statusTab === status 
+                  ? "bg-white text-primary shadow-sm" 
+                  : "text-gray-500 hover:text-gray-700"
+              )}
             >
-              Active ({counts.Active})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="Converted" 
-              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
-            >
-              Converted ({counts.Converted})
-            </TabsTrigger>
-            <TabsTrigger 
-              value="Dropped" 
-              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
-            >
-              Dropped ({counts.Dropped})
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+              {status} ({counts[status]})
+            </button>
+          ))}
+        </div>
       </div>
 
       <Button 
-        onClick={() => selectEnquiry(null)}
+        onClick={startCreating}
         size={isCompact ? "icon" : "default"}
         className="gap-2 text-xs font-bold"
       >

@@ -8,29 +8,29 @@ import DetailHeader from './DetailHeader.jsx';
  * The overarching container for the right-hand view when an enquiry is selected.
  * Implements Phase 3A: Shell & Header with Framer Motion animations.
  */
-const EnquiryDetailPane = ({ activeEnquiryId, onClose }) => {
+const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   const { enquiries, updateStatus } = useEnquiryContext();
 
   // Find the active enquiry matching activeEnquiryId
   const activeEnquiry = enquiries.find(e => e.id === activeEnquiryId);
 
-  // Render Condition: If !activeEnquiryId or the enquiry is not found, return null
-  if (!activeEnquiryId || !activeEnquiry) {
+  // Render Condition: If not creating AND (no activeEnquiryId OR no activeEnquiry found), return null
+  if (!isCreating && (!activeEnquiryId || !activeEnquiry)) {
     return null;
   }
 
   const handleSave = () => {
     // Placeholder for now, will be implemented with form logic later
-    console.log('Saving enquiry:', activeEnquiryId);
+    console.log('Saving enquiry:', activeEnquiryId || 'NEW');
   };
 
   const handleConvert = () => {
-    updateStatus('Converted');
+    if (activeEnquiryId) updateStatus('Converted');
   };
 
   const handleDrop = () => {
     // In a real app, this might open a reason modal
-    updateStatus('Dropped', 'Lost to competitor');
+    if (activeEnquiryId) updateStatus('Dropped', 'Lost to competitor');
   };
 
   return (
@@ -40,11 +40,17 @@ const EnquiryDetailPane = ({ activeEnquiryId, onClose }) => {
       animate={{ x: 0 }}
       exit={{ x: '100%' }}
       transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-      className="flex-1 overflow-hidden flex flex-col bg-white shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-20"
+      className="flex-1 h-full overflow-hidden flex flex-col bg-white shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-20"
     >
       {/* Detail Header */}
       <DetailHeader 
-        enquiry={activeEnquiry} 
+        enquiry={isCreating ? { 
+          id: "NEW ENQUIRY", 
+          status: "DRAFT",
+          roles: {
+            revenue: [{ id: 'u1', name: 'Mayank Kumar' }]
+          }
+        } : activeEnquiry} 
         onClose={onClose}
         onSave={handleSave}
         onConvert={handleConvert}
