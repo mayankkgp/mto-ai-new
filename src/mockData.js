@@ -16,6 +16,15 @@ export const mockUsers = [
 export const mockChannels = ['Trade Show', 'Direct Outreach', 'B2B Portal', 'Referral', 'Inbound Web'];
 export const mockProbabilities = ['High (80%)', 'Medium (50%)', 'Low (20%)'];
 
+// 2.5 Customers List (For Autocomplete)
+export const MOCK_CUSTOMERS = [
+  { id: 'c1', name: 'Stitchwell Garments Ltd.' },
+  { id: 'c2', name: 'Aura Boutique Label' },
+  { id: 'c3', name: 'Fabrito Textiles' },
+  { id: 'c4', name: 'Global Apparel Group' },
+  { id: 'c5', name: 'Urban Threads Co.' }
+];
+
 // 3. The Master Enquiry Dataset
 export const mockEnquiries = [
   {

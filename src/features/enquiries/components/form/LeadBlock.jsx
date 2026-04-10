@@ -15,7 +15,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
     <div className="space-y-2">
       <div className="space-y-0.5">
         <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Lead Overview
+          Lead Overview *
         </Label>
         <TextareaAutosize
           className={cn(
@@ -34,7 +34,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
           Lead Details
         </Label>
         <TextareaAutosize
-          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed resize-none max-h-[120px] overflow-y-auto"
+          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed resize-none max-h-[80px] overflow-y-auto"
           value={formData.leadDetails || ''}
           onChange={(e) => handleChange('leadDetails', e.target.value)}
           disabled={isReadOnly}

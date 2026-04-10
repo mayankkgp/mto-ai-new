@@ -22,7 +22,7 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
     <div className="grid grid-cols-3 gap-1.5">
       <div className="space-y-0.5">
         <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Type
+          Type *
         </Label>
         <ToggleGroup 
           type="single" 
@@ -33,13 +33,13 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
         >
           <ToggleGroupItem 
             value="MTO" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-100 flex-1"
+            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 flex-1"
           >
             MTO
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="Ready" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-100 flex-1"
+            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 flex-1"
           >
             Ready
           </ToggleGroupItem>
@@ -73,9 +73,11 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Direct" className="text-[11px]">Direct</SelectItem>
-            <SelectItem value="Referral" className="text-[11px]">Referral</SelectItem>
-            <SelectItem value="Web" className="text-[11px]">Web</SelectItem>
-            <SelectItem value="Agent" className="text-[11px]">Agent</SelectItem>
+            <SelectItem value="Website" className="text-[11px]">Website</SelectItem>
+            <SelectItem value="WhatsApp" className="text-[11px]">WhatsApp</SelectItem>
+            <SelectItem value="LinkedIn" className="text-[11px]">LinkedIn</SelectItem>
+            <SelectItem value="Event" className="text-[11px]">Event</SelectItem>
+            <SelectItem value="Others" className="text-[11px]">Others</SelectItem>
           </SelectContent>
         </Select>
       </div>

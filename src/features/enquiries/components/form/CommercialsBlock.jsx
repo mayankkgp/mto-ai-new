@@ -74,9 +74,8 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
           Order Value
         </Label>
         <div className="relative">
-          <span className="absolute left-1 top-1/2 -translate-y-1/2 text-[10px] text-gray-400 font-bold">₹</span>
           <Input 
-            className="w-full pl-4 pr-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight font-bold"
+            className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight font-bold"
             value={displayValue}
             onChange={handleOrderValueChange}
             disabled={isReadOnly}
@@ -97,7 +96,7 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(p => (
+            {[10, 30, 50, 70, 90].map(p => (
               <SelectItem key={p} value={String(p)} className="text-[11px]">{p}%</SelectItem>
             ))}
           </SelectContent>
@@ -109,7 +108,7 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
           Exp. Value
         </Label>
         <div className="w-full px-1 h-[26px] flex items-center justify-end tracking-tight bg-gray-50 border border-gray-200 text-gray-800 rounded text-[11px] font-bold text-right">
-          ₹ {formatIndianCurrency(formData.commercials?.expectedValue || 0)}
+          {formatIndianCurrency(formData.commercials?.expectedValue || 0)}
         </div>
       </div>
     </div>

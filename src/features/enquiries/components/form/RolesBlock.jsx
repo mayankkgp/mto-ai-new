@@ -35,10 +35,13 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
       
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <div className={cn(
-            "cursor-pointer focus:outline-none group flex flex-wrap items-center gap-1 p-[2px] bg-white border border-gray-200 rounded min-h-[26px] transition-colors hover:border-primary/40",
-            isReadOnly && "bg-gray-50 cursor-not-allowed"
-          )}>
+          <button 
+            type="button"
+            className={cn(
+              "w-full cursor-pointer focus:outline-none group flex flex-wrap items-center gap-1 p-[2px] bg-white border border-gray-200 rounded min-h-[26px] transition-colors hover:border-primary/40 text-left",
+              isReadOnly && "bg-gray-50 cursor-not-allowed"
+            )}
+          >
             {selectedUsers?.map(user => (
               <div 
                 key={user.id}
@@ -58,11 +61,11 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
               </div>
             ))}
             {!isReadOnly && (
-              <div className="p-0.5 text-gray-400 hover:text-primary ml-auto">
+              <div className="p-0.5 text-gray-400 hover:text-primary">
                 <UserPlus size={12} />
               </div>
             )}
-          </div>
+          </button>
         </PopoverTrigger>
         {!isReadOnly && (
           <PopoverContent className="w-auto min-w-[160px] p-0 py-1 bg-white border border-gray-200 rounded shadow-xl overflow-hidden flex flex-col" align="start">
@@ -124,13 +127,13 @@ const RolesBlock = ({ formData, setFormData, isReadOnly }) => {
   return (
     <div className="grid grid-cols-2 gap-1.5">
       <UserSelector 
-        label="Revenue" 
+        label="Revenue Role *" 
         selectedUsers={formData.roles?.revenue} 
         onToggle={(user) => toggleUser('revenue', user)}
         isReadOnly={isReadOnly}
       />
       <UserSelector 
-        label="Supply" 
+        label="Supply Role" 
         selectedUsers={formData.roles?.supply} 
         onToggle={(user) => toggleUser('supply', user)}
         isReadOnly={isReadOnly}

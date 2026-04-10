@@ -1,5 +1,5 @@
 import React from 'react';
-import { Paperclip, FileText, Image as ImageIcon, X } from 'lucide-react';
+import { Paperclip, FileText, X } from 'lucide-react';
 
 const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
   const isImage = file.type?.startsWith('image/');
@@ -8,12 +8,17 @@ const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
     <div className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-pointer transition-all hover:border-primary/30">
       <div className="flex-1 flex items-center justify-center bg-gray-100/50">
         {isImage ? (
-          <ImageIcon size={20} className="text-gray-400" />
+          <img 
+            src={file.url} 
+            alt={file.name} 
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
         ) : (
           <FileText size={20} className="text-gray-400" />
         )}
       </div>
-      <div className="px-1 py-0.5 bg-white border-t border-gray-50 truncate text-[8px] font-medium text-gray-500">
+      <div className="absolute bottom-0 left-0 right-0 p-0.5 bg-white/90 backdrop-blur-sm border-t border-gray-100 truncate text-[8px] font-medium text-gray-500">
         {file.name}
       </div>
       
@@ -84,17 +89,17 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
             isReadOnly={isReadOnly}
           />
         ))}
-        
-        {!isReadOnly && (
-          <button 
-            onClick={() => fileInputRef.current?.click()}
-            className="border border-dashed border-gray-300 rounded w-16 h-16 shrink-0 flex flex-col items-center justify-center gap-1 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50"
-          >
-            <Paperclip size={16} className="text-gray-400" />
-            <span className="text-[8px] font-bold text-gray-500 uppercase tracking-wide">Attach</span>
-          </button>
-        )}
       </div>
+      
+      {!isReadOnly && (
+        <button 
+          onClick={() => fileInputRef.current?.click()}
+          className="w-full py-1.5 border border-dashed border-gray-300 rounded flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50"
+        >
+          <Paperclip size={14} className="text-gray-400" />
+          <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">Attach Files</span>
+        </button>
+      )}
       
       <input 
         type="file" 

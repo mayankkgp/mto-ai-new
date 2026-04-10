@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { MOCK_CUSTOMERS } from '@/mockData.js';
 
 const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
@@ -22,7 +23,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
     <div className="space-y-0">
       <div className="flex items-center justify-between mb-0.5 h-[18px]">
         <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Customer Name
+          Customer Name *
         </Label>
         <button 
           onClick={() => setIsExpanded(!isExpanded)}
@@ -42,7 +43,13 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
           onChange={(e) => handleChange('name', e.target.value)}
           disabled={isReadOnly}
           placeholder="Enter customer name..."
+          list="customers"
         />
+        <datalist id="customers">
+          {MOCK_CUSTOMERS.map(c => (
+            <option key={c.id} value={c.name} />
+          ))}
+        </datalist>
       </div>
 
       <AnimatePresence>
@@ -59,7 +66,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
             )}>
               <div className={cn(isCreating ? "" : "col-span-2")}>
                 <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
-                  POC Name
+                  POC Name *
                 </Label>
                 <Input 
                   className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
@@ -70,7 +77,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
               </div>
               <div>
                 <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
-                  City
+                  City *
                 </Label>
                 <Input 
                   className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
@@ -81,7 +88,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
               </div>
               <div>
                 <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
-                  Contact
+                  Contact *
                 </Label>
                 <Input 
                   className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
