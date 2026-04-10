@@ -130,7 +130,11 @@ const FilterBar = ({
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 bg-transparent border-none shadow-none" align="end">
-              <AdvancedFilterMenu enquiries={enquiries} />
+              <AdvancedFilterMenu 
+                enquiries={enquiries} 
+                activeFilters={activeFilters}
+                setActiveFilters={setActiveFilters}
+              />
             </PopoverContent>
           </Popover>
           

@@ -17,7 +17,19 @@ const EnquiryMasterPane = ({ isCompact }) => {
   const [activeFilters, setActiveFilters] = useState({
     type: [],
     revRole: [],
-    advanced: false
+    advanced: false,
+    channel: '',
+    supply: [],
+    leadDateStart: '',
+    leadDateEnd: '',
+    revDueStart: '',
+    revDueEnd: '',
+    supDueStart: '',
+    supDueEnd: '',
+    minExpValue: '',
+    maxExpValue: '',
+    city: '',
+    source: ''
   });
 
   const filteredEnquiries = useMemo(() => {
@@ -45,6 +57,67 @@ const EnquiryMasterPane = ({ isCompact }) => {
         const enquiryRevRoles = enquiry.roles?.revenue?.map(r => r.id) || [];
         const hasMatch = activeFilters.revRole.some(roleId => enquiryRevRoles.includes(roleId));
         if (!hasMatch) return false;
+      }
+
+      // 5. Advanced Filters
+      // Channel
+      if (activeFilters.channel && enquiry.leadChannel !== activeFilters.channel) return false;
+
+      // Supply (Array of names)
+      if (activeFilters.supply.length > 0) {
+        const enquirySupplyNames = enquiry.roles?.supply?.map(s => s.name) || [];
+        const hasSupplyMatch = activeFilters.supply.some(name => enquirySupplyNames.includes(name));
+        if (!hasSupplyMatch) return false;
+      }
+
+      // City
+      if (activeFilters.city && enquiry.customer?.city !== activeFilters.city) return false;
+
+      // Source
+      if (activeFilters.source && !enquiry.source?.toLowerCase().includes(activeFilters.source.toLowerCase())) return false;
+
+      // Expected Value Range
+      const expValue = enquiry.commercials?.expectedValue || 0;
+      if (activeFilters.minExpValue && expValue < parseFloat(activeFilters.minExpValue)) return false;
+      if (activeFilters.maxExpValue && expValue > parseFloat(activeFilters.maxExpValue)) return false;
+
+      // Date Ranges (Lead Date)
+      const leadDate = enquiry.createdOn ? new Date(enquiry.createdOn).getTime() : null;
+      if (activeFilters.leadDateStart && leadDate < new Date(activeFilters.leadDateStart).getTime()) return false;
+      if (activeFilters.leadDateEnd) {
+        const endDate = new Date(activeFilters.leadDateEnd);
+        endDate.setHours(23, 59, 59, 999);
+        if (leadDate > endDate.getTime()) return false;
+      }
+
+      // Task Due Date Ranges (Rev Due / Sup Due)
+      const getEarliestDueDate = (tasks) => {
+        if (!tasks || tasks.length === 0) return null;
+        const incomplete = tasks.filter(t => !t.isCompleted);
+        if (incomplete.length === 0) return null;
+        return Math.min(...incomplete.map(t => new Date(t.dueDate).getTime()));
+      };
+
+      if (activeFilters.revDueStart || activeFilters.revDueEnd) {
+        const revDue = getEarliestDueDate(enquiry.tasks?.revenue);
+        if (!revDue) return false;
+        if (activeFilters.revDueStart && revDue < new Date(activeFilters.revDueStart).getTime()) return false;
+        if (activeFilters.revDueEnd) {
+          const endDate = new Date(activeFilters.revDueEnd);
+          endDate.setHours(23, 59, 59, 999);
+          if (revDue > endDate.getTime()) return false;
+        }
+      }
+
+      if (activeFilters.supDueStart || activeFilters.supDueEnd) {
+        const supDue = getEarliestDueDate(enquiry.tasks?.supply);
+        if (!supDue) return false;
+        if (activeFilters.supDueStart && supDue < new Date(activeFilters.supDueStart).getTime()) return false;
+        if (activeFilters.supDueEnd) {
+          const endDate = new Date(activeFilters.supDueEnd);
+          endDate.setHours(23, 59, 59, 999);
+          if (supDue > endDate.getTime()) return false;
+        }
       }
 
       return true;
