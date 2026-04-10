@@ -28,7 +28,7 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
     >
       {/* 1. Customer (Sticky) */}
       <TableCell className={cn(
-        "sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-100 px-table-fluid py-0.5 min-[height:801px]:py-1.5 text-[11px] font-semibold",
+        "sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-100 px-table-fluid py-0.5 min-[height:801px]:py-1.5 text-[11px] font-semibold max-w-0 truncate",
         isActive ? "bg-[#F4F5FB] group-hover:bg-[#E9ECF7] border-l-[3px] border-primary" : "bg-white group-hover:bg-gray-50 border-l-[3px] border-transparent"
       )}>
         {enquiry.customer?.name}
@@ -36,7 +36,7 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
       {/* 2. Overview */}
       <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[11px] text-gray-600">
         <div className={cn(
-          isCompact ? "whitespace-normal line-clamp-2" : "truncate"
+          isCompact ? "max-w-[200px] whitespace-normal line-clamp-2" : "w-[25%] max-w-0 truncate"
         )}>
           {enquiry.leadOverview}
         </div>
@@ -52,12 +52,12 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
         </div>
       </TableCell>
       {/* 4. ID */}
-      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 font-mono text-[11px] font-bold whitespace-nowrap">
+      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 font-mono text-[11px] font-bold max-w-0 truncate">
         {enquiry.id}
       </TableCell>
       {/* 5. Type */}
-      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-center">
-        <span className="text-[11px] font-bold text-[#374151] uppercase whitespace-nowrap">
+      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-center max-w-0 truncate">
+        <span className="text-[11px] font-bold text-[#374151] uppercase">
           {enquiry.type}
         </span>
       </TableCell>
@@ -72,11 +72,11 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
         </div>
       </TableCell>
       {/* 7. Rev Action */}
-      <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", revUrgency.color)}>
+      <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] max-w-0 truncate", revUrgency.color)}>
         {revUrgency.text}
       </TableCell>
       {/* 8. Sup Action */}
-      <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] whitespace-nowrap", supUrgency.color)}>
+      <TableCell className={cn("px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] max-w-0 truncate", supUrgency.color)}>
         {supUrgency.text}
       </TableCell>
       {/* 9. Exp Value */}
@@ -84,7 +84,7 @@ const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
         {formatCurrency(enquiry.commercials?.expectedValue)}
       </TableCell>
       {/* 10. Created On */}
-      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] text-gray-400 whitespace-nowrap">
+      <TableCell className="px-table-fluid py-0.5 min-[height:801px]:py-1.5 border-r border-gray-100 text-[10px] text-gray-400 max-w-0 truncate">
         {formatDate(enquiry.createdOn)}
       </TableCell>
     </TableRow>

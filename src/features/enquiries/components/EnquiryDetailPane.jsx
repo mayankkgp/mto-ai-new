@@ -62,7 +62,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
         {/* 1. Left Pane (Form & Overview) */}
         <motion.div 
           layout 
-          animate={{ width: "35%" }}
+          animate={{ width: isCreating ? "70%" : "35%" }}
           className="@container overflow-y-auto no-scrollbar bg-white min-w-[300px] p-1.5 min-[height:801px]:p-3"
         >
           <div className="text-sm text-gray-500 italic">Context Pane Placeholder</div>
@@ -71,7 +71,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
         {/* 2. Right Pane (Action Items & Workspace) */}
         <motion.div 
           layout 
-          animate={{ width: "65%" }}
+          animate={{ width: isCreating ? "30%" : "65%" }}
           className="flex flex-col bg-gray-50/50 overflow-hidden border-l border-gray-100"
         >
           <div className="p-4 text-sm text-gray-500 italic">Action Pane Placeholder</div>
