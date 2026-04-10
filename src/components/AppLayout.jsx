@@ -26,7 +26,6 @@ export const AppLayout = ({ children }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      // Logic for isCompact: if sidebar is open and screen is small, or just screen is small
       const width = window.innerWidth;
       const sidebarWidth = isCollapsed ? 64 : 200;
       const availableWidth = width - sidebarWidth;
@@ -37,6 +36,24 @@ export const AppLayout = ({ children }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isCollapsed]);
+
+  const renderChildren = (children) => {
+    return React.Children.map(children, child => {
+      if (!React.isValidElement(child)) return child;
+      
+      if (typeof child.type !== 'string') {
+        return React.cloneElement(child, { isCompact });
+      }
+      
+      if (child.props.children) {
+        return React.cloneElement(child, {
+          children: renderChildren(child.props.children)
+        });
+      }
+      
+      return child;
+    });
+  };
 
   return (
     <TooltipProvider>
@@ -49,13 +66,7 @@ export const AppLayout = ({ children }) => {
           user={user}
         />
         <MainWorkspace>
-          {/* We pass isCompact down via props if needed */}
-          {React.Children.map(children, child => {
-            if (React.isValidElement(child) && typeof child.type !== 'string') {
-              return React.cloneElement(child, { isCompact });
-            }
-            return child;
-          })}
+          {renderChildren(children)}
         </MainWorkspace>
       </div>
     </TooltipProvider>
