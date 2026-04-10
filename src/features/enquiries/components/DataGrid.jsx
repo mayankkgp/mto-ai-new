@@ -14,8 +14,8 @@ import { ArrowUpDown } from 'lucide-react';
  * Implements the Master Data Grid for enquiries with sticky columns and urgency logic.
  * Refactored for pixel-perfect legacy UI sync.
  */
-const DataGrid = ({ isCompact }) => {
-  const { enquiries, activeEnquiryId, selectEnquiry, isGlobalLoading } = useEnquiryContext();
+const DataGrid = ({ isCompact, filteredEnquiries }) => {
+  const { activeEnquiryId, selectEnquiry, isGlobalLoading } = useEnquiryContext();
 
   if (isGlobalLoading) {
     return (
@@ -25,7 +25,7 @@ const DataGrid = ({ isCompact }) => {
     );
   }
 
-  if (enquiries.length === 0) {
+  if (filteredEnquiries.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center text-sm text-muted-foreground italic">
         No enquiries found.
@@ -111,7 +111,7 @@ const DataGrid = ({ isCompact }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {enquiries.map((enquiry) => (
+          {filteredEnquiries.map((enquiry) => (
             <DataGridRow 
               key={enquiry.id} 
               enquiry={enquiry} 

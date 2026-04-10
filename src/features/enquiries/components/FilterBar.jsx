@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Search, SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
@@ -6,17 +6,15 @@ import { mockUsers } from '@/mockData.js';
 import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 
-const FilterBar = ({ isCompact }) => {
+const FilterBar = ({ 
+  isCompact, 
+  searchQuery, 
+  setSearchQuery, 
+  activeFilters, 
+  setActiveFilters 
+}) => {
   const { enquiries } = useEnquiryContext();
-  const [search, setSearch] = useState('');
   
-  // Mock active filters state
-  const [activeFilters, setActiveFilters] = useState({
-    type: [],
-    revRole: [],
-    advanced: false
-  });
-
   const revUsers = useMemo(() => {
     return mockUsers.filter(u => u.department === 'Revenue' || u.department === 'Admin');
   }, []);
@@ -40,14 +38,14 @@ const FilterBar = ({ isCompact }) => {
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
           <input 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search enquiries..." 
             className="w-full pl-9 pr-8 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
           />
-          {search.length > 0 && (
+          {searchQuery.length > 0 && (
             <button 
-              onClick={() => setSearch('')}
+              onClick={() => setSearchQuery('')}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200/50 transition-colors"
             >
               <X className="h-3 w-3" />

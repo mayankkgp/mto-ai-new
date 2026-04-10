@@ -12,7 +12,7 @@ import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
  * 3. CREATE NEW ENQUIRY text in all caps
  * 4. text-xs font-bold on the Create Button
  */
-const MasterHeader = ({ isCompact }) => {
+const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   const { enquiries, selectEnquiry } = useEnquiryContext();
 
   const counts = {
@@ -24,7 +24,7 @@ const MasterHeader = ({ isCompact }) => {
   return (
     <header className="flex items-center justify-between h-header-fluid px-nav-fluid border-b bg-background sticky top-0 z-10">
       <div className="flex items-center gap-4">
-        <Tabs defaultValue="Active" className="w-auto">
+        <Tabs value={statusTab} onValueChange={setStatusTab} className="w-auto">
           <TabsList className="h-8">
             <TabsTrigger 
               value="Active" 
