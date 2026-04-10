@@ -33,6 +33,10 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     if (activeEnquiryId) updateStatus('Dropped', 'Lost to competitor');
   };
 
+  const handleReopen = () => {
+    if (activeEnquiryId) updateStatus('Active');
+  };
+
   return (
     <motion.div 
       layout
@@ -55,6 +59,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
         onSave={handleSave}
         onConvert={handleConvert}
         onDrop={handleDrop}
+        onReopen={handleReopen}
       />
 
       {/* Split-Pane Container */}

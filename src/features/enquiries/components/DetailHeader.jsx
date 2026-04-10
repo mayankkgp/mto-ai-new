@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Save, CheckCircle2, Ban } from 'lucide-react';
+import { X, Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils.js';
  * The top sticky bar for the Enquiry Detail Pane.
  * Implements Identity Group, Status Badge, and Action Group.
  */
-const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop }) => {
+const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
   if (!enquiry) return null;
 
   const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id) || []);
@@ -75,32 +75,48 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop }) => {
 
       {/* 2. Right Group (Actions) */}
       <div className="flex items-center gap-2">
-        <Button 
-          onClick={onConvert}
-          className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none"
-        >
-          <CheckCircle2 size={14} />
-          <span>CONVERT</span>
-        </Button>
+        {(enquiry.status === 'Converted' || enquiry.status === 'Dropped') ? (
+          <Button 
+            onClick={onReopen}
+            className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none"
+          >
+            <RotateCcw size={14} />
+            <span>RE-OPEN</span>
+          </Button>
+        ) : (
+          <>
+            {enquiry.status === 'Active' && (
+              <>
+                <Button 
+                  onClick={onConvert}
+                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none"
+                >
+                  <CheckCircle2 size={14} />
+                  <span>CONVERT</span>
+                </Button>
 
-        <Button 
-          onClick={onDrop}
-          variant="ghost"
-          className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none"
-        >
-          <Ban size={14} />
-          <span>DROP</span>
-        </Button>
+                <Button 
+                  onClick={onDrop}
+                  variant="ghost"
+                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none"
+                >
+                  <Ban size={14} />
+                  <span>DROP</span>
+                </Button>
+              </>
+            )}
 
-        <div className="w-px h-6 bg-gray-200 mx-1" />
+            <div className="w-px h-6 bg-gray-200 mx-1" />
 
-        <Button 
-          onClick={onSave}
-          className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none"
-        >
-          <Save size={14} />
-          <span>SAVE</span>
-        </Button>
+            <Button 
+              onClick={onSave}
+              className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none"
+            >
+              <Save size={14} />
+              <span>SAVE</span>
+            </Button>
+          </>
+        )}
 
         <Button 
           onClick={onClose}
