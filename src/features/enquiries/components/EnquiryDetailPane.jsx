@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 import DetailHeader from './DetailHeader.jsx';
+import ContextColumn from './form/ContextColumn.jsx';
 
 /**
  * EnquiryDetailPane Component
@@ -14,14 +15,47 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   // Find the active enquiry matching activeEnquiryId
   const activeEnquiry = enquiries.find(e => e.id === activeEnquiryId);
 
+  // Form State
+  const [formData, setFormData] = React.useState(null);
+
+  // Initialize formData when activeEnquiry or isCreating changes
+  React.useEffect(() => {
+    if (isCreating) {
+      setFormData({
+        id: "NEW ENQUIRY",
+        status: "DRAFT",
+        customer: { name: '', city: '', poc: '', contact: '' },
+        leadOverview: '',
+        leadDetails: '',
+        type: 'MTO',
+        leadDate: new Date().toISOString().split('T')[0],
+        channel: 'Direct',
+        commercials: { orderValue: 0, probability: 50, expectedValue: 0 },
+        roles: { 
+          revenue: [{ id: 'u1', name: 'Mayank Kumar' }], 
+          supply: [] 
+        },
+        attachments: []
+      });
+    } else if (activeEnquiry) {
+      setFormData({ ...activeEnquiry });
+    } else {
+      setFormData(null);
+    }
+  }, [activeEnquiry, isCreating]);
+
   // Render Condition: If not creating AND (no activeEnquiryId OR no activeEnquiry found), return null
   if (!isCreating && (!activeEnquiryId || !activeEnquiry)) {
     return null;
   }
 
+  if (!formData) return null;
+
+  const isReadOnly = formData.status === 'Converted' || formData.status === 'Dropped';
+
   const handleSave = () => {
-    // Placeholder for now, will be implemented with form logic later
-    console.log('Saving enquiry:', activeEnquiryId || 'NEW');
+    console.log('Saving enquiry data:', formData);
+    // In a real app, this would call an API or context method
   };
 
   const handleConvert = () => {
@@ -48,13 +82,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     >
       {/* Detail Header */}
       <DetailHeader 
-        enquiry={isCreating ? { 
-          id: "NEW ENQUIRY", 
-          status: "DRAFT",
-          roles: {
-            revenue: [{ id: 'u1', name: 'Mayank Kumar' }]
-          }
-        } : activeEnquiry} 
+        enquiry={formData} 
         onClose={onClose}
         onSave={handleSave}
         onConvert={handleConvert}
@@ -70,7 +98,12 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
           animate={{ width: isCreating ? "70%" : "35%" }}
           className="@container overflow-y-auto no-scrollbar bg-white min-w-[300px] p-1.5 min-[height:801px]:p-3"
         >
-          <div className="text-sm text-gray-500 italic">Context Pane Placeholder</div>
+          <ContextColumn 
+            formData={formData} 
+            setFormData={setFormData} 
+            isCreating={isCreating} 
+            isReadOnly={isReadOnly} 
+          />
         </motion.div>
 
         {/* 2. Right Pane (Action Items & Workspace) */}
