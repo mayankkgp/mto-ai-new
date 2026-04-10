@@ -124,6 +124,27 @@ const EnquiryMasterPane = ({ isCompact }) => {
     });
   }, [enquiries, statusTab, searchQuery, activeFilters]);
 
+  const clearAllFilters = () => {
+    setSearchQuery('');
+    setActiveFilters({
+      type: [],
+      revRole: [],
+      advanced: false,
+      channel: '',
+      supply: [],
+      leadDateStart: '',
+      leadDateEnd: '',
+      revDueStart: '',
+      revDueEnd: '',
+      supDueStart: '',
+      supDueEnd: '',
+      minExpValue: '',
+      maxExpValue: '',
+      city: '',
+      source: ''
+    });
+  };
+
   return (
     <div className="flex flex-col h-full w-full bg-white border-r border-gray-200 overflow-hidden">
       <MasterHeader 
@@ -137,6 +158,7 @@ const EnquiryMasterPane = ({ isCompact }) => {
         setSearchQuery={setSearchQuery}
         activeFilters={activeFilters}
         setActiveFilters={setActiveFilters}
+        clearAllFilters={clearAllFilters}
       />
       
       <DataGrid 

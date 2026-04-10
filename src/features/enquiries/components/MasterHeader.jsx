@@ -28,19 +28,19 @@ const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
           <TabsList className="h-8">
             <TabsTrigger 
               value="Active" 
-              className="text-xs font-semibold transition-none"
+              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
             >
               Active ({counts.Active})
             </TabsTrigger>
             <TabsTrigger 
               value="Converted" 
-              className="text-xs font-semibold transition-none"
+              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
             >
               Converted ({counts.Converted})
             </TabsTrigger>
             <TabsTrigger 
               value="Dropped" 
-              className="text-xs font-semibold transition-none"
+              className="text-xs font-semibold transition-none px-4 text-gray-500 hover:text-gray-700 data-active:text-primary"
             >
               Dropped ({counts.Dropped})
             </TabsTrigger>

@@ -11,13 +11,29 @@ const FilterBar = ({
   searchQuery, 
   setSearchQuery, 
   activeFilters, 
-  setActiveFilters 
+  setActiveFilters,
+  clearAllFilters
 }) => {
   const { enquiries } = useEnquiryContext();
   
   const revUsers = useMemo(() => {
     return mockUsers.filter(u => u.department === 'Revenue' || u.department === 'Admin');
   }, []);
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (activeFilters.type?.length > 0) count++;
+    if (activeFilters.revRole?.length > 0) count++;
+    if (activeFilters.supply?.length > 0) count++;
+    if (activeFilters.channel !== '') count++;
+    if (activeFilters.city !== '') count++;
+    if (activeFilters.source !== '') count++;
+    if (activeFilters.leadDateStart || activeFilters.leadDateEnd) count++;
+    if (activeFilters.revDueStart || activeFilters.revDueEnd) count++;
+    if (activeFilters.supDueStart || activeFilters.supDueEnd) count++;
+    if (activeFilters.minExpValue || activeFilters.maxExpValue) count++;
+    return count;
+  }, [activeFilters]);
 
   const toggleFilter = (category, value) => {
     setActiveFilters(prev => {
@@ -118,7 +134,7 @@ const FilterBar = ({
         {/* Advanced Filter Group */}
         <div className={cn(
           "flex items-center rounded transition-colors overflow-hidden", 
-          activeFilters.advanced 
+          activeFilterCount > 0 
             ? "bg-[#F3F4F6] text-[#374151] border border-[#E5E7EB]" 
             : "bg-gray-100 text-gray-700"
         )}>
@@ -126,7 +142,17 @@ const FilterBar = ({
             <PopoverTrigger asChild>
               <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold hover:bg-black/5 transition-colors shrink-0">
                 <SlidersHorizontal className="h-3.5 w-3.5" />
-                {!isCompact && <span>Filters</span>}
+                {isCompact ? (
+                  activeFilterCount > 0 && (
+                    <span className="flex items-center justify-center bg-gray-700 text-white text-[9px] w-3.5 h-3.5 rounded-full leading-none">
+                      {activeFilterCount}
+                    </span>
+                  )
+                ) : (
+                  <span>
+                    {activeFilterCount === 0 ? "Filters" : `Filter (${activeFilterCount})`}
+                  </span>
+                )}
               </button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0 bg-transparent border-none shadow-none" align="end">
@@ -134,13 +160,14 @@ const FilterBar = ({
                 enquiries={enquiries} 
                 activeFilters={activeFilters}
                 setActiveFilters={setActiveFilters}
+                clearAllFilters={clearAllFilters}
               />
             </PopoverContent>
           </Popover>
           
-          {activeFilters.advanced && (
+          {activeFilterCount > 0 && (
             <button 
-              onClick={() => setActiveFilters(prev => ({ ...prev, advanced: false }))}
+              onClick={clearAllFilters}
               className="px-2 py-1.5 border-l border-[#E5E7EB] hover:bg-black/5 transition-colors"
             >
               <X className="h-3.5 w-3.5" />

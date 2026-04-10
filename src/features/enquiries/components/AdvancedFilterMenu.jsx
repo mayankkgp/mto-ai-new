@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils.js';
  * Advanced Filter Menu Component
  * Accordion-style list matching legacy UI
  */
-const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters }) => {
+const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearAllFilters }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
   
   const uniqueCities = useMemo(() => {
@@ -61,25 +61,6 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters }) => {
     });
   };
 
-  const clearFilters = () => {
-    setActiveFilters(prev => ({
-      ...prev,
-      advanced: false,
-      channel: '',
-      supply: [],
-      leadDateStart: '',
-      leadDateEnd: '',
-      revDueStart: '',
-      revDueEnd: '',
-      supDueStart: '',
-      supDueEnd: '',
-      minExpValue: '',
-      maxExpValue: '',
-      city: '',
-      source: ''
-    }));
-  };
-
   const removeFilter = (key, value = null) => {
     setActiveFilters(prev => {
       let nextValue;
@@ -113,7 +94,7 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters }) => {
     <div className="bg-white border border-gray-200 rounded-lg shadow-xl py-1 w-64 max-h-[80vh] overflow-y-auto no-scrollbar">
       <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Advanced Filters</span>
-        <button onClick={clearFilters} className="text-[10px] text-primary font-bold hover:underline">Clear</button>
+        <button onClick={clearAllFilters} className="text-[10px] text-primary font-bold hover:underline">Clear</button>
       </div>
 
       {activePills.length > 0 && (
