@@ -69,23 +69,25 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
         </PopoverTrigger>
         {!isReadOnly && (
           <PopoverContent className="w-auto min-w-[160px] p-0 py-1 bg-white border border-gray-200 rounded shadow-xl overflow-hidden flex flex-col" align="start">
-            <Command className="bg-transparent">
+            <Command className="bg-transparent p-0">
               <div className="px-2 py-1 border-b border-gray-50 mb-1">
                 <CommandInput 
+                  size="micro"
                   placeholder="Search user..." 
-                  className="w-full px-1.5 py-1 text-[10px] bg-gray-50 border border-gray-100 rounded outline-none focus:border-primary focus:ring-0 transition-colors h-auto"
+                  className="w-full px-1.5 bg-gray-50 border border-gray-100 rounded focus:border-[#1E40AF]"
                 />
               </div>
               <CommandList className="max-h-[160px] overflow-y-auto no-scrollbar">
                 <CommandEmpty className="px-2 py-3 text-center text-[10px] text-gray-400 italic">No user found.</CommandEmpty>
-                <CommandGroup>
+                <CommandGroup className="p-0">
                   {MOCK_USERS.map((user) => {
                     const isSelected = selectedUsers?.some(u => u.id === user.id);
                     return (
                       <CommandItem
                         key={user.id}
+                        size="micro"
                         onSelect={() => onToggle(user)}
-                        className="w-full px-2 py-1 text-[10px] flex items-center justify-between transition-colors text-gray-700 aria-selected:bg-gray-50 cursor-pointer"
+                        className="flex items-center justify-between cursor-pointer aria-selected:bg-gray-50"
                       >
                         <span className={cn("truncate", isSelected && "text-primary font-bold")}>
                           {user.name}

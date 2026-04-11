@@ -1,10 +1,21 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
 
 const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
   const overviewRef = useRef(null);
   const detailsRef = useRef(null);
+
+  useEffect(() => {
+    if (overviewRef.current) {
+      overviewRef.current.style.height = 'auto';
+      overviewRef.current.style.height = overviewRef.current.scrollHeight + 'px';
+    }
+    if (detailsRef.current) {
+      detailsRef.current.style.height = 'auto';
+      detailsRef.current.style.height = detailsRef.current.scrollHeight + 'px';
+    }
+  }, [formData.leadOverview, formData.leadDetails]);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({
@@ -29,7 +40,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
           rows={1}
           onInput={handleInput}
           className={cn(
-            "w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal resize-none max-h-[80px] overflow-y-auto",
+            "w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal",
             !formData.leadOverview && "border-red-500 bg-red-50"
           )}
           value={formData.leadOverview || ''}
@@ -47,7 +58,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
           ref={detailsRef}
           rows={1}
           onInput={handleInput}
-          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal resize-none max-h-[80px] overflow-y-auto"
+          className="w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal"
           value={formData.leadDetails || ''}
           onChange={(e) => handleChange('leadDetails', e.target.value)}
           disabled={isReadOnly}

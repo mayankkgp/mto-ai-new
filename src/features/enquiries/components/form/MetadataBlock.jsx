@@ -29,17 +29,21 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           value={formData.type} 
           onValueChange={(val) => val && handleChange('type', val)}
           disabled={isReadOnly}
-          className="flex h-[26px] items-center justify-center rounded bg-white p-0.5 border border-gray-200 transition-colors focus-within:border-primary focus-within:ring-0"
+          className="flex h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]"
         >
           <ToggleGroupItem 
             value="MTO" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 border-gray-200 flex-1"
+            variant="mto"
+            size="micro"
+            className="flex-1"
           >
             MTO
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="Ready" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 border-gray-200 flex-1"
+            variant="mto"
+            size="micro"
+            className="flex-1"
           >
             Ready
           </ToggleGroupItem>
@@ -52,7 +56,8 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
         </Label>
         <Input 
           type="date"
-          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal tracking-tight"
+          size="micro"
+          className="w-full tracking-tight"
           value={formData.leadDate || ''}
           onChange={(e) => handleChange('leadDate', e.target.value)}
           disabled={isReadOnly}
@@ -68,10 +73,10 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           onValueChange={(val) => handleChange('channel', val)}
           disabled={isReadOnly}
         >
-          <SelectTrigger className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal tracking-tight">
+          <SelectTrigger size="micro" className="w-full tracking-tight">
             <SelectValue placeholder="Select channel" />
           </SelectTrigger>
-          <SelectContent position="popper" sideOffset={0}>
+          <SelectContent position="popper" sideOffset={1}>
             <SelectItem value="Direct" className="text-[11px]">Direct</SelectItem>
             <SelectItem value="Website" className="text-[11px]">Website</SelectItem>
             <SelectItem value="WhatsApp" className="text-[11px]">WhatsApp</SelectItem>

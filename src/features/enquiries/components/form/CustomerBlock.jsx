@@ -35,8 +35,9 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
 
       <div className="relative w-full">
         <Input 
+          size="micro"
           className={cn(
-            "w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal font-semibold",
+            "w-full",
             !formData.customer.name && "border-red-500 bg-red-50"
           )}
           value={formData.customer.name || ''}
@@ -68,7 +69,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                   POC Name *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
+                  size="micro"
+                  className="w-full"
                   value={formData.customer.poc || ''}
                   onChange={(e) => handleChange('poc', e.target.value)}
                   disabled={isReadOnly}
@@ -79,7 +81,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                   City *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
+                  size="micro"
+                  className="w-full"
                   value={formData.customer.city || ''}
                   onChange={(e) => handleChange('city', e.target.value)}
                   disabled={isReadOnly}
@@ -90,7 +93,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                   Contact *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
+                  size="micro"
+                  className="w-full"
                   value={formData.customer.contact || ''}
                   onChange={(e) => handleChange('contact', e.target.value)}
                   disabled={isReadOnly}
