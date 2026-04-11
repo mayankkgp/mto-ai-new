@@ -30,7 +30,7 @@ function ToggleGroup({
       data-orientation={orientation}
       style={{ "--gap": spacing }}
       className={cn(
-        "flex h-[26px] w-full border border-gray-200 rounded overflow-hidden bg-white focus-within:border-[#1E40AF] gap-0 space-x-0 items-center justify-center",
+        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch",
         className,
       )}
       {...props}
