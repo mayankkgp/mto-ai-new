@@ -37,7 +37,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
         <Input 
           size="micro"
           className={cn(
-            "w-full",
+            "w-full font-semibold",
             !formData.customer.name && "border-red-500 bg-red-50"
           )}
           value={formData.customer.name || ''}

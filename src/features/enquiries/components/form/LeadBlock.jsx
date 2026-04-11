@@ -30,7 +30,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="space-y-0.5">
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Lead Overview *

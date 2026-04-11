@@ -29,7 +29,7 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           value={formData.type} 
           onValueChange={(val) => val && handleChange('type', val)}
           disabled={isReadOnly}
-          className="flex h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]"
+          className="w-full"
         >
           <ToggleGroupItem 
             value="MTO" 
