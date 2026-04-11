@@ -29,7 +29,7 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
 
   return (
     <div className="space-y-0.5">
-      <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+      <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
         {label}
       </Label>
       
@@ -85,7 +85,7 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
                       <CommandItem
                         key={user.id}
                         onSelect={() => onToggle(user)}
-                        className="w-full px-2 py-1.5 text-[10px] flex items-center justify-between transition-colors text-gray-700 aria-selected:bg-gray-50 cursor-pointer"
+                        className="w-full px-2 py-1 text-[10px] flex items-center justify-between transition-colors text-gray-700 aria-selected:bg-gray-50 cursor-pointer"
                       >
                         <span className={cn("truncate", isSelected && "text-primary font-bold")}>
                           {user.name}

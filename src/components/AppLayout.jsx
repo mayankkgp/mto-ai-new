@@ -11,7 +11,7 @@ const MainWorkspace = ({ children }) => {
 };
 
 export const AppLayout = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [activeTab, setActiveTab] = useState('enquiries');
   
   // Mock user data - in a real app this might come from an AuthContext

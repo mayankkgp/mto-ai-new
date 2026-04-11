@@ -22,7 +22,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
   return (
     <div className="space-y-0">
       <div className="flex items-center justify-between mb-0.5 h-[18px]">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Customer Name *
         </Label>
         <button 
@@ -36,13 +36,12 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
       <div className="relative w-full">
         <Input 
           className={cn(
-            "w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed font-semibold",
+            "w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal font-semibold",
             !formData.customer.name && "border-red-500 bg-red-50"
           )}
           value={formData.customer.name || ''}
           onChange={(e) => handleChange('name', e.target.value)}
           disabled={isReadOnly}
-          placeholder="Enter customer name..."
           list="customers"
         />
         <datalist id="customers">
@@ -65,33 +64,33 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
               isCreating ? "grid-cols-2 @[500px]:grid-cols-3" : "grid-cols-1 @[500px]:grid-cols-2"
             )}>
               <div className={cn(isCreating ? "" : "col-span-2")}>
-                <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
                   POC Name *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
                   value={formData.customer.poc || ''}
                   onChange={(e) => handleChange('poc', e.target.value)}
                   disabled={isReadOnly}
                 />
               </div>
               <div>
-                <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
                   City *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
                   value={formData.customer.city || ''}
                   onChange={(e) => handleChange('city', e.target.value)}
                   disabled={isReadOnly}
                 />
               </div>
               <div>
-                <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
                   Contact *
                 </Label>
                 <Input 
-                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal"
                   value={formData.customer.contact || ''}
                   onChange={(e) => handleChange('contact', e.target.value)}
                   disabled={isReadOnly}

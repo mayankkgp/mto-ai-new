@@ -8,7 +8,7 @@ import RolesBlock from './RolesBlock.jsx';
 
 const ContextColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
   return (
-    <div className="flex flex-col gap-2 min-[height:801px]:gap-3">
+    <div className="flex flex-col gap-1.5 min-[height:801px]:gap-3">
       <CustomerBlock 
         formData={formData} 
         setFormData={setFormData} 

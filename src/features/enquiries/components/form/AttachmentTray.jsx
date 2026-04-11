@@ -80,23 +80,25 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
     >
-      <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar min-h-[64px]">
-        {formData.attachments?.map((file) => (
-          <FileThumbnail 
-            key={file.id} 
-            file={file} 
-            onRemove={removeFile} 
-            isReadOnly={isReadOnly}
-          />
-        ))}
-      </div>
+      {formData.attachments?.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar min-h-[64px]">
+          {formData.attachments?.map((file) => (
+            <FileThumbnail 
+              key={file.id} 
+              file={file} 
+              onRemove={removeFile} 
+              isReadOnly={isReadOnly}
+            />
+          ))}
+        </div>
+      )}
       
       {!isReadOnly && (
         <button 
           onClick={() => fileInputRef.current?.click()}
           className="w-full py-1.5 border border-dashed border-gray-300 rounded flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50"
         >
-          <Paperclip size={14} className="text-gray-400" />
+          <Paperclip size={12} className="text-gray-400" />
           <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">Attach Files</span>
         </button>
       )}

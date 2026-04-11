@@ -70,12 +70,12 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
   return (
     <div className="grid grid-cols-3 gap-1.5">
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Order Value
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+          Order Value (₹)
         </Label>
         <div className="relative">
           <Input 
-            className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight font-bold"
+            className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal font-bold tracking-tight"
             value={displayValue}
             onChange={handleOrderValueChange}
             disabled={isReadOnly}
@@ -84,18 +84,18 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Prob. (%)
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+          Prob (%)
         </Label>
         <Select 
           value={String(formData.commercials?.probability || 50)} 
           onValueChange={handleProbabilityChange}
           disabled={isReadOnly}
         >
-          <SelectTrigger className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight">
+          <SelectTrigger className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal tracking-tight">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper" sideOffset={0}>
             {[10, 30, 50, 70, 90].map(p => (
               <SelectItem key={p} value={String(p)} className="text-[11px]">{p}%</SelectItem>
             ))}
@@ -104,11 +104,11 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-          Exp. Value
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+          Expected Value
         </Label>
         <div className="w-full px-1 h-[26px] flex items-center justify-end tracking-tight bg-gray-50 border border-gray-200 text-gray-800 rounded text-[11px] font-bold text-right">
-          {formatIndianCurrency(formData.commercials?.expectedValue || 0)}
+          ₹ {formatIndianCurrency(formData.commercials?.expectedValue || 0)}
         </div>
       </div>
     </div>

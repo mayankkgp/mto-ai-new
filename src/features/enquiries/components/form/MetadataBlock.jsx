@@ -21,7 +21,7 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
   return (
     <div className="grid grid-cols-3 gap-1.5">
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Type *
         </Label>
         <ToggleGroup 
@@ -33,13 +33,13 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
         >
           <ToggleGroupItem 
             value="MTO" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 flex-1"
+            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 border-gray-200 flex-1"
           >
             MTO
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="Ready" 
-            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 flex-1"
+            className="h-full px-2 text-[10px] font-bold uppercase tracking-wide rounded-sm transition-all data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=off]:text-gray-500 hover:data-[state=off]:bg-gray-200 border-gray-200 flex-1"
           >
             Ready
           </ToggleGroupItem>
@@ -47,12 +47,12 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Lead Date
         </Label>
         <Input 
           type="date"
-          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight [&::-webkit-calendar-picker-indicator]:hidden"
+          className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal tracking-tight"
           value={formData.leadDate || ''}
           onChange={(e) => handleChange('leadDate', e.target.value)}
           disabled={isReadOnly}
@@ -60,7 +60,7 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Channel
         </Label>
         <Select 
@@ -68,10 +68,10 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           onValueChange={(val) => handleChange('channel', val)}
           disabled={isReadOnly}
         >
-          <SelectTrigger className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus:border-primary focus:ring-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed tracking-tight">
+          <SelectTrigger className="w-full px-1 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 rounded text-[11px] outline-none focus-visible:ring-0 focus-visible:border-[#1E40AF] focus-visible:border disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal tracking-tight">
             <SelectValue placeholder="Select channel" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent position="popper" sideOffset={0}>
             <SelectItem value="Direct" className="text-[11px]">Direct</SelectItem>
             <SelectItem value="Website" className="text-[11px]">Website</SelectItem>
             <SelectItem value="WhatsApp" className="text-[11px]">WhatsApp</SelectItem>
