@@ -1,6 +1,6 @@
 import React from 'react';
+import { format, parse, isValid } from 'date-fns';
 import { Label } from '@/components/ui/label.jsx';
-import { Input } from '@/components/ui/input.jsx';
 import { 
   Select, 
   SelectContent, 
@@ -9,6 +9,14 @@ import {
   SelectValue 
 } from '@/components/ui/select.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
+import { Button } from '@/components/ui/button.jsx';
+import { Calendar } from '@/components/ui/calendar.jsx';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover.jsx';
+import { cn } from '@/lib/utils.js';
 
 const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
   const handleChange = (field, value) => {
@@ -16,6 +24,16 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
       ...prev,
       [field]: value
     }));
+  };
+
+  const dateValue = formData.leadDate 
+    ? parse(formData.leadDate, "dd-MM-yyyy", new Date()) 
+    : null;
+
+  const handleDateSelect = (date) => {
+    if (date) {
+      handleChange('leadDate', format(date, "dd-MM-yyyy"));
+    }
   };
 
   return (
@@ -29,7 +47,7 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
           value={formData.type} 
           onValueChange={(val) => val && handleChange('type', val)}
           disabled={isReadOnly}
-          className="flex h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]"
+          className="flex w-full h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]"
         >
           <ToggleGroupItem 
             value="MTO" 
@@ -54,14 +72,29 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Lead Date
         </Label>
-        <Input 
-          type="date"
-          size="micro"
-          className="w-full tracking-tight"
-          value={formData.leadDate || ''}
-          onChange={(e) => handleChange('leadDate', e.target.value)}
-          disabled={isReadOnly}
-        />
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="mto-input"
+              size="micro"
+              disabled={isReadOnly}
+              className={cn(
+                "w-full justify-start text-left font-normal",
+                !formData.leadDate && "text-gray-500"
+              )}
+            >
+              {formData.leadDate || "Select date"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar
+              mode="single"
+              selected={isValid(dateValue) ? dateValue : undefined}
+              onSelect={handleDateSelect}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div className="space-y-0.5">
