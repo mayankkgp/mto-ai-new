@@ -3,10 +3,9 @@ import { Textarea } from '@/components/ui/textarea.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { Label } from '@/components/ui/label.jsx';
-import { Checkbox } from '@/components/ui/checkbox.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
 import { cn } from '@/lib/utils.js';
-import { Trash2, CornerDownLeft, CheckCircle2, Truck } from 'lucide-react';
+import { CornerDownLeft, CheckCircle2, Truck, Circle } from 'lucide-react';
 
 const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
   const actionRef = React.useRef(null);
@@ -75,77 +74,57 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
     }));
   };
 
-  const deleteTask = (type, taskId) => {
-    setFormData(prev => ({
-      ...prev,
-      tasks: {
-        ...prev.tasks,
-        [type]: prev.tasks[type].filter(t => t.id !== taskId)
-      }
-    }));
-  };
-
   const TaskCard = ({ task, type }) => {
     const isEditing = editingTask?.id === task.id;
 
     return (
       <div className={cn(
-        "group p-1.5 bg-white border-b border-gray-100 transition-all hover:bg-gray-50/50",
-        task.isCompleted && "opacity-60"
+        "group p-1.5 rounded border transition-all mb-1.5", 
+        task.isCompleted ? "bg-gray-50 border-gray-100 opacity-60" : "bg-white border-gray-200 shadow-sm hover:border-primary/20"
       )}>
         <div className="flex items-start gap-1.5">
-          <Checkbox 
-            checked={task.isCompleted}
-            onCheckedChange={() => toggleTaskStatus(type, task.id)}
-            className="rounded-full mt-0.5 h-3.5 w-3.5"
-            disabled={isReadOnly}
-          />
+          <button 
+            onClick={() => !isReadOnly && toggleTaskStatus(type, task.id)} 
+            disabled={isReadOnly} 
+            className="shrink-0 min-w-[24px] min-h-[24px] flex items-center justify-center rounded hover:bg-gray-100"
+          >
+            {task.isCompleted ? <CheckCircle2 size={14} className="text-[#059669]" /> : <Circle size={14} className="text-gray-300 hover:text-[#1E40AF]/80" />}
+          </button>
+          
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                {isEditing && editingTask.field === 'text' ? (
-                  <Textarea 
-                    autoFocus
-                    value={editingTask.value}
-                    onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
-                    onBlur={() => {
-                      updateTask(type, task.id, { text: editingTask.value });
-                      setEditingTask(null);
-                    }}
-                    className="text-[11px] p-1 min-h-[26px] leading-tight rounded border-gray-200 focus-visible:ring-0"
-                  />
-                ) : (
-                  <p 
-                    onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'text', value: task.text })}
-                    className={cn(
-                      "text-[11px] font-medium leading-tight cursor-pointer break-words",
-                      task.isCompleted && "line-through text-gray-400"
-                    )}
-                  >
-                    {task.text}
-                  </p>
+            <Input 
+              type="date"
+              size="micro"
+              value={task.dueDate}
+              onChange={(e) => updateTask(type, task.id, { dueDate: e.target.value })}
+              className="relative float-right ml-2 mb-1 bg-transparent border-none outline-none focus:underline p-0 cursor-pointer text-[9px] font-bold text-gray-500 hover:underline w-[70px] text-right"
+              disabled={isReadOnly}
+            />
+
+            {isEditing && editingTask.field === 'text' ? (
+              <Textarea 
+                autoFocus
+                value={editingTask.value}
+                onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
+                onBlur={() => {
+                  updateTask(type, task.id, { text: editingTask.value });
+                  setEditingTask(null);
+                }}
+                className="text-[11px] p-1 min-h-[26px] leading-tight rounded border-gray-200 focus-visible:ring-0"
+              />
+            ) : (
+              <p 
+                onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'text', value: task.text })}
+                className={cn(
+                  "text-[11px] mt-1 break-words leading-tight", 
+                  task.isCompleted ? "line-through text-gray-400 font-bold" : "text-gray-800 font-bold hover:text-[#1E40AF]"
                 )}
-              </div>
-              
-              <div className="flex items-center gap-1 shrink-0">
-                <Input 
-                  type="date"
-                  size="micro"
-                  value={task.dueDate}
-                  onChange={(e) => updateTask(type, task.id, { dueDate: e.target.value })}
-                  className="w-fit h-4 text-[8px] p-0 border-none bg-transparent font-medium text-gray-400 text-right"
-                  disabled={isReadOnly}
-                />
-                {!isReadOnly && (
-                  <button 
-                    onClick={() => deleteTask(type, task.id)}
-                    className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity"
-                  >
-                    <Trash2 size={10} />
-                  </button>
-                )}
-              </div>
-            </div>
+              >
+                {task.text}
+              </p>
+            )}
+
+            <div className="clear-both"></div>
 
             {task.remark || (isEditing && editingTask.field === 'remark') ? (
               <div className="mt-0.5">
@@ -164,7 +143,10 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
                 ) : (
                   <p 
                     onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'remark', value: task.remark })}
-                    className="text-[10px] text-gray-500 leading-tight cursor-pointer italic"
+                    className={cn(
+                      "text-[10px] mt-0.5 italic leading-tight block", 
+                      task.isCompleted ? "text-gray-400" : "text-gray-500 hover:text-gray-700"
+                    )}
                   >
                     {task.remark}
                   </p>
