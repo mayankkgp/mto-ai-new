@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
 
-const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
+const LeadBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
   const overviewRef = useRef(null);
   const detailsRef = useRef(null);
 
@@ -41,7 +41,7 @@ const LeadBlock = ({ formData, setFormData, isReadOnly }) => {
           onInput={handleInput}
           className={cn(
             "w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal",
-            !formData.leadOverview && "border-red-500 bg-red-50"
+            !formData.leadOverview && !isCreating && "border-red-500 bg-red-50"
           )}
           value={formData.leadOverview || ''}
           onChange={(e) => handleChange('leadOverview', e.target.value)}

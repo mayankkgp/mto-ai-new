@@ -37,9 +37,12 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
         <PopoverTrigger asChild>
           <button 
             type="button"
+            disabled={isReadOnly}
             className={cn(
-              "w-full cursor-pointer focus:outline-none group flex flex-wrap items-center gap-1 p-[2px] bg-white border border-gray-200 rounded min-h-[26px] transition-colors hover:border-primary/40 text-left",
-              isReadOnly && "bg-gray-50 cursor-not-allowed"
+              "w-full focus:outline-none group flex flex-wrap items-center gap-1 p-[2px] bg-white border border-gray-200 rounded min-h-[26px] transition-colors text-left",
+              isReadOnly 
+                ? "bg-gray-50 cursor-not-allowed" 
+                : "cursor-pointer hover:border-primary/40"
             )}
           >
             {selectedUsers?.map(user => (

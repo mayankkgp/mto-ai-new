@@ -19,6 +19,7 @@ const ContextColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
       <LeadBlock 
         formData={formData} 
         setFormData={setFormData} 
+        isCreating={isCreating} 
         isReadOnly={isReadOnly} 
       />
       

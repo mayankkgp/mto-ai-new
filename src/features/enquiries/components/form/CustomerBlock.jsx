@@ -79,7 +79,7 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
           size="micro"
           className={cn(
             "w-full font-semibold",
-            !formData.customer.name && "border-red-500 bg-red-50"
+            !formData.customer.name && !isCreating && "border-red-500 bg-red-50"
           )}
           value={formData.customer.name || ''}
           onChange={(e) => handleCustomerNameChange(e.target.value)}
