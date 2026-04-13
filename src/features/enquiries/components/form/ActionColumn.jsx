@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label.jsx';
 import { Checkbox } from '@/components/ui/checkbox.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
 import { cn } from '@/lib/utils.js';
-import { Trash2, CornerDownLeft } from 'lucide-react';
+import { Trash2, CornerDownLeft, CheckCircle2, Truck } from 'lucide-react';
 
 const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
   const actionRef = React.useRef(null);
@@ -90,61 +90,65 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
 
     return (
       <div className={cn(
-        "group p-2 bg-white border border-gray-100 rounded shadow-sm transition-all hover:border-primary/20",
+        "group p-1.5 bg-white border-b border-gray-100 transition-all hover:bg-gray-50/50",
         task.isCompleted && "opacity-60"
       )}>
-        <div className="flex items-start gap-2">
+        <div className="flex items-start gap-1.5">
           <Checkbox 
             checked={task.isCompleted}
             onCheckedChange={() => toggleTaskStatus(type, task.id)}
-            className="rounded-full mt-1"
+            className="rounded-full mt-0.5 h-3.5 w-3.5"
             disabled={isReadOnly}
           />
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-2 mb-1">
-              <Input 
-                type="date"
-                size="micro"
-                value={task.dueDate}
-                onChange={(e) => updateTask(type, task.id, { dueDate: e.target.value })}
-                className="w-fit h-5 text-[9px] p-1 border-none bg-gray-50 font-medium"
-                disabled={isReadOnly}
-              />
-              {!isReadOnly && (
-                <button 
-                  onClick={() => deleteTask(type, task.id)}
-                  className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-red-500 transition-opacity"
-                >
-                  <Trash2 size={12} />
-                </button>
-              )}
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex-1 min-w-0">
+                {isEditing && editingTask.field === 'text' ? (
+                  <Textarea 
+                    autoFocus
+                    value={editingTask.value}
+                    onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
+                    onBlur={() => {
+                      updateTask(type, task.id, { text: editingTask.value });
+                      setEditingTask(null);
+                    }}
+                    className="text-[11px] p-1 min-h-[26px] leading-tight rounded border-gray-200 focus-visible:ring-0"
+                  />
+                ) : (
+                  <p 
+                    onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'text', value: task.text })}
+                    className={cn(
+                      "text-[11px] font-medium leading-tight cursor-pointer break-words",
+                      task.isCompleted && "line-through text-gray-400"
+                    )}
+                  >
+                    {task.text}
+                  </p>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-1 shrink-0">
+                <Input 
+                  type="date"
+                  size="micro"
+                  value={task.dueDate}
+                  onChange={(e) => updateTask(type, task.id, { dueDate: e.target.value })}
+                  className="w-fit h-4 text-[8px] p-0 border-none bg-transparent font-medium text-gray-400 text-right"
+                  disabled={isReadOnly}
+                />
+                {!isReadOnly && (
+                  <button 
+                    onClick={() => deleteTask(type, task.id)}
+                    className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-opacity"
+                  >
+                    <Trash2 size={10} />
+                  </button>
+                )}
+              </div>
             </div>
 
-            {isEditing && editingTask.field === 'text' ? (
-              <Textarea 
-                autoFocus
-                value={editingTask.value}
-                onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
-                onBlur={() => {
-                  updateTask(type, task.id, { text: editingTask.value });
-                  setEditingTask(null);
-                }}
-                className="text-xs p-1 min-h-[40px] leading-tight"
-              />
-            ) : (
-              <p 
-                onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'text', value: task.text })}
-                className={cn(
-                  "text-[11px] font-medium leading-tight cursor-pointer",
-                  task.isCompleted && "line-through text-gray-400"
-                )}
-              >
-                {task.text}
-              </p>
-            )}
-
             {task.remark || (isEditing && editingTask.field === 'remark') ? (
-              <div className="mt-1">
+              <div className="mt-0.5">
                 {isEditing && editingTask.field === 'remark' ? (
                   <Textarea 
                     autoFocus
@@ -155,7 +159,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
                       setEditingTask(null);
                     }}
                     placeholder="Add remark..."
-                    className="text-[10px] p-1 min-h-[30px] leading-tight text-gray-500"
+                    className="text-[10px] p-1 min-h-[20px] leading-tight text-gray-500 rounded border-gray-200 focus-visible:ring-0"
                   />
                 ) : (
                   <p 
@@ -169,9 +173,9 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
             ) : !isReadOnly && (
               <button 
                 onClick={() => setEditingTask({ id: task.id, field: 'remark', value: '' })}
-                className="mt-1 text-[9px] text-primary/60 hover:text-primary font-medium"
+                className="mt-0.5 text-[9px] text-primary/60 hover:text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity"
               >
-                + Add Remark
+                + Remark
               </button>
             )}
           </div>
@@ -324,24 +328,26 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
       </div>
 
       {/* Task Boards */}
-      <div className="flex-1 overflow-y-auto no-scrollbar p-3">
+      <div className="flex-1 overflow-y-auto no-scrollbar bg-gray-50/30">
         <div className={cn(
-          "grid gap-4 h-full",
-          isCreating ? "grid-cols-1" : "grid-cols-2"
+          "grid h-full",
+          isCreating ? "grid-cols-1 gap-0" : "grid-cols-2 gap-0"
         )}>
           {/* Revenue Board */}
           <div className={cn(
-            "flex flex-col gap-2",
-            !isCreating && "pr-2 border-r border-gray-100"
+            "flex flex-col h-full",
+            !isCreating && "border-r border-gray-200"
           )}>
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Revenue Tasks</Label>
-              <span className="ml-auto text-[10px] font-bold text-gray-300">{formData.tasks.revenue.length}</span>
+            <div className="px-3 py-1.5 bg-white border-b border-gray-200 flex items-center gap-2 shrink-0">
+              <CheckCircle2 size={12} className="text-[#6B7280]" />
+              <h3 className="text-[9px] font-bold text-[#374151] uppercase tracking-wider">Revenue Tasks</h3>
+              <span className="ml-auto text-[9px] font-bold text-gray-500 bg-white px-1.5 py-0.5 rounded-full border border-gray-200">
+                {formData.tasks.revenue.length}
+              </span>
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col">
               {formData.tasks.revenue.length === 0 ? (
-                <div className="py-8 border border-dashed border-gray-200 rounded flex flex-col items-center justify-center text-gray-300">
+                <div className="py-8 flex flex-col items-center justify-center text-gray-300">
                   <p className="text-[10px] font-medium uppercase tracking-tighter">No Revenue Actions</p>
                 </div>
               ) : (
@@ -353,15 +359,17 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
           </div>
 
           {/* Supply Board */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-              <Label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Supply Tasks</Label>
-              <span className="ml-auto text-[10px] font-bold text-gray-300">{formData.tasks.supply.length}</span>
+          <div className="flex flex-col h-full">
+            <div className="px-3 py-1.5 bg-white border-b border-gray-200 flex items-center gap-2 shrink-0">
+              <Truck size={12} className="text-[#6B7280]" />
+              <h3 className="text-[9px] font-bold text-[#374151] uppercase tracking-wider">Supply Tasks</h3>
+              <span className="ml-auto text-[9px] font-bold text-gray-500 bg-white px-1.5 py-0.5 rounded-full border border-gray-200">
+                {formData.tasks.supply.length}
+              </span>
             </div>
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col">
               {formData.tasks.supply.length === 0 ? (
-                <div className="py-8 border border-dashed border-gray-200 rounded flex flex-col items-center justify-center text-gray-300">
+                <div className="py-8 flex flex-col items-center justify-center text-gray-300">
                   <p className="text-[10px] font-medium uppercase tracking-tighter">No Supply Actions</p>
                 </div>
               ) : (
