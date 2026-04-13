@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
 import { cn } from '@/lib/utils.js';
 import { CornerDownLeft, CheckCircle2, Truck, Circle } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
   const actionRef = React.useRef(null);
@@ -25,7 +26,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
 
     const task = {
       id: Math.random().toString(36).substr(2, 9),
-      text: newAction.text,
+      actionText: newAction.text,
       remark: newAction.remark,
       dueDate: newAction.dueDate,
       isCompleted: false,
@@ -56,7 +57,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
       tasks: {
         ...prev.tasks,
         [type]: prev.tasks[type].map(t => 
-          t.id === taskId ? { ...t, isCompleted: !t.isCompleted } : t
+          t.id === taskId ? { ...t, isCompleted: !t.isCompleted, completedAt: !t.isCompleted ? Date.now() : undefined } : t
         )
       }
     }));
@@ -78,80 +79,89 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
     const isEditing = editingTask?.id === task.id;
 
     return (
-      <div className={cn(
-        "group p-1.5 rounded border transition-all mb-1.5", 
-        task.isCompleted ? "bg-gray-50 border-gray-100 opacity-60" : "bg-white border-gray-200 shadow-sm hover:border-primary/20"
-      )}>
+      <motion.div 
+        layout 
+        initial={{ opacity: 0 }} 
+        animate={{ opacity: 1 }}
+        className={cn("group p-1.5 rounded border transition-all", task.isCompleted ? "bg-gray-50 border-gray-100 opacity-60" : "bg-white border-gray-200 shadow-sm hover:border-primary/20")}
+      >
         <div className="flex items-start gap-1.5">
-          <button 
-            onClick={() => !isReadOnly && toggleTaskStatus(type, task.id)} 
-            disabled={isReadOnly} 
-            className="shrink-0 min-w-[24px] min-h-[24px] flex items-center justify-center rounded hover:bg-gray-100"
-          >
+          <button onClick={() => !isReadOnly && toggleTaskStatus(type, task.id)} disabled={isReadOnly} className="shrink-0 min-w-[24px] min-h-[24px] flex items-center justify-center rounded hover:bg-gray-100">
             {task.isCompleted ? <CheckCircle2 size={14} className="text-[#059669]" /> : <Circle size={14} className="text-gray-300 hover:text-[#1E40AF]/80" />}
           </button>
           
           <div className="flex-1 min-w-0">
-            <Input 
+            <input 
               type="date"
-              size="micro"
               value={task.dueDate}
               onChange={(e) => updateTask(type, task.id, { dueDate: e.target.value })}
-              className="relative float-right ml-2 mb-1 bg-transparent border-none outline-none focus:underline p-0 cursor-pointer text-[9px] font-bold text-gray-500 hover:underline w-[70px] text-right"
+              className="relative float-right ml-2 mb-1 bg-transparent border-none outline-none focus:underline p-0 cursor-pointer text-[9px] font-bold text-gray-500 hover:underline w-[70px] text-right [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
               disabled={isReadOnly}
             />
 
-            {isEditing && editingTask.field === 'text' ? (
-              <Textarea 
+            {isEditing && editingTask.field === 'actionText' ? (
+              <textarea 
                 autoFocus
+                rows={1}
                 value={editingTask.value}
-                onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
+                onFocus={(e) => { 
+                  e.target.setSelectionRange(e.target.value.length, e.target.value.length); 
+                  e.target.style.height = 'auto'; 
+                  e.target.style.height = e.target.scrollHeight + 'px'; 
+                }}
+                onChange={(e) => { 
+                  setEditingTask({ ...editingTask, value: e.target.value }); 
+                  e.target.style.height = 'auto'; 
+                  e.target.style.height = e.target.scrollHeight + 'px'; 
+                }}
                 onBlur={() => {
-                  updateTask(type, task.id, { text: editingTask.value });
+                  updateTask(type, task.id, { actionText: editingTask.value });
                   setEditingTask(null);
                 }}
-                className="text-[11px] p-1 min-h-[26px] leading-tight rounded border-gray-200 focus-visible:ring-0"
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && e.target.blur()}
+                className="w-[calc(100%-80px)] mt-1 bg-white border border-gray-200 rounded px-1 py-0.5 text-[11px] font-bold outline-none focus:border-[#1E40AF] focus:ring-0 resize-none placeholder:font-normal placeholder:text-gray-400 block"
               />
             ) : (
               <p 
-                onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'text', value: task.text })}
-                className={cn(
-                  "text-[11px] mt-1 break-words leading-tight", 
-                  task.isCompleted ? "line-through text-gray-400 font-bold" : "text-gray-800 font-bold hover:text-[#1E40AF]"
-                )}
+                onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'actionText', value: task.actionText })}
+                className={cn("text-[11px] mt-1 break-words leading-tight", task.isCompleted ? "line-through text-gray-400 font-bold" : "text-gray-800 font-bold hover:text-[#1E40AF]")}
               >
-                {task.text}
+                {task.actionText}
               </p>
             )}
 
             <div className="clear-both"></div>
 
-            {task.remark || (isEditing && editingTask.field === 'remark') ? (
-              <div className="mt-0.5">
-                {isEditing && editingTask.field === 'remark' ? (
-                  <Textarea 
-                    autoFocus
-                    value={editingTask.value}
-                    onChange={(e) => setEditingTask({ ...editingTask, value: e.target.value })}
-                    onBlur={() => {
-                      updateTask(type, task.id, { remark: editingTask.value });
-                      setEditingTask(null);
-                    }}
-                    placeholder="Add remark..."
-                    className="text-[10px] p-1 min-h-[20px] leading-tight text-gray-500 rounded border-gray-200 focus-visible:ring-0"
-                  />
-                ) : (
-                  <p 
-                    onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'remark', value: task.remark })}
-                    className={cn(
-                      "text-[10px] mt-0.5 italic leading-tight block", 
-                      task.isCompleted ? "text-gray-400" : "text-gray-500 hover:text-gray-700"
-                    )}
-                  >
-                    {task.remark}
-                  </p>
-                )}
-              </div>
+            {isEditing && editingTask.field === 'remark' ? (
+              <textarea 
+                autoFocus
+                rows={1}
+                value={editingTask.value}
+                onFocus={(e) => { 
+                  e.target.setSelectionRange(e.target.value.length, e.target.value.length); 
+                  e.target.style.height = 'auto'; 
+                  e.target.style.height = e.target.scrollHeight + 'px'; 
+                }}
+                onChange={(e) => { 
+                  setEditingTask({ ...editingTask, value: e.target.value }); 
+                  e.target.style.height = 'auto'; 
+                  e.target.style.height = e.target.scrollHeight + 'px'; 
+                }}
+                onBlur={() => {
+                  updateTask(type, task.id, { remark: editingTask.value });
+                  setEditingTask(null);
+                }}
+                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && e.target.blur()}
+                placeholder="Add remark..."
+                className="w-full mt-1 bg-white border border-gray-200 rounded px-1 py-0.5 text-[10px] italic outline-none focus:border-[#1E40AF] focus:ring-0 resize-none block placeholder:not-italic placeholder:text-gray-400"
+              />
+            ) : task.remark ? (
+              <p 
+                onClick={() => !isReadOnly && setEditingTask({ id: task.id, field: 'remark', value: task.remark })}
+                className={cn("text-[10px] mt-0.5 italic leading-tight block", task.isCompleted ? "text-gray-400" : "text-gray-500 hover:text-gray-700")}
+              >
+                {task.remark}
+              </p>
             ) : !isReadOnly && (
               <button 
                 onClick={() => setEditingTask({ id: task.id, field: 'remark', value: '' })}
@@ -162,7 +172,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   };
 
@@ -324,16 +334,20 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
               <CheckCircle2 size={12} className="text-[#6B7280]" />
               <h3 className="text-[9px] font-bold text-[#374151] uppercase tracking-wider">Revenue Tasks</h3>
               <span className="ml-auto text-[9px] font-bold text-gray-500 bg-white px-1.5 py-0.5 rounded-full border border-gray-200">
-                {formData.tasks.revenue.length}
+                {formData.tasks.revenue.filter(t => !t.isCompleted).length}
               </span>
             </div>
-            <div className="flex flex-col">
+            <div className="flex-1 overflow-y-auto p-1 min-[height:801px]:p-2 space-y-1 min-[height:801px]:space-y-1.5 no-scrollbar">
               {formData.tasks.revenue.length === 0 ? (
                 <div className="py-8 flex flex-col items-center justify-center text-gray-300">
                   <p className="text-[10px] font-medium uppercase tracking-tighter">No Revenue Actions</p>
                 </div>
               ) : (
-                formData.tasks.revenue.map(task => (
+                [...formData.tasks.revenue].sort((a, b) => {
+                  if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+                  if (a.isCompleted && b.isCompleted) return (b.completedAt || 0) - (a.completedAt || 0);
+                  return 0;
+                }).map(task => (
                   <TaskCard key={task.id} task={task} type="revenue" />
                 ))
               )}
@@ -346,16 +360,20 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
               <Truck size={12} className="text-[#6B7280]" />
               <h3 className="text-[9px] font-bold text-[#374151] uppercase tracking-wider">Supply Tasks</h3>
               <span className="ml-auto text-[9px] font-bold text-gray-500 bg-white px-1.5 py-0.5 rounded-full border border-gray-200">
-                {formData.tasks.supply.length}
+                {formData.tasks.supply.filter(t => !t.isCompleted).length}
               </span>
             </div>
-            <div className="flex flex-col">
+            <div className="flex-1 overflow-y-auto p-1 min-[height:801px]:p-2 space-y-1 min-[height:801px]:space-y-1.5 no-scrollbar">
               {formData.tasks.supply.length === 0 ? (
                 <div className="py-8 flex flex-col items-center justify-center text-gray-300">
                   <p className="text-[10px] font-medium uppercase tracking-tighter">No Supply Actions</p>
                 </div>
               ) : (
-                formData.tasks.supply.map(task => (
+                [...formData.tasks.supply].sort((a, b) => {
+                  if (a.isCompleted !== b.isCompleted) return a.isCompleted ? 1 : -1;
+                  if (a.isCompleted && b.isCompleted) return (b.completedAt || 0) - (a.completedAt || 0);
+                  return 0;
+                }).map(task => (
                   <TaskCard key={task.id} task={task} type="supply" />
                 ))
               )}
