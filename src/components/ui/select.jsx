@@ -50,9 +50,21 @@ function SelectValue({
 function SelectTrigger({
   className,
   size = "default",
+  asChild = false,
   children,
   ...props
 }) {
+  if (asChild) {
+    return (
+      <SelectPrimitive.Trigger
+        data-slot="select-trigger"
+        data-size={size}
+        className={cn(selectTriggerVariants({ size }), className)}
+        {...props}
+        render={children}
+      />
+    );
+  }
   return (
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
