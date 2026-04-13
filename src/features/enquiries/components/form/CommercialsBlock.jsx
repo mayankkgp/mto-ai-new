@@ -84,7 +84,7 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
         </div>
       </div>
 
-      <div className="space-y-0.5">
+      <div className="flex flex-col gap-0.5">
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Prob (%)
         </Label>

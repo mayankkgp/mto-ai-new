@@ -1,5 +1,5 @@
 import React from 'react';
-import { format, parse, isValid } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { Label } from '@/components/ui/label.jsx';
 import { 
   Select, 
@@ -27,17 +27,17 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
   };
 
   const dateValue = formData.leadDate 
-    ? parse(formData.leadDate, "dd-MM-yyyy", new Date()) 
+    ? new Date(formData.leadDate) 
     : null;
 
   const handleDateSelect = (date) => {
     if (date) {
-      handleChange('leadDate', format(date, "dd-MM-yyyy"));
+      handleChange('leadDate', format(date, "yyyy-MM-dd"));
     }
   };
 
   return (
-    <div className="grid grid-cols-3 gap-1.5">
+    <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-start">
       <div className="space-y-0.5">
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Type *
@@ -79,25 +79,28 @@ const MetadataBlock = ({ formData, setFormData, isReadOnly }) => {
               size="micro"
               disabled={isReadOnly}
               className={cn(
-                "w-full justify-start text-left font-normal",
+                "w-fit justify-start text-left font-normal",
                 !formData.leadDate && "text-gray-500"
               )}
             >
-              {formData.leadDate || "Select date"}
+              {formData.leadDate ? format(dateValue, "dd/MM/yyyy") : "Select date"}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto p-0" align="start" sideOffset={0}>
             <Calendar
               mode="single"
               selected={isValid(dateValue) ? dateValue : undefined}
               onSelect={handleDateSelect}
               initialFocus
+              captionLayout="dropdown"
+              fromYear={2020}
+              toYear={2030}
             />
           </PopoverContent>
         </Popover>
       </div>
 
-      <div className="space-y-0.5">
+      <div className="flex flex-col gap-0.5">
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Channel
         </Label>

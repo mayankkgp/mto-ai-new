@@ -183,6 +183,10 @@
   * {
     @apply border-border outline-ring/50;
     }
+  input, textarea, select, button {
+    display: block;
+    vertical-align: top;
+  }
   body {
     @apply bg-background text-foreground antialiased;
     }

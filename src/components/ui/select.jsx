@@ -14,7 +14,7 @@ const selectTriggerVariants = cva(
       size: {
         default: "h-8",
         sm: "h-7 rounded-[min(var(--radius-md),10px)]",
-        micro: "h-[26px] min-h-[26px] px-1.5 py-0 text-[11px] leading-none focus:ring-0 focus:ring-offset-0 focus:border-[#1E40AF] disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500",
+        micro: "h-[26px] min-h-[26px] px-1.5 py-0 text-[11px] leading-tight focus:ring-0 focus:ring-offset-0 focus:border-[#1E40AF] disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500",
       },
     },
     defaultVariants: {
@@ -91,7 +91,7 @@ function SelectContent({
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            "relative isolate z-50 max-h-(--available-height) min-w-(--anchor-width) max-w-xs w-auto origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
             className
           )}
           {...props}>

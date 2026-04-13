@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
 import DetailHeader from './DetailHeader.jsx';
 import ContextColumn from './form/ContextColumn.jsx';
+import ActionColumn from './form/ActionColumn.jsx';
 
 /**
  * EnquiryDetailPane Component
@@ -35,10 +36,14 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
           revenue: [{ id: 'u1', name: 'Mayank Kumar' }], 
           supply: [] 
         },
-        attachments: []
+        attachments: [],
+        tasks: { revenue: [], supply: [] }
       });
     } else if (activeEnquiry) {
-      setFormData({ ...activeEnquiry });
+      setFormData({ 
+        ...activeEnquiry,
+        tasks: activeEnquiry.tasks || { revenue: [], supply: [] }
+      });
     } else {
       setFormData(null);
     }
@@ -112,7 +117,12 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
           animate={{ width: isCreating ? "30%" : "65%" }}
           className="flex flex-col bg-gray-50/50 overflow-hidden border-l border-gray-100"
         >
-          <div className="p-4 text-sm text-gray-500 italic">Action Pane Placeholder</div>
+          <ActionColumn 
+            formData={formData} 
+            setFormData={setFormData} 
+            isCreating={isCreating} 
+            isReadOnly={isReadOnly} 
+          />
         </motion.div>
       </motion.div>
     </motion.div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Paperclip, FileText, X } from 'lucide-react';
+import { cn } from '@/lib/utils.js';
 
 const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
   const isImage = file.type?.startsWith('image/');
@@ -76,7 +77,7 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
 
   return (
     <div 
-      className="space-y-1 px-2 py-0 -mx-2 rounded-lg transition-colors hover:bg-gray-50/50"
+      className="px-2 py-0 -mx-2 rounded-lg transition-colors hover:bg-gray-50/50"
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
     >
@@ -96,7 +97,10 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
       {!isReadOnly && (
         <button 
           onClick={() => fileInputRef.current?.click()}
-          className="w-full py-1.5 border border-dashed border-gray-300 rounded flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50"
+          className={cn(
+            "w-full h-[26px] py-0 border border-dashed border-gray-300 rounded flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50",
+            formData.attachments?.length > 0 && "mt-1"
+          )}
         >
           <Paperclip size={12} className="text-gray-400" />
           <span className="text-[10px] font-bold text-gray-600 uppercase tracking-wide">Attach Files</span>
