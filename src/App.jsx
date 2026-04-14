@@ -1,5 +1,7 @@
 import React from 'react';
-import { EnquiryProvider, useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { UIStateProvider, useUIState } from '@/contexts/UIStateContext.jsx';
+import { EnquiryListProvider } from '@/contexts/EnquiryListContext.jsx';
+import { EnquiryDetailProvider, useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { AppLayout } from '@/components/AppLayout.jsx';
 import { Toaster } from '@/components/ui/sonner.jsx';
 import { cn } from '@/lib/utils.js';
@@ -7,7 +9,8 @@ import EnquiryMasterPane from '@/features/enquiries/components/EnquiryMasterPane
 import EnquiryDetailPane from '@/features/enquiries/components/EnquiryDetailPane.jsx';
 
 function AppContent() {
-  const { activeEnquiryId, isCreating, closePane } = useEnquiryContext();
+  const { isCreating } = useUIState();
+  const { activeEnquiryId, closePane } = useEnquiryDetail();
   const isPaneOpen = !!activeEnquiryId || isCreating;
 
   return (
@@ -39,9 +42,13 @@ function AppContent() {
 
 export default function App() {
   return (
-    <EnquiryProvider>
-      <AppContent />
-      <Toaster position="top-right" />
-    </EnquiryProvider>
+    <UIStateProvider>
+      <EnquiryListProvider>
+        <EnquiryDetailProvider>
+          <AppContent />
+          <Toaster position="top-right" />
+        </EnquiryDetailProvider>
+      </EnquiryListProvider>
+    </UIStateProvider>
   );
 }

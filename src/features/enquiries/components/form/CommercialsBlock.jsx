@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
 import { Label } from '@/components/ui/label.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { 
@@ -21,50 +22,26 @@ const formatIndianCurrency = (num) => {
   return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
 };
 
-const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
+const CommercialsBlock = ({ isReadOnly }) => {
+  const { watch, setValue, control } = useFormContext();
+  
+  const orderValue = watch('commercials.orderValue') || 0;
+  const probability = watch('commercials.probability') || 50;
+  const expectedValue = Math.round(orderValue * (probability / 100));
+
   const [displayValue, setDisplayValue] = React.useState(
-    formatIndianCurrency(formData.commercials?.orderValue || 0)
+    formatIndianCurrency(orderValue)
   );
 
   React.useEffect(() => {
-    setDisplayValue(formatIndianCurrency(formData.commercials?.orderValue || 0));
-  }, [formData.commercials?.orderValue]);
+    setDisplayValue(formatIndianCurrency(orderValue));
+  }, [orderValue]);
 
   const handleOrderValueChange = (e) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
     const numericValue = parseInt(rawValue, 10) || 0;
-    
-    setFormData(prev => {
-      const newOrderValue = numericValue;
-      const probability = prev.commercials?.probability || 0;
-      const newExpectedValue = Math.round(newOrderValue * (probability / 100));
-      
-      return {
-        ...prev,
-        commercials: {
-          ...prev.commercials,
-          orderValue: newOrderValue,
-          expectedValue: newExpectedValue
-        }
-      };
-    });
-  };
-
-  const handleProbabilityChange = (val) => {
-    const probability = parseInt(val, 10);
-    setFormData(prev => {
-      const orderValue = prev.commercials?.orderValue || 0;
-      const newExpectedValue = Math.round(orderValue * (probability / 100));
-      
-      return {
-        ...prev,
-        commercials: {
-          ...prev.commercials,
-          probability: probability,
-          expectedValue: newExpectedValue
-        }
-      };
-    });
+    setValue('commercials.orderValue', numericValue);
+    setValue('commercials.expectedValue', Math.round(numericValue * (probability / 100)));
   };
 
   return (
@@ -88,20 +65,30 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
         <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
           Prob (%)
         </Label>
-        <Select 
-          value={String(formData.commercials?.probability || 50)} 
-          onValueChange={handleProbabilityChange}
-          disabled={isReadOnly}
-        >
-          <SelectTrigger size="micro" className="w-full tracking-tight">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent position="popper" sideOffset={1}>
-            {[10, 30, 50, 70, 90].map(p => (
-              <SelectItem key={p} value={String(p)} className="text-[11px]">{p}%</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          name="commercials.probability"
+          control={control}
+          render={({ field }) => (
+            <Select 
+              value={String(field.value || 50)} 
+              onValueChange={(val) => {
+                const prob = parseInt(val, 10);
+                field.onChange(prob);
+                setValue('commercials.expectedValue', Math.round(orderValue * (prob / 100)));
+              }}
+              disabled={isReadOnly}
+            >
+              <SelectTrigger size="micro" className="w-full tracking-tight">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent position="popper" sideOffset={1}>
+                {[10, 30, 50, 70, 90].map(p => (
+                  <SelectItem key={p} value={String(p)} className="text-[11px]">{p}%</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
       </div>
 
       <div className="space-y-0.5">
@@ -109,7 +96,7 @@ const CommercialsBlock = ({ formData, setFormData, isReadOnly }) => {
           Expected Value
         </Label>
         <div className="w-full px-1.5 h-[26px] flex items-center justify-end tracking-tight bg-gray-50 border border-gray-200 text-gray-800 rounded text-[11px] font-bold text-right">
-          ₹ {formatIndianCurrency(formData.commercials?.expectedValue || 0)}
+          ₹ {formatIndianCurrency(expectedValue)}
         </div>
       </div>
     </div>

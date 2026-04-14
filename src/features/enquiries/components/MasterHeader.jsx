@@ -1,7 +1,8 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
-import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { cn } from '@/lib/utils.js';
 
 /**
@@ -13,7 +14,8 @@ import { cn } from '@/lib/utils.js';
  * 4. text-xs font-bold on the Create Button
  */
 const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
-  const { enquiries, startCreating } = useEnquiryContext();
+  const { enquiries } = useEnquiryList();
+  const { startCreating } = useUIState();
 
   const counts = {
     Active: enquiries.filter(e => e.status === 'Active').length,

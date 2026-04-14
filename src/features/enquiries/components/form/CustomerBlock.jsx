@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Input } from '@/components/ui/input.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
@@ -6,10 +7,13 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { MOCK_CUSTOMERS } from '@/mockData.js';
 
-const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
+const CustomerBlock = ({ isCreating, isReadOnly }) => {
+  const { register, setValue, watch, formState: { errors } } = useFormContext();
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
   const [isOpen, setIsOpen] = React.useState(false);
   const containerRef = React.useRef(null);
+
+  const customerName = watch('customer.name') || '';
 
   React.useEffect(() => {
     const handleClickOutside = (event) => {
@@ -21,43 +25,23 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      customer: {
-        ...prev.customer,
-        [field]: value
-      }
-    }));
-  };
-
   const handleCustomerNameChange = (value) => {
+    setValue('customer.name', value);
     const matchedCustomer = MOCK_CUSTOMERS.find(
       c => c.name.toLowerCase() === value.toLowerCase()
     );
 
     if (matchedCustomer) {
-      setFormData(prev => ({
-        ...prev,
-        customer: {
-          ...prev.customer,
-          ...matchedCustomer
-        }
-      }));
+      setValue('customer.poc', matchedCustomer.poc);
+      setValue('customer.city', matchedCustomer.city);
+      setValue('customer.contact', matchedCustomer.contact);
     } else {
-      setFormData(prev => ({
-        ...prev,
-        customer: {
-          ...prev.customer,
-          name: value,
-          poc: '' // Clear POC for new free-text entries
-        }
-      }));
+      setValue('customer.poc', ''); // Clear POC for new free-text entries
     }
   };
 
   const filteredCustomers = MOCK_CUSTOMERS.filter(c => 
-    c.name.toLowerCase().includes((formData.customer.name || '').toLowerCase())
+    c.name.toLowerCase().includes(customerName.toLowerCase())
   );
 
   return (
@@ -79,9 +63,9 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
           size="micro"
           className={cn(
             "w-full font-semibold",
-            !formData.customer.name && !isCreating && "border-red-500 bg-red-50"
+            errors.customer?.name && "border-red-500 bg-red-50"
           )}
-          value={formData.customer.name || ''}
+          {...register('customer.name')}
           onChange={(e) => handleCustomerNameChange(e.target.value)}
           onFocus={() => setIsOpen(true)}
           disabled={isReadOnly}
@@ -94,13 +78,10 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                 key={customer.id}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
-                  setFormData(prev => ({
-                    ...prev,
-                    customer: {
-                      ...prev.customer,
-                      ...customer
-                    }
-                  }));
+                  setValue('customer.name', customer.name);
+                  setValue('customer.poc', customer.poc);
+                  setValue('customer.city', customer.city);
+                  setValue('customer.contact', customer.contact);
                   setIsOpen(false);
                 }}
                 className="px-2 py-1.5 text-[11px] cursor-pointer hover:bg-accent"
@@ -130,9 +111,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                 </Label>
                 <Input 
                   size="micro"
-                  className="w-full"
-                  value={formData.customer.poc || ''}
-                  onChange={(e) => handleChange('poc', e.target.value)}
+                  className={cn("w-full", errors.customer?.poc && "border-red-500 bg-red-50")}
+                  {...register('customer.poc')}
                   disabled={isReadOnly}
                 />
               </div>
@@ -142,9 +122,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                 </Label>
                 <Input 
                   size="micro"
-                  className="w-full"
-                  value={formData.customer.city || ''}
-                  onChange={(e) => handleChange('city', e.target.value)}
+                  className={cn("w-full", errors.customer?.city && "border-red-500 bg-red-50")}
+                  {...register('customer.city')}
                   disabled={isReadOnly}
                 />
               </div>
@@ -154,9 +133,8 @@ const CustomerBlock = ({ formData, setFormData, isCreating, isReadOnly }) => {
                 </Label>
                 <Input 
                   size="micro"
-                  className="w-full"
-                  value={formData.customer.contact || ''}
-                  onChange={(e) => handleChange('contact', e.target.value)}
+                  className={cn("w-full", errors.customer?.contact && "border-red-500 bg-red-50")}
+                  {...register('customer.contact')}
                   disabled={isReadOnly}
                 />
               </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Textarea } from '@/components/ui/textarea.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { Button } from '@/components/ui/button.jsx';
@@ -6,9 +7,12 @@ import { Label } from '@/components/ui/label.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
 import { CornerDownLeft } from 'lucide-react';
 
-const TaskComposer = ({ isCreating, isReadOnly, setFormData }) => {
+const TaskComposer = ({ isCreating, isReadOnly }) => {
+  const { watch, setValue } = useFormContext();
   const actionRef = React.useRef(null);
   const remarkRef = React.useRef(null);
+
+  const tasks = watch('tasks') || { revenue: [], supply: [] };
 
   const [newAction, setNewAction] = React.useState({
     text: '',
@@ -39,13 +43,8 @@ const TaskComposer = ({ isCreating, isReadOnly, setFormData }) => {
       createdAt: new Date().toISOString()
     };
 
-    setFormData(prev => ({
-      ...prev,
-      tasks: {
-        ...prev.tasks,
-        [newAction.type]: [...prev.tasks[newAction.type], task]
-      }
-    }));
+    const currentTypeTasks = tasks[newAction.type] || [];
+    setValue(`tasks.${newAction.type}`, [...currentTypeTasks, task]);
 
     setNewAction({
       ...newAction,

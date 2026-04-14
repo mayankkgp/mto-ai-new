@@ -5,7 +5,8 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table.jsx';
-import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import DataGridRow from './DataGridRow.jsx';
 import { ArrowUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
@@ -16,7 +17,8 @@ import { cn } from '@/lib/utils.js';
  * Refactored for pixel-perfect legacy UI sync.
  */
 const DataGrid = ({ isCompact, filteredEnquiries }) => {
-  const { activeEnquiryId, selectEnquiry, isGlobalLoading } = useEnquiryContext();
+  const { isGlobalLoading } = useUIState();
+  const { activeEnquiryId, selectEnquiry } = useEnquiryDetail();
 
   if (isGlobalLoading) {
     return (

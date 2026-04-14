@@ -1,4 +1,5 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Label } from '@/components/ui/label.jsx';
 import { 
   Popover, 
@@ -24,7 +25,7 @@ const MOCK_USERS = [
   { id: 'u5', name: 'Sneha Reddy' }
 ];
 
-const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
+const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -42,7 +43,8 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
               "w-full focus:outline-none group flex flex-wrap items-center gap-1 p-[2px] bg-white border border-gray-200 rounded min-h-[26px] transition-colors text-left",
               isReadOnly 
                 ? "bg-gray-50 cursor-not-allowed" 
-                : "cursor-pointer hover:border-primary/40"
+                : "cursor-pointer hover:border-primary/40",
+              hasError && "border-red-500 bg-red-50"
             )}
           >
             {selectedUsers?.map(user => (
@@ -109,37 +111,35 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly }) => {
   );
 };
 
-const RolesBlock = ({ formData, setFormData, isReadOnly }) => {
+const RolesBlock = ({ isReadOnly }) => {
+  const { watch, setValue, formState: { errors } } = useFormContext();
+  
+  const revenueRoles = watch('roles.revenue') || [];
+  const supplyRoles = watch('roles.supply') || [];
+
   const toggleUser = (role, user) => {
-    setFormData(prev => {
-      const currentUsers = prev.roles?.[role] || [];
-      const exists = currentUsers.some(u => u.id === user.id);
+    const currentUsers = role === 'revenue' ? revenueRoles : supplyRoles;
+    const exists = currentUsers.some(u => u.id === user.id);
+    
+    const newUsers = exists 
+      ? currentUsers.filter(u => u.id !== user.id)
+      : [...currentUsers, user];
       
-      const newUsers = exists 
-        ? currentUsers.filter(u => u.id !== user.id)
-        : [...currentUsers, user];
-        
-      return {
-        ...prev,
-        roles: {
-          ...prev.roles,
-          [role]: newUsers
-        }
-      };
-    });
+    setValue(`roles.${role}`, newUsers, { shouldValidate: true });
   };
 
   return (
     <div className="grid grid-cols-2 gap-1.5">
       <UserSelector 
         label="Revenue Role *" 
-        selectedUsers={formData.roles?.revenue} 
+        selectedUsers={revenueRoles} 
         onToggle={(user) => toggleUser('revenue', user)}
         isReadOnly={isReadOnly}
+        hasError={!!errors.roles?.revenue}
       />
       <UserSelector 
         label="Supply Role" 
-        selectedUsers={formData.roles?.supply} 
+        selectedUsers={supplyRoles} 
         onToggle={(user) => toggleUser('supply', user)}
         isReadOnly={isReadOnly}
       />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
@@ -118,9 +119,12 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
   );
 };
 
-const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
+const AttachmentTray = ({ isReadOnly }) => {
+  const { watch, setValue } = useFormContext();
   const fileInputRef = React.useRef(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+
+  const attachments = watch('attachments') || [];
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -136,17 +140,11 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
       url: URL.createObjectURL(file)
     }));
 
-    setFormData(prev => ({
-      ...prev,
-      attachments: [...(prev.attachments || []), ...formattedFiles]
-    }));
+    setValue('attachments', [...attachments, ...formattedFiles]);
   };
 
   const removeFile = (id) => {
-    setFormData(prev => ({
-      ...prev,
-      attachments: prev.attachments.filter(f => f.id !== id)
-    }));
+    setValue('attachments', attachments.filter(f => f.id !== id));
   };
 
   const handleDrop = (e) => {
@@ -162,9 +160,9 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
       onDragOver={(e) => e.preventDefault()}
       onDrop={handleDrop}
     >
-      {formData.attachments?.length > 0 && (
+      {attachments.length > 0 && (
         <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar min-h-[64px]">
-          {formData.attachments?.map((file, index) => (
+          {attachments.map((file, index) => (
             <FileThumbnail 
               key={file.id} 
               file={file} 
@@ -182,7 +180,7 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
           onClick={() => fileInputRef.current?.click()}
           className={cn(
             "w-full h-[26px] py-0 border border-dashed border-gray-300 rounded flex items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/5 transition-colors cursor-pointer bg-gray-50/50",
-            formData.attachments?.length > 0 && "mt-1"
+            attachments.length > 0 && "mt-1"
           )}
         >
           <Paperclip size={12} className="text-gray-400" />
@@ -200,7 +198,7 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
 
       {lightboxIndex !== null && (
         <FileLightbox 
-          files={formData.attachments}
+          files={attachments}
           initialIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
           isReadOnly={isReadOnly}

@@ -2,7 +2,9 @@ import React, { useState, useMemo } from 'react';
 import MasterHeader from './MasterHeader.jsx';
 import FilterBar from './FilterBar.jsx';
 import DataGrid from './DataGrid.jsx';
-import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 
 /**
  * EnquiryMasterPane Component
@@ -10,7 +12,9 @@ import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
  * Assembles the Header, FilterBar, and DataGrid.
  */
 const EnquiryMasterPane = ({ isCompact: isCompactProp }) => {
-  const { enquiries, activeEnquiryId, isCreating } = useEnquiryContext();
+  const { enquiries } = useEnquiryList();
+  const { isCreating } = useUIState();
+  const { activeEnquiryId } = useEnquiryDetail();
   
   // Force compact mode if an enquiry is active or being created (Detail Pane is open)
   const isCompact = (activeEnquiryId || isCreating) ? true : isCompactProp;

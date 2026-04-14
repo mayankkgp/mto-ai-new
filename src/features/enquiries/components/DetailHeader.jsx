@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
+import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
@@ -22,63 +23,46 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
   const [isReopenModalOpen, setIsReopenModalOpen] = useState(false);
 
-  const runValidation = () => {
-    const errors = [];
-    if (!enquiry.customer?.name || enquiry.customer.name.trim() === "") {
-      errors.push("Customer Name");
+  const { trigger, formState: { errors: formErrors } } = useFormContext();
+
+  const handleValidation = async (action) => {
+    const isValid = await trigger();
+    if (!isValid) {
+      const errorList = [];
+      // Manually map zod errors to the legacy ribbons
+      if (formErrors.customer?.name) errorList.push("Customer Name");
+      if (formErrors.customer?.poc) errorList.push("POC Name");
+      if (formErrors.customer?.city) errorList.push("City");
+      if (formErrors.customer?.contact) errorList.push("Contact");
+      if (formErrors.leadOverview) errorList.push("Lead Overview");
+      if (formErrors.type) errorList.push("Enquiry Type");
+      if (formErrors.roles?.revenue) errorList.push("Revenue Role");
+      
+      setPendingAction(action);
+      setValidationErrors(errorList);
+      setIsValidationAlertOpen(true);
+      return false;
     }
-    if (!enquiry.customer?.poc || enquiry.customer.poc.trim() === "") {
-      errors.push("POC Name");
-    }
-    if (!enquiry.customer?.city || enquiry.customer.city.trim() === "") {
-      errors.push("City");
-    }
-    if (!enquiry.customer?.contact || enquiry.customer.contact.trim() === "") {
-      errors.push("Contact");
-    }
-    if (!enquiry.leadOverview || enquiry.leadOverview.trim() === "") {
-      errors.push("Lead Overview");
-    }
-    if (!enquiry.type || enquiry.type.trim() === "") {
-      errors.push("Enquiry Type");
-    }
-    if (!enquiry.roles?.revenue || enquiry.roles.revenue.length === 0) {
-      errors.push("Revenue Role");
-    }
-    return errors;
+    return true;
   };
 
-  const handleSaveClick = () => {
-    const errors = runValidation();
-    
-    if (errors.length > 0) {
-      setPendingAction('save');
-      setValidationErrors(errors);
-      setIsValidationAlertOpen(true);
-    } else {
+  const handleSaveClick = async () => {
+    const isValid = await handleValidation('save');
+    if (isValid) {
       onSave();
     }
   };
 
-  const handleCloseClick = () => {
-    const errors = runValidation();
-
-    if (errors.length > 0) {
-      setPendingAction('close');
-      setValidationErrors(errors);
-      setIsValidationAlertOpen(true);
-    } else {
+  const handleCloseClick = async () => {
+    const isValid = await handleValidation('close');
+    if (isValid) {
       onClose();
     }
   };
 
-  const handleConvertClick = () => {
-    const errors = runValidation();
-    if (errors.length > 0) {
-      setPendingAction('convert');
-      setValidationErrors(errors);
-      setIsValidationAlertOpen(true);
-    } else {
+  const handleConvertClick = async () => {
+    const isValid = await handleValidation('convert');
+    if (isValid) {
       setIsConvertModalOpen(true);
     }
   };

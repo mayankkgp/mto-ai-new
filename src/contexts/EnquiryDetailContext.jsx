@@ -1,42 +1,23 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import * as api from '../mockApi.js';
+import { useUIState } from './UIStateContext.jsx';
+import { useEnquiryList } from './EnquiryListContext.jsx';
 
-const EnquiryContext = createContext(null);
+const EnquiryDetailContext = createContext(null);
 
-export const useEnquiryContext = () => {
-  const context = useContext(EnquiryContext);
-  if (!context) {
-    throw new Error('useEnquiryContext must be used within an EnquiryProvider');
-  }
+export const useEnquiryDetail = () => {
+  const context = useContext(EnquiryDetailContext);
+  if (!context) throw new Error('useEnquiryDetail must be used within EnquiryDetailProvider');
   return context;
 };
 
-export const EnquiryProvider = ({ children }) => {
-  const [enquiries, setEnquiries] = useState([]);
+export const EnquiryDetailProvider = ({ children }) => {
   const [activeEnquiryId, setActiveEnquiryId] = useState(null);
   const [activeEnquiry, setActiveEnquiry] = useState(null);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isGlobalLoading, setIsGlobalLoading] = useState(true);
-  const [isActionLoading, setIsActionLoading] = useState(false);
-  const [uploadProgress, setUploadProgress] = useState(0);
-
-  // Load initial enquiries
-  const loadEnquiries = useCallback(async () => {
-    setIsGlobalLoading(true);
-    try {
-      const data = await api.fetchEnquiries();
-      setEnquiries(data);
-    } catch (error) {
-      toast.error("Failed to load enquiries", { description: error.message });
-    } finally {
-      setIsGlobalLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadEnquiries();
-  }, [loadEnquiries]);
+  
+  const { setIsCreating, setIsActionLoading, setUploadProgress } = useUIState();
+  const { enquiries, setEnquiries } = useEnquiryList();
 
   // Sync activeEnquiry when activeEnquiryId or enquiries change
   useEffect(() => {
@@ -51,11 +32,6 @@ export const EnquiryProvider = ({ children }) => {
   const selectEnquiry = (id) => {
     setActiveEnquiryId(id);
     setIsCreating(false);
-  };
-
-  const startCreating = () => {
-    setActiveEnquiryId(null);
-    setIsCreating(true);
   };
 
   const closePane = () => {
@@ -213,16 +189,9 @@ export const EnquiryProvider = ({ children }) => {
   };
 
   const value = {
-    enquiries,
     activeEnquiry,
     activeEnquiryId,
-    isCreating,
-    isGlobalLoading,
-    isActionLoading,
-    uploadProgress,
-    loadEnquiries,
     selectEnquiry,
-    startCreating,
     closePane,
     saveEnquiryDetails,
     updateStatus,
@@ -233,8 +202,8 @@ export const EnquiryProvider = ({ children }) => {
   };
 
   return (
-    <EnquiryContext.Provider value={value}>
+    <EnquiryDetailContext.Provider value={value}>
       {children}
-    </EnquiryContext.Provider>
+    </EnquiryDetailContext.Provider>
   );
 };

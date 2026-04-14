@@ -1,35 +1,29 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 import { cn } from '@/lib/utils.js';
 import { CheckCircle2, Truck } from 'lucide-react';
 import TaskComposer from './tasks/TaskComposer.jsx';
 import TaskBoard from './tasks/TaskBoard.jsx';
 
-const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
-
+const ActionColumn = ({ isCreating, isReadOnly }) => {
+  const { watch, setValue } = useFormContext();
+  const formData = watch();
   const [editingTask, setEditingTask] = React.useState(null);
 
   const toggleTaskStatus = (type, taskId) => {
-    setFormData(prev => ({
-      ...prev,
-      tasks: {
-        ...prev.tasks,
-        [type]: prev.tasks[type].map(t => 
-          t.id === taskId ? { ...t, isCompleted: !t.isCompleted, completedAt: !t.isCompleted ? Date.now() : undefined } : t
-        )
-      }
-    }));
+    const currentTasks = formData.tasks[type] || [];
+    const updatedTasks = currentTasks.map(t => 
+      t.id === taskId ? { ...t, isCompleted: !t.isCompleted, completedAt: !t.isCompleted ? Date.now() : undefined } : t
+    );
+    setValue(`tasks.${type}`, updatedTasks);
   };
 
   const updateTask = (type, taskId, updates) => {
-    setFormData(prev => ({
-      ...prev,
-      tasks: {
-        ...prev.tasks,
-        [type]: prev.tasks[type].map(t => 
-          t.id === taskId ? { ...t, ...updates } : t
-        )
-      }
-    }));
+    const currentTasks = formData.tasks[type] || [];
+    const updatedTasks = currentTasks.map(t => 
+      t.id === taskId ? { ...t, ...updates } : t
+    );
+    setValue(`tasks.${type}`, updatedTasks);
   };
 
   return (
@@ -49,7 +43,6 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
         <TaskComposer 
           isCreating={isCreating} 
           isReadOnly={isReadOnly} 
-          setFormData={setFormData} 
         />
       )}
 
@@ -63,7 +56,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
             title="Revenue Tasks" 
             type="revenue" 
             icon={CheckCircle2} 
-            tasks={formData.tasks.revenue} 
+            tasks={formData.tasks?.revenue || []} 
             isReadOnly={isReadOnly} 
             toggleTaskStatus={toggleTaskStatus} 
             updateTask={updateTask} 
@@ -74,7 +67,7 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
             title="Supply Tasks" 
             type="supply" 
             icon={Truck} 
-            tasks={formData.tasks.supply} 
+            tasks={formData.tasks?.supply || []} 
             isReadOnly={isReadOnly} 
             toggleTaskStatus={toggleTaskStatus} 
             updateTask={updateTask} 
