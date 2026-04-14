@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Search, SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
-import { mockUsers } from '@/mockData.js';
+import { mockUsers } from '@/mocks/mockData.js';
 import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 

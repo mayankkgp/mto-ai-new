@@ -11,7 +11,7 @@ import {
   Search,
   X
 } from 'lucide-react';
-import { mockUsers } from '@/mockData.js';
+import { mockUsers } from '@/mocks/mockData.js';
 import { cn } from '@/lib/utils.js';
 
 /**

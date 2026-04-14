@@ -4,7 +4,7 @@
  * * Enforces async/await patterns, try/catch error handling, and mock upload progress.
  */
 
-import { mockEnquiries } from './mockData.js';
+import { mockEnquiries, mockUsers, mockChannels, MOCK_CUSTOMERS } from './mockData.js';
 
 // Simulated network latency (in milliseconds)
 const NETWORK_DELAY = 800;
@@ -21,6 +21,30 @@ export const fetchEnquiries = async () => {
   await delay(NETWORK_DELAY);
   // Simulating a successful fetch
   return [...mockEnquiries]; 
+};
+
+/**
+ * 1.1 Fetch all users
+ */
+export const fetchUsers = async () => {
+  await delay(NETWORK_DELAY);
+  return [...mockUsers];
+};
+
+/**
+ * 1.2 Fetch all channels
+ */
+export const fetchChannels = async () => {
+  await delay(NETWORK_DELAY);
+  return [...mockChannels];
+};
+
+/**
+ * 1.3 Fetch all customers
+ */
+export const fetchCustomers = async () => {
+  await delay(NETWORK_DELAY);
+  return [...MOCK_CUSTOMERS];
 };
 
 /**

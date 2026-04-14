@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { MOCK_CUSTOMERS } from '@/mockData.js';
+import { MOCK_CUSTOMERS } from '@/mocks/mockData.js';
 
 const CustomerBlock = ({ isCreating, isReadOnly }) => {
   const { register, setValue, watch, formState: { errors } } = useFormContext();

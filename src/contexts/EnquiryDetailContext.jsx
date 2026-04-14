@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import * as api from '../mockApi.js';
+import * as api from '../mocks/mockApi.js';
 import { useUIState } from './UIStateContext.jsx';
 import { useEnquiryList } from './EnquiryListContext.jsx';
 

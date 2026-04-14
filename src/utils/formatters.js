@@ -1,4 +1,4 @@
-import { mockUsers } from '@/mockData.js';
+import { mockUsers } from '@/mocks/mockData.js';
 
 /**
  * Format Indian Currency
