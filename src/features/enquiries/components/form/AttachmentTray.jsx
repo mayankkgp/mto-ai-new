@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
-import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 import FileLightbox from './FileLightbox.jsx';
 
 const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) => {
@@ -97,7 +96,7 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
 };
 
 const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
-  const fileInputRef = React.useRef(null);
+  const fileInputRef = useRef(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const handleFileChange = (e) => {
