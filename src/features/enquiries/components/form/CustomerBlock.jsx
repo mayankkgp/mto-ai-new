@@ -1,14 +1,15 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { MOCK_CUSTOMERS } from '@/mocks/mockData.js';
 
 const CustomerBlock = ({ isCreating, isReadOnly }) => {
   const { register, setValue, watch, formState: { errors } } = useFormContext();
+  const { customers } = useReferenceData();
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
   const [isOpen, setIsOpen] = React.useState(false);
   const containerRef = React.useRef(null);
@@ -27,7 +28,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
 
   const handleCustomerNameChange = (value) => {
     setValue('customer.name', value);
-    const matchedCustomer = MOCK_CUSTOMERS.find(
+    const matchedCustomer = customers.find(
       c => c.name.toLowerCase() === value.toLowerCase()
     );
 
@@ -40,7 +41,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
     }
   };
 
-  const filteredCustomers = MOCK_CUSTOMERS.filter(c => 
+  const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(customerName.toLowerCase())
   );
 

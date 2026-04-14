@@ -1,5 +1,6 @@
 import React from 'react';
 import { UIStateProvider, useUIState } from '@/contexts/UIStateContext.jsx';
+import { ReferenceDataProvider } from '@/contexts/ReferenceDataContext.jsx';
 import { EnquiryListProvider } from '@/contexts/EnquiryListContext.jsx';
 import { EnquiryDetailProvider, useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { AppLayout } from '@/components/AppLayout.jsx';
@@ -43,12 +44,14 @@ function AppContent() {
 export default function App() {
   return (
     <UIStateProvider>
-      <EnquiryListProvider>
-        <EnquiryDetailProvider>
-          <AppContent />
-          <Toaster position="top-right" />
-        </EnquiryDetailProvider>
-      </EnquiryListProvider>
+      <ReferenceDataProvider>
+        <EnquiryListProvider>
+          <EnquiryDetailProvider>
+            <AppContent />
+            <Toaster position="top-right" />
+          </EnquiryDetailProvider>
+        </EnquiryListProvider>
+      </ReferenceDataProvider>
     </UIStateProvider>
   );
 }

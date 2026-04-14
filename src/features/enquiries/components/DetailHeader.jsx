@@ -3,6 +3,7 @@ import { X, Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import SystemModal from '@/components/ui/system-modal.jsx';
@@ -16,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea.jsx';
  */
 const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
   const [isDropModalOpen, setIsDropModalOpen] = useState(false);
+  const { users } = useReferenceData();
   const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
@@ -69,8 +71,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
   if (!enquiry) return null;
 
-  const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id) || []);
-  const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id) || []);
+  const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id) || [], users);
+  const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id) || [], users);
 
   const getStatusClasses = (status) => {
     switch (status) {

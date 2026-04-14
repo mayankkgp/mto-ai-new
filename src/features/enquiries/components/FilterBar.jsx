@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Search, SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
-import { mockUsers } from '@/mocks/mockData.js';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 
@@ -15,10 +15,11 @@ const FilterBar = ({
   clearAllFilters
 }) => {
   const { enquiries } = useEnquiryList();
+  const { users } = useReferenceData();
   
   const revUsers = useMemo(() => {
-    return mockUsers.filter(u => u.department === 'Revenue' || u.department === 'Admin');
-  }, []);
+    return users.filter(u => u.department === 'Revenue' || u.department === 'Admin');
+  }, [users]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;

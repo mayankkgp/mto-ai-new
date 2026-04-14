@@ -1,5 +1,3 @@
-import { mockUsers } from '@/mocks/mockData.js';
-
 /**
  * Format Indian Currency
  */
@@ -14,10 +12,10 @@ export const formatCurrency = (value) => {
 /**
  * Get User Initials from IDs
  */
-export const getUserInitials = (userIds) => {
+export const getUserInitials = (userIds, users = []) => {
   if (!userIds || userIds.length === 0) return null;
   return userIds.map(id => {
-    const user = mockUsers.find(u => u.id === id);
+    const user = users.find(u => u.id === id);
     return user ? user.initials : null;
   }).filter(Boolean);
 };

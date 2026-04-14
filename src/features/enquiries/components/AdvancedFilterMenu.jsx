@@ -11,7 +11,7 @@ import {
   Search,
   X
 } from 'lucide-react';
-import { mockUsers } from '@/mocks/mockData.js';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { cn } from '@/lib/utils.js';
 
 /**
@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils.js';
  */
 const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearAllFilters }) => {
   const [expandedCategory, setExpandedCategory] = useState(null);
+  const { users, channels: referenceChannels } = useReferenceData();
   
   const uniqueCities = useMemo(() => {
     const cities = enquiries.map(e => e.customer?.city).filter(Boolean);
@@ -27,13 +28,11 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
   }, [enquiries]);
 
   const supplyUsers = useMemo(() => {
-    return mockUsers.filter(u => u.department === 'Supply' || u.department === 'Admin');
-  }, []);
-
-  const channels = ['Direct', 'Website', 'WhatsApp', 'LinkedIn', 'Event', 'Others'];
+    return users.filter(u => u.department === 'Supply' || u.department === 'Admin');
+  }, [users]);
 
   const categories = [
-    { id: 'channel', label: 'Channel', icon: Filter, options: channels },
+    { id: 'channel', label: 'Channel', icon: Filter, options: referenceChannels },
     { id: 'supply', label: 'Supply', icon: Truck, options: supplyUsers.map(u => u.name) },
     { id: 'city', label: 'City', icon: Filter, options: uniqueCities },
     { id: 'leadDate', label: 'Lead Date', icon: Calendar, isDate: true, startKey: 'leadDateStart', endKey: 'leadDateEnd' },

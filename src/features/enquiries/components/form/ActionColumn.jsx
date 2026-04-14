@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { cn } from '@/lib/utils.js';
 import { CheckCircle2, Truck } from 'lucide-react';
 import TaskComposer from './tasks/TaskComposer.jsx';
@@ -7,11 +8,18 @@ import TaskBoard from './tasks/TaskBoard.jsx';
 
 const ActionColumn = ({ isCreating, isReadOnly }) => {
   const { watch, setValue } = useFormContext();
+  const { toggleTaskCompletion } = useEnquiryDetail();
   const formData = watch();
   const [editingTask, setEditingTask] = React.useState(null);
 
-  const toggleTaskStatus = (type, taskId) => {
+  const toggleTaskStatus = async (type, taskId) => {
     const currentTasks = formData.tasks[type] || [];
+    const task = currentTasks.find(t => t.id === taskId);
+    
+    if (task) {
+      await toggleTaskCompletion(taskId, !task.isCompleted);
+    }
+
     const updatedTasks = currentTasks.map(t => 
       t.id === taskId ? { ...t, isCompleted: !t.isCompleted, completedAt: !t.isCompleted ? Date.now() : undefined } : t
     );

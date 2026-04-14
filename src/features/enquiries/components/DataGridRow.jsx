@@ -1,5 +1,6 @@
 import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table.jsx';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { cn } from '@/lib/utils.js';
 import { 
   formatCurrency, 
@@ -13,8 +14,9 @@ import {
  * Renders a single row in the DataGrid with all its cells and formatting logic.
  */
 const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
-  const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id));
-  const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id));
+  const { users } = useReferenceData();
+  const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id), users);
+  const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id), users);
   const revUrgency = getUrgencyInfo(enquiry.tasks?.revenue);
   const supUrgency = getUrgencyInfo(enquiry.tasks?.supply);
 

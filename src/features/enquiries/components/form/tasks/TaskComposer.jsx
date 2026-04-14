@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { Textarea } from '@/components/ui/textarea.jsx';
 import { Input } from '@/components/ui/input.jsx';
 import { Button } from '@/components/ui/button.jsx';
@@ -8,11 +8,9 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
 import { CornerDownLeft } from 'lucide-react';
 
 const TaskComposer = ({ isCreating, isReadOnly }) => {
-  const { watch, setValue } = useFormContext();
+  const { addNewTask } = useEnquiryDetail();
   const actionRef = React.useRef(null);
   const remarkRef = React.useRef(null);
-
-  const tasks = watch('tasks') || { revenue: [], supply: [] };
 
   const [newAction, setNewAction] = React.useState({
     text: '',
@@ -31,20 +29,15 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
     setNewAction({ ...newAction, [field]: e.target.value });
   };
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!newAction.text.trim()) return;
 
-    const task = {
-      id: Math.random().toString(36).substr(2, 9),
+    await addNewTask({
       actionText: newAction.text,
       remark: newAction.remark,
       dueDate: newAction.dueDate,
-      isCompleted: false,
-      createdAt: new Date().toISOString()
-    };
-
-    const currentTypeTasks = tasks[newAction.type] || [];
-    setValue(`tasks.${newAction.type}`, [...currentTypeTasks, task]);
+      assignedTo: newAction.type === 'revenue' ? 'u_001' : 's_001'
+    });
 
     setNewAction({
       ...newAction,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { 
   Popover, 
@@ -17,15 +18,7 @@ import {
 import { UserPlus, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 
-const MOCK_USERS = [
-  { id: 'u1', name: 'Mayank Kumar' },
-  { id: 'u2', name: 'Rahul Sharma' },
-  { id: 'u3', name: 'Priya Singh' },
-  { id: 'u4', name: 'Amit Patel' },
-  { id: 'u5', name: 'Sneha Reddy' }
-];
-
-const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError }) => {
+const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError, users }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -85,7 +78,7 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError }) 
               <CommandList className="max-h-[160px] overflow-y-auto no-scrollbar">
                 <CommandEmpty className="px-2 py-3 text-center text-[10px] text-gray-400 italic">No user found.</CommandEmpty>
                 <CommandGroup className="p-0">
-                  {MOCK_USERS.map((user) => {
+                  {users.map((user) => {
                     const isSelected = selectedUsers?.some(u => u.id === user.id);
                     return (
                       <CommandItem
@@ -113,6 +106,7 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError }) 
 
 const RolesBlock = ({ isReadOnly }) => {
   const { watch, setValue, formState: { errors } } = useFormContext();
+  const { users } = useReferenceData();
   
   const revenueRoles = watch('roles.revenue') || [];
   const supplyRoles = watch('roles.supply') || [];
@@ -136,12 +130,14 @@ const RolesBlock = ({ isReadOnly }) => {
         onToggle={(user) => toggleUser('revenue', user)}
         isReadOnly={isReadOnly}
         hasError={!!errors.roles?.revenue}
+        users={users}
       />
       <UserSelector 
         label="Supply Role" 
         selectedUsers={supplyRoles} 
         onToggle={(user) => toggleUser('supply', user)}
         isReadOnly={isReadOnly}
+        users={users}
       />
     </div>
   );

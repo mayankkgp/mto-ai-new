@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, isValid } from 'date-fns';
 import { useFormContext, Controller } from 'react-hook-form';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Label } from '@/components/ui/label.jsx';
 import { 
   Select, 
@@ -21,6 +22,7 @@ import { cn } from '@/lib/utils.js';
 
 const MetadataBlock = ({ isReadOnly }) => {
   const { control, formState: { errors } } = useFormContext();
+  const { channels } = useReferenceData();
 
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-start">
@@ -121,12 +123,11 @@ const MetadataBlock = ({ isReadOnly }) => {
                 <SelectValue placeholder="Select channel" />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={1}>
-                <SelectItem value="Direct" className="text-[11px]">Direct</SelectItem>
-                <SelectItem value="Website" className="text-[11px]">Website</SelectItem>
-                <SelectItem value="WhatsApp" className="text-[11px]">WhatsApp</SelectItem>
-                <SelectItem value="LinkedIn" className="text-[11px]">LinkedIn</SelectItem>
-                <SelectItem value="Event" className="text-[11px]">Event</SelectItem>
-                <SelectItem value="Others" className="text-[11px]">Others</SelectItem>
+                {channels.map(channel => (
+                  <SelectItem key={channel} value={channel} className="text-[11px]">
+                    {channel}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           )}

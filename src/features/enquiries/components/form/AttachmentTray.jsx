@@ -3,6 +3,8 @@ import { useFormContext } from 'react-hook-form';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import FileLightbox from './FileLightbox.jsx';
 
 const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) => {
@@ -123,35 +125,44 @@ const AttachmentTray = ({ isReadOnly }) => {
   const { watch, setValue } = useFormContext();
   const fileInputRef = React.useRef(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  
+  const { uploadProgress } = useUIState();
+  const { handleFileUpload, handleFileDelete } = useEnquiryDetail();
 
   const attachments = watch('attachments') || [];
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    addFiles(files);
+    for (const file of files) {
+      const uploadedFile = await handleFileUpload(file);
+      if (uploadedFile) {
+        const currentAttachments = watch('attachments') || [];
+        setValue('attachments', [...currentAttachments, uploadedFile]);
+      }
+    }
+    // Clear input so same file can be selected again
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const addFiles = (newFiles) => {
-    const formattedFiles = newFiles.map(file => ({
-      id: Math.random().toString(36).substr(2, 9),
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      url: URL.createObjectURL(file)
-    }));
-
-    setValue('attachments', [...attachments, ...formattedFiles]);
+  const removeFile = async (id) => {
+    const success = await handleFileDelete(id);
+    if (success) {
+      const currentAttachments = watch('attachments') || [];
+      setValue('attachments', currentAttachments.filter(f => f.id !== id));
+    }
   };
 
-  const removeFile = (id) => {
-    setValue('attachments', attachments.filter(f => f.id !== id));
-  };
-
-  const handleDrop = (e) => {
+  const handleDrop = async (e) => {
     e.preventDefault();
     if (isReadOnly) return;
     const files = Array.from(e.dataTransfer.files);
-    addFiles(files);
+    for (const file of files) {
+      const uploadedFile = await handleFileUpload(file);
+      if (uploadedFile) {
+        const currentAttachments = watch('attachments') || [];
+        setValue('attachments', [...currentAttachments, uploadedFile]);
+      }
+    }
   };
 
   return (
@@ -172,6 +183,21 @@ const AttachmentTray = ({ isReadOnly }) => {
               isReadOnly={isReadOnly}
             />
           ))}
+        </div>
+      )}
+      
+      {uploadProgress > 0 && uploadProgress < 100 && (
+        <div className="mb-2 px-1">
+          <div className="flex justify-between text-[9px] font-bold text-gray-500 uppercase mb-1">
+            <span>Uploading...</span>
+            <span>{uploadProgress}%</span>
+          </div>
+          <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary transition-all duration-300" 
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
         </div>
       )}
       

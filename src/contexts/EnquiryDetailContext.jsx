@@ -102,6 +102,7 @@ export const EnquiryDetailProvider = ({ children }) => {
         });
       });
       toast.success(`File "${file.name}" uploaded successfully`);
+      return fileData;
     } catch (error) {
       toast.error("Upload failed", { description: error.message });
       throw error;
@@ -126,6 +127,7 @@ export const EnquiryDetailProvider = ({ children }) => {
         });
       });
       toast.success("File deleted successfully");
+      return true;
     } catch (error) {
       toast.error("Delete failed", { description: error.message });
       throw error;

@@ -16,7 +16,7 @@ import ActionColumn from './form/ActionColumn.jsx';
  */
 const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   const { enquiries } = useEnquiryList();
-  const { updateStatus } = useEnquiryDetail();
+  const { updateStatus, saveEnquiryDetails } = useEnquiryDetail();
 
   // Find the active enquiry matching activeEnquiryId
   const activeEnquiry = enquiries.find(e => e.id === activeEnquiryId);
@@ -80,9 +80,8 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
 
   const isReadOnly = formData.status === 'Converted' || formData.status === 'Dropped';
 
-  const handleSave = (data) => {
-    console.log('Saving enquiry data:', data);
-    // In a real app, this would call an API or context method
+  const handleSave = async (data) => {
+    await saveEnquiryDetails(data);
   };
 
   const handleConvert = () => {
