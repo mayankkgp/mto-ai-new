@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import * as api from '../mockApi.js';
 import { useUIState } from './UIStateContext.jsx';
@@ -26,6 +26,10 @@ export const EnquiryListProvider = ({ children }) => {
       setIsGlobalLoading(false);
     }
   }, [setIsGlobalLoading]);
+
+  useEffect(() => {
+    loadEnquiries();
+  }, [loadEnquiries]);
 
   const value = {
     enquiries,
