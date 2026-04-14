@@ -13,8 +13,7 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
     <HoverCard openDelay={200} closeDelay={100}>
       <HoverCardTrigger asChild>
         <div 
-          onClick={() => onOpenLightbox(index)}
-          className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-pointer transition-all hover:border-primary/30"
+          className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-default transition-all"
         >
           <div className="flex-1 flex items-center justify-center bg-gray-100/50">
             {isImage ? (
@@ -62,6 +61,12 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
             <div className="p-2 bg-white border-t border-gray-100">
               <p className="text-sm font-bold text-gray-700 truncate text-center">{file.name}</p>
               <p className="text-[10px] text-gray-500 text-center uppercase mt-0.5">{fileSize}</p>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+                className="mt-2 w-full py-1 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors rounded text-[10px] font-bold uppercase tracking-wide"
+              >
+                View Full Screen
+              </button>
             </div>
           </div>
         ) : isPdf ? (
@@ -76,6 +81,12 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
             <div className="p-2 bg-white border-t border-gray-100">
               <p className="text-sm font-bold text-gray-700 truncate text-center">{file.name}</p>
               <p className="text-[10px] text-gray-500 text-center uppercase mt-0.5">{fileSize} • PDF</p>
+              <button 
+                onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+                className="mt-2 w-full py-1 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors rounded text-[10px] font-bold uppercase tracking-wide"
+              >
+                View Full Screen
+              </button>
             </div>
           </div>
         ) : (
@@ -85,9 +96,12 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
               <p className="text-sm font-bold text-gray-800 break-all">{file.name}</p>
               <p className="text-xs text-gray-500 uppercase">{fileSize}</p>
             </div>
-            <div className="mt-2 px-3 py-1 bg-white border border-gray-200 rounded-full text-[10px] font-bold text-gray-500 uppercase tracking-wide shadow-sm">
-              CLICK TO VIEW
-            </div>
+            <button 
+              onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+              className="mt-2 px-3 py-1 bg-white border border-gray-200 rounded-full text-[10px] font-bold text-gray-500 uppercase tracking-wide shadow-sm hover:border-primary/50 hover:text-primary transition-colors cursor-pointer"
+            >
+              Click to View
+            </button>
           </div>
         )}
       </HoverCardContent>
