@@ -6,7 +6,6 @@ import {
   TableRow 
 } from '@/components/ui/table.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
-import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 import DataGridRow from './DataGridRow.jsx';
 import { ArrowUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
@@ -16,9 +15,8 @@ import { cn } from '@/lib/utils.js';
  * Implements the Master Data Grid for enquiries with sticky columns and urgency logic.
  * Refactored for pixel-perfect legacy UI sync.
  */
-const DataGrid = ({ filteredEnquiries }) => {
+const DataGrid = ({ isCompact, filteredEnquiries }) => {
   const { activeEnquiryId, selectEnquiry, isGlobalLoading } = useEnquiryContext();
-  const { isCompact } = useLayoutContext();
 
   if (isGlobalLoading) {
     return (

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
 
 import { cn } from "@/lib/utils.js";
@@ -55,7 +56,7 @@ function ToggleGroupItem({
 
   if (asChild) {
     return (
-      <ToggleGroupPrimitive.Item
+      <TogglePrimitive
         data-slot="toggle-group-item"
         data-variant={context.variant || variant}
         data-size={context.size || size}
@@ -75,7 +76,7 @@ function ToggleGroupItem({
   }
 
   return (
-    <ToggleGroupPrimitive.Item
+    <TogglePrimitive
       data-slot="toggle-group-item"
       data-variant={context.variant || variant}
       data-size={context.size || size}
@@ -91,7 +92,7 @@ function ToggleGroupItem({
       {...props}
     >
       {children}
-    </ToggleGroupPrimitive.Item>
+    </TogglePrimitive>
   );
 }
 

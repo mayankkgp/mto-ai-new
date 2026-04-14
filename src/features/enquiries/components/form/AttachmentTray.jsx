@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
@@ -61,8 +61,11 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
             <div className="p-2 bg-white border-t border-gray-100">
               <p className="text-sm font-bold text-gray-700 truncate text-center">{file.name}</p>
               <p className="text-[10px] text-gray-500 text-center uppercase mt-0.5">{fileSize}</p>
-              <button 
-                onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenLightbox(index);
+                }}
                 className="mt-2 w-full py-1 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors rounded text-[10px] font-bold uppercase tracking-wide"
               >
                 View Full Screen
@@ -81,8 +84,11 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
             <div className="p-2 bg-white border-t border-gray-100">
               <p className="text-sm font-bold text-gray-700 truncate text-center">{file.name}</p>
               <p className="text-[10px] text-gray-500 text-center uppercase mt-0.5">{fileSize} • PDF</p>
-              <button 
-                onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenLightbox(index);
+                }}
                 className="mt-2 w-full py-1 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors rounded text-[10px] font-bold uppercase tracking-wide"
               >
                 View Full Screen
@@ -96,8 +102,11 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
               <p className="text-sm font-bold text-gray-800 break-all">{file.name}</p>
               <p className="text-xs text-gray-500 uppercase">{fileSize}</p>
             </div>
-            <button 
-              onClick={(e) => { e.stopPropagation(); onOpenLightbox(index); }}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenLightbox(index);
+              }}
               className="mt-2 px-3 py-1 bg-white border border-gray-200 rounded-full text-[10px] font-bold text-gray-500 uppercase tracking-wide shadow-sm hover:border-primary/50 hover:text-primary transition-colors cursor-pointer"
             >
               Click to View
@@ -110,7 +119,7 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
 };
 
 const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
-  const fileInputRef = useRef(null);
+  const fileInputRef = React.useRef(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const handleFileChange = (e) => {

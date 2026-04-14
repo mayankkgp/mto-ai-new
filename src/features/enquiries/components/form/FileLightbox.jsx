@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { 
   X, 
   Download, 
@@ -7,7 +7,8 @@ import {
   ChevronRight, 
   FileText 
 } from 'lucide-react';
-import { Dialog, DialogPortal, DialogContent } from "@/components/ui/dialog.jsx";
+import { Dialog, DialogPortal, DialogOverlay } from "@/components/ui/dialog.jsx";
+import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { Button } from "@/components/ui/button.jsx";
 import { cn } from "@/lib/utils.js";
 
@@ -43,8 +44,8 @@ const FileLightbox = ({ files, initialIndex, onClose, isReadOnly }) => {
   return (
     <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
       <DialogPortal>
-        <DialogContent 
-          showCloseButton={false}
+        <DialogOverlay className="bg-black/80 backdrop-blur-sm z-[80]" />
+        <DialogPrimitive.Popup
           className={cn(
             "fixed top-1/2 left-1/2 z-[81] -translate-x-1/2 -translate-y-1/2",
             "max-w-5xl w-full max-h-full flex flex-col items-center justify-center border-none bg-transparent shadow-none p-4 sm:p-8 outline-none",
@@ -159,7 +160,7 @@ const FileLightbox = ({ files, initialIndex, onClose, isReadOnly }) => {
               ))}
             </div>
           </div>
-        </DialogContent>
+        </DialogPrimitive.Popup>
       </DialogPortal>
     </Dialog>
   );

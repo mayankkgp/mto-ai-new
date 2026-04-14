@@ -2,7 +2,6 @@ import React from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
-import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 import { cn } from '@/lib/utils.js';
 
 /**
@@ -13,9 +12,8 @@ import { cn } from '@/lib/utils.js';
  * 3. CREATE NEW ENQUIRY text in all caps
  * 4. text-xs font-bold on the Create Button
  */
-const MasterHeader = ({ statusTab, setStatusTab }) => {
+const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   const { enquiries, startCreating } = useEnquiryContext();
-  const { isCompact } = useLayoutContext();
 
   const counts = {
     Active: enquiries.filter(e => e.status === 'Active').length,

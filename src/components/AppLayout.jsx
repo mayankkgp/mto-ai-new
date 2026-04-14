@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip.jsx';
 import { GlobalSidebar } from './layout/GlobalSidebar.jsx';
-import { LayoutProvider } from '@/contexts/LayoutContext.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
@@ -38,22 +37,38 @@ export const AppLayout = ({ children }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [isCollapsed]);
 
+  const renderChildren = (children) => {
+    return React.Children.map(children, child => {
+      if (!React.isValidElement(child)) return child;
+      
+      if (typeof child.type !== 'string') {
+        return React.cloneElement(child, { isCompact });
+      }
+      
+      if (child.props.children) {
+        return React.cloneElement(child, {
+          children: renderChildren(child.props.children)
+        });
+      }
+      
+      return child;
+    });
+  };
+
   return (
     <TooltipProvider>
-      <LayoutProvider isCompact={isCompact}>
-        <div className="flex h-screen w-full overflow-hidden bg-[#F9FAFB]">
-          <GlobalSidebar 
-            isCollapsed={isCollapsed} 
-            setIsCollapsed={setIsCollapsed} 
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            user={user}
-          />
-          <MainWorkspace>
-            {children}
-          </MainWorkspace>
-        </div>
-      </LayoutProvider>
+      <div className="flex h-screen w-full overflow-hidden bg-[#F9FAFB]">
+        <GlobalSidebar 
+          isCollapsed={isCollapsed} 
+          setIsCollapsed={setIsCollapsed} 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          user={user}
+        />
+        <MainWorkspace>
+          {renderChildren(children)}
+        </MainWorkspace>
+      </div>
     </TooltipProvider>
   );
 };
