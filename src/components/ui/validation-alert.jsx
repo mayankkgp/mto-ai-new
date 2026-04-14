@@ -5,57 +5,76 @@ import {
   AlertDialogTitle, 
   AlertDialogDescription, 
   AlertDialogFooter, 
-  AlertDialogAction, 
-  AlertDialogOverlay, 
-  AlertDialogPortal 
+  AlertDialogAction,
+  AlertDialogCancel
 } from '@/components/ui/alert-dialog.jsx';
-import { AlertTriangle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
+import { cn } from '@/lib/utils.js';
 
-const ValidationAlert = ({ isOpen, onClose, errors }) => {
+const ValidationAlert = ({ isOpen, onClose, errors, onDiscard, showDiscardOption }) => {
+  const hasUnsubmittedTask = errors.includes("Unsubmitted Task");
+
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogPortal>
-        <AlertDialogOverlay className="z-[100] bg-black/50 backdrop-blur-sm" />
-        <AlertDialogContent className="sm:max-w-md p-6 text-center bg-white rounded-xl shadow-2xl border-0">
-          <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-amber-100 text-amber-600">
-            <AlertTriangle size={24} />
-          </div>
+      <AlertDialogContent className="sm:max-w-md p-6 text-center bg-white rounded-xl shadow-2xl border-0">
+        <div className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 bg-red-100 text-red-600">
+          <AlertCircle size={24} />
+        </div>
           
-          <AlertDialogHeader className="space-y-0">
-            <AlertDialogTitle className="text-lg font-bold text-gray-900 flex justify-center mb-2">
-              Validation Error
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-gray-500 mb-6">
-              Please fix the following issues before saving:
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+        <AlertDialogHeader className="space-y-0">
+          <AlertDialogTitle className="text-lg font-bold text-gray-900 flex justify-center mb-2">
+            Missing Required Fields
+          </AlertDialogTitle>
+        </AlertDialogHeader>
 
-          {errors.length > 0 && (
-            <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-xs text-left">
-              <div className="flex flex-wrap gap-2">
-                {errors.map((error, index) => (
-                  <span 
-                    key={index} 
-                    className="px-2 py-1 text-[10px] font-bold rounded border uppercase tracking-tight bg-red-50 text-red-600 border-red-100"
-                  >
-                    {error}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+        {hasUnsubmittedTask && (
+          <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-xs text-left">
+            <p className="font-bold mb-1">⚠️ Unsubmitted Task</p>
+            <p>You need to submit or clear the task in the right pane.</p>
+          </div>
+        )}
 
-          <AlertDialogFooter className="flex sm:flex-row sm:justify-center gap-3 w-full sm:space-x-0">
-            <AlertDialogAction 
-              onClick={onClose}
-              variant="default"
-              className="flex-1 text-white text-sm font-bold rounded-lg"
+        <AlertDialogDescription className="text-sm text-gray-500 mb-6">
+          Please fill in all mandatory fields before saving or navigating:
+        </AlertDialogDescription>
+
+        <div className="flex flex-wrap gap-2 justify-center mb-6">
+          {errors.map((error, index) => (
+            <span 
+              key={index} 
+              className={cn(
+                "px-2 py-1 text-[10px] font-bold rounded border uppercase tracking-tight",
+                error === "Unsubmitted Task" 
+                  ? "bg-amber-50 text-amber-600 border-amber-100"
+                  : "bg-red-50 text-red-600 border-red-100"
+              )}
             >
-              Fix Errors
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialogPortal>
+              {error}
+            </span>
+          ))}
+        </div>
+
+        <AlertDialogFooter className="flex sm:flex-row sm:justify-center gap-3 w-full sm:space-x-0">
+          {showDiscardOption && (
+            <AlertDialogCancel 
+              onClick={onDiscard}
+              className="flex-1 mt-0 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold rounded-lg border-0"
+            >
+              Discard Changes
+            </AlertDialogCancel>
+          )}
+          <AlertDialogAction 
+            onClick={onClose}
+            variant="default"
+            className={cn(
+              "text-white text-sm font-bold rounded-lg",
+              showDiscardOption ? "flex-1" : "w-full"
+            )}
+          >
+            Fix Errors
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
     </AlertDialog>
   );
 };

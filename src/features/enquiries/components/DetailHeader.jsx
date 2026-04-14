@@ -21,11 +21,26 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
   const handleSaveClick = () => {
     const errors = [];
-    if (!enquiry.customer?.name) {
+    if (!enquiry.customer?.name || enquiry.customer.name.trim() === "") {
       errors.push("Customer Name is required");
     }
-    if (!enquiry.leadDate) {
-      errors.push("Lead Date is missing");
+    if (!enquiry.customer?.poc || enquiry.customer.poc.trim() === "") {
+      errors.push("POC Name is required");
+    }
+    if (!enquiry.customer?.city || enquiry.customer.city.trim() === "") {
+      errors.push("City is required");
+    }
+    if (!enquiry.customer?.contact || enquiry.customer.contact.trim() === "") {
+      errors.push("Contact is required");
+    }
+    if (!enquiry.leadOverview || enquiry.leadOverview.trim() === "") {
+      errors.push("Lead Overview is required");
+    }
+    if (!enquiry.type || enquiry.type.trim() === "") {
+      errors.push("Enquiry Type is required");
+    }
+    if (!enquiry.roles?.revenue || enquiry.roles.revenue.length === 0) {
+      errors.push("Revenue Role is required");
     }
     
     if (errors.length > 0) {
