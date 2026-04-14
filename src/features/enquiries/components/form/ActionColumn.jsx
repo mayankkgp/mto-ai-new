@@ -34,11 +34,24 @@ const ActionColumn = ({ formData, setFormData, isCreating, isReadOnly }) => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      <TaskComposer 
-        isCreating={isCreating} 
-        isReadOnly={isReadOnly} 
-        setFormData={setFormData} 
-      />
+      {formData.status === 'Dropped' && formData.dropReason && (
+        <div className="bg-[#FEF2F2] border-b border-[#FECACA] p-3 min-[height:801px]:p-4 shrink-0">
+          <label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-[#991B1B] uppercase tracking-wider mb-1">
+            Drop Reason
+          </label>
+          <p className="text-[11px] text-[#7F1D1D] leading-relaxed whitespace-pre-wrap break-words">
+            {formData.dropReason}
+          </p>
+        </div>
+      )}
+
+      {!isReadOnly && (
+        <TaskComposer 
+          isCreating={isCreating} 
+          isReadOnly={isReadOnly} 
+          setFormData={setFormData} 
+        />
+      )}
 
       {/* Task Boards */}
       <div className="flex-1 overflow-y-auto no-scrollbar bg-gray-50/30">

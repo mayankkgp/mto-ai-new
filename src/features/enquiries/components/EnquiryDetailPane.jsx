@@ -67,9 +67,15 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     if (activeEnquiryId) updateStatus('Converted');
   };
 
-  const handleDrop = () => {
-    // In a real app, this might open a reason modal
-    if (activeEnquiryId) updateStatus('Dropped', 'Lost to competitor');
+  const handleDrop = (reason) => {
+    if (activeEnquiryId) {
+      updateStatus('Dropped', reason);
+      setFormData(prev => ({
+        ...prev,
+        status: 'Dropped',
+        dropReason: reason
+      }));
+    }
   };
 
   const handleReopen = () => {

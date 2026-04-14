@@ -99,7 +99,6 @@ export const EnquiryProvider = ({ children }) => {
           return e;
         });
       });
-      toast.success(`Enquiry status updated to ${newStatus}`);
     } catch (error) {
       toast.error("Failed to update status", { description: error.message });
       throw error;

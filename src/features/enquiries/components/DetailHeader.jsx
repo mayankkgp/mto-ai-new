@@ -18,36 +18,68 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
   const [validationErrors, setValidationErrors] = useState([]);
+  const [pendingAction, setPendingAction] = useState(null);
+  const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
+  const [isReopenModalOpen, setIsReopenModalOpen] = useState(false);
 
-  const handleSaveClick = () => {
+  const runValidation = () => {
     const errors = [];
     if (!enquiry.customer?.name || enquiry.customer.name.trim() === "") {
-      errors.push("Customer Name is required");
+      errors.push("Customer Name");
     }
     if (!enquiry.customer?.poc || enquiry.customer.poc.trim() === "") {
-      errors.push("POC Name is required");
+      errors.push("POC Name");
     }
     if (!enquiry.customer?.city || enquiry.customer.city.trim() === "") {
-      errors.push("City is required");
+      errors.push("City");
     }
     if (!enquiry.customer?.contact || enquiry.customer.contact.trim() === "") {
-      errors.push("Contact is required");
+      errors.push("Contact");
     }
     if (!enquiry.leadOverview || enquiry.leadOverview.trim() === "") {
-      errors.push("Lead Overview is required");
+      errors.push("Lead Overview");
     }
     if (!enquiry.type || enquiry.type.trim() === "") {
-      errors.push("Enquiry Type is required");
+      errors.push("Enquiry Type");
     }
     if (!enquiry.roles?.revenue || enquiry.roles.revenue.length === 0) {
-      errors.push("Revenue Role is required");
+      errors.push("Revenue Role");
     }
+    return errors;
+  };
+
+  const handleSaveClick = () => {
+    const errors = runValidation();
     
     if (errors.length > 0) {
+      setPendingAction('save');
       setValidationErrors(errors);
       setIsValidationAlertOpen(true);
     } else {
       onSave();
+    }
+  };
+
+  const handleCloseClick = () => {
+    const errors = runValidation();
+
+    if (errors.length > 0) {
+      setPendingAction('close');
+      setValidationErrors(errors);
+      setIsValidationAlertOpen(true);
+    } else {
+      onClose();
+    }
+  };
+
+  const handleConvertClick = () => {
+    const errors = runValidation();
+    if (errors.length > 0) {
+      setPendingAction('convert');
+      setValidationErrors(errors);
+      setIsValidationAlertOpen(true);
+    } else {
+      setIsConvertModalOpen(true);
     }
   };
 
@@ -117,7 +149,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
       <div className="flex items-center gap-2">
         {(enquiry.status === 'Converted' || enquiry.status === 'Dropped') ? (
           <Button 
-            onClick={onReopen}
+            onClick={() => setIsReopenModalOpen(true)}
             className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none"
           >
             <RotateCcw size={14} />
@@ -128,7 +160,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
             {enquiry.status === 'Active' && (
               <>
                 <Button 
-                  onClick={onConvert}
+                  onClick={handleConvertClick}
                   className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none"
                 >
                   <CheckCircle2 size={14} />
@@ -159,7 +191,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         )}
 
         <Button 
-          onClick={onClose}
+          onClick={handleCloseClick}
           variant="ghost"
           size="icon"
           className="p-1.5 h-auto w-auto rounded-full hover:bg-gray-200 text-gray-500 transition-colors"
@@ -191,7 +223,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                 variant="destructive"
                 onClick={() => {
                   console.log("Drop reason:", dropReason);
-                  onDrop();
+                  onDrop(dropReason);
                   setIsDropModalOpen(false);
                   setDropReason("");
                 }}
@@ -220,7 +252,71 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
           isOpen={isValidationAlertOpen}
           onClose={() => setIsValidationAlertOpen(false)}
           errors={validationErrors}
+          showDiscardOption={pendingAction === 'close'}
+          onDiscard={() => { setIsValidationAlertOpen(false); onClose(); }}
         />
+
+        <SystemModal
+          isOpen={isConvertModalOpen}
+          onClose={() => setIsConvertModalOpen(false)}
+          title="Convert Enquiry"
+          variant="default"
+          footer={
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => setIsConvertModalOpen(false)}
+                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsConvertModalOpen(false);
+                  onConvert();
+                }}
+                className="text-xs font-bold rounded-lg bg-primary hover:bg-primary/90 text-white"
+              >
+                Convert
+              </Button>
+            </>
+          }
+        >
+          <p className="text-xs text-gray-600 font-medium">
+            Are you sure you want to convert this enquiry? This action will mark the enquiry as converted and cannot be undone.
+          </p>
+        </SystemModal>
+
+        <SystemModal
+          isOpen={isReopenModalOpen}
+          onClose={() => setIsReopenModalOpen(false)}
+          title="Re-open Enquiry"
+          variant="default"
+          footer={
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => setIsReopenModalOpen(false)}
+                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsReopenModalOpen(false);
+                  onReopen();
+                }}
+                className="text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Confirm Re-open
+              </Button>
+            </>
+          }
+        >
+          <p className="text-xs text-gray-600 font-medium">
+            Are you sure you want to re-open this item? This will restore all editing capabilities and move it back to the active list.
+          </p>
+        </SystemModal>
       </div>
     </header>
   );

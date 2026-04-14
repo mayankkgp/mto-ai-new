@@ -34,24 +34,26 @@ const ValidationAlert = ({ isOpen, onClose, errors, onDiscard, showDiscardOption
           </div>
         )}
 
-        <AlertDialogDescription className="text-sm text-gray-500 mb-6">
-          Please fill in all mandatory fields before saving or navigating:
-        </AlertDialogDescription>
+        <div className="mb-6">
+          <AlertDialogDescription className="text-sm text-gray-500 mb-2">
+            Please fill in all mandatory fields before saving or navigating:
+          </AlertDialogDescription>
 
-        <div className="flex flex-wrap gap-2 justify-center mb-6">
-          {errors.map((error, index) => (
-            <span 
-              key={index} 
-              className={cn(
-                "px-2 py-1 text-[10px] font-bold rounded border uppercase tracking-tight",
-                error === "Unsubmitted Task" 
-                  ? "bg-amber-50 text-amber-600 border-amber-100"
-                  : "bg-red-50 text-red-600 border-red-100"
-              )}
-            >
-              {error}
-            </span>
-          ))}
+          <div className="flex flex-wrap gap-2 justify-center">
+            {errors.map((error, index) => (
+              <span 
+                key={index} 
+                className={cn(
+                  "px-2 py-1 text-[10px] font-bold rounded border uppercase tracking-tight",
+                  error === "Unsubmitted Task" 
+                    ? "bg-amber-50 text-amber-600 border-amber-100"
+                    : "bg-red-50 text-red-600 border-red-100"
+                )}
+              >
+                {error}
+              </span>
+            ))}
+          </div>
         </div>
 
         <AlertDialogFooter className="flex sm:flex-row sm:justify-center gap-3 w-full sm:space-x-0">
