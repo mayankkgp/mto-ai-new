@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
+import SystemModal from '@/components/ui/system-modal.jsx';
+import { Textarea } from '@/components/ui/textarea.jsx';
 
 /**
  * DetailHeader Component
@@ -11,6 +13,9 @@ import { cn } from '@/lib/utils.js';
  * Implements Identity Group, Status Badge, and Action Group.
  */
 const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
+  const [isDropModalOpen, setIsDropModalOpen] = useState(false);
+  const [dropReason, setDropReason] = useState("");
+
   if (!enquiry) return null;
 
   const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id) || []);
@@ -96,7 +101,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                 </Button>
 
                 <Button 
-                  onClick={onDrop}
+                  onClick={() => setIsDropModalOpen(true)}
                   variant="ghost"
                   className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none"
                 >
@@ -126,6 +131,55 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         >
           <X size={18} />
         </Button>
+
+        <SystemModal
+          isOpen={isDropModalOpen}
+          onClose={() => {
+            setIsDropModalOpen(false);
+            setDropReason("");
+          }}
+          title="Drop Enquiry"
+          variant="danger"
+          footer={
+            <>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setIsDropModalOpen(false);
+                  setDropReason("");
+                }}
+                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  console.log("Drop reason:", dropReason);
+                  onDrop();
+                  setIsDropModalOpen(false);
+                  setDropReason("");
+                }}
+                disabled={!dropReason.trim()}
+                className="text-xs font-bold rounded-lg"
+              >
+                Drop Enquiry
+              </Button>
+            </>
+          }
+        >
+          <div className="space-y-4">
+            <p className="text-xs text-gray-600 font-medium">
+              Dropping an enquiry is a permanent action. Please provide a reason below.
+            </p>
+            <Textarea
+              value={dropReason}
+              onChange={(e) => setDropReason(e.target.value)}
+              className="w-full min-h-[80px] bg-gray-50 border-gray-200 rounded-lg text-xs resize-none focus-visible:ring-1 focus-visible:ring-primary"
+              placeholder="Enter reason for dropping..."
+            />
+          </div>
+        </SystemModal>
       </div>
     </header>
   );
