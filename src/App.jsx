@@ -41,7 +41,7 @@ export default function App() {
   return (
     <EnquiryProvider>
       <AppContent />
-      <Toaster position="top-right" />
+      {/* <Toaster position="top-right" /> */}
     </EnquiryProvider>
   );
 }

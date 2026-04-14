@@ -31,14 +31,29 @@ function Toggle({
   className,
   variant = "default",
   size = "default",
+  asChild = false,
+  children,
   ...props
 }) {
+  if (asChild) {
+    return (
+      <TogglePrimitive
+        data-slot="toggle"
+        className={cn(toggleVariants({ variant, size, className }))}
+        {...props}
+        render={children}
+      />
+    );
+  }
+
   return (
     <TogglePrimitive
       data-slot="toggle"
       className={cn(toggleVariants({ variant, size, className }))}
       {...props}
-    />
+    >
+      {children}
+    </TogglePrimitive>
   );
 }
 

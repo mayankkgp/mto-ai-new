@@ -3,14 +3,16 @@ import MasterHeader from './MasterHeader.jsx';
 import FilterBar from './FilterBar.jsx';
 import DataGrid from './DataGrid.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 
 /**
  * EnquiryMasterPane Component
  * Main container for the left side of the screen (Master Pane).
  * Assembles the Header, FilterBar, and DataGrid.
  */
-const EnquiryMasterPane = ({ isCompact: isCompactProp }) => {
+const EnquiryMasterPane = () => {
   const { enquiries, activeEnquiryId, isCreating } = useEnquiryContext();
+  const { isCompact: isCompactProp } = useLayoutContext();
   
   // Force compact mode if an enquiry is active or being created (Detail Pane is open)
   const isCompact = (activeEnquiryId || isCreating) ? true : isCompactProp;

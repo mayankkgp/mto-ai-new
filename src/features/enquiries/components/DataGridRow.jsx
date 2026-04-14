@@ -1,6 +1,7 @@
 import React from 'react';
 import { TableCell, TableRow } from '@/components/ui/table.jsx';
 import { cn } from '@/lib/utils.js';
+import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 import { 
   formatCurrency, 
   getUserInitials, 
@@ -12,7 +13,8 @@ import {
  * DataGridRow Component
  * Renders a single row in the DataGrid with all its cells and formatting logic.
  */
-const DataGridRow = ({ enquiry, isActive, onSelect, isCompact }) => {
+const DataGridRow = ({ enquiry, isActive, onSelect }) => {
+  const { isCompact } = useLayoutContext();
   const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id));
   const supInitials = getUserInitials(enquiry.roles?.supply?.map(r => r.id));
   const revUrgency = getUrgencyInfo(enquiry.tasks?.revenue);

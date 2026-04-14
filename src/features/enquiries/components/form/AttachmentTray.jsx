@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
+import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
+import FileLightbox from './FileLightbox.jsx';
 
-const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
+const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) => {
   const isImage = file.type?.startsWith('image/');
   const isPdf = file.type === 'application/pdf';
   const fileSize = file.size ? (file.size / 1024 / 1024).toFixed(2) + ' MB' : 'Unknown size';
@@ -11,7 +13,10 @@ const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
   return (
     <HoverCard openDelay={200} closeDelay={100}>
       <HoverCardTrigger asChild>
-        <div className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-pointer transition-all hover:border-primary/30">
+        <div 
+          onClick={() => onOpenLightbox(index)}
+          className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-pointer transition-all hover:border-primary/30"
+        >
           <div className="flex-1 flex items-center justify-center bg-gray-100/50">
             {isImage ? (
               <img 
@@ -93,6 +98,7 @@ const FileThumbnail = ({ file, onRemove, isReadOnly }) => {
 
 const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
   const fileInputRef = React.useRef(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -136,11 +142,13 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
     >
       {formData.attachments?.length > 0 && (
         <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar min-h-[64px]">
-          {formData.attachments?.map((file) => (
+          {formData.attachments?.map((file, index) => (
             <FileThumbnail 
               key={file.id} 
               file={file} 
+              index={index}
               onRemove={removeFile} 
+              onOpenLightbox={setLightboxIndex}
               isReadOnly={isReadOnly}
             />
           ))}
@@ -167,6 +175,15 @@ const AttachmentTray = ({ formData, setFormData, isReadOnly }) => {
         className="hidden" 
         onChange={handleFileChange}
       />
+
+      {lightboxIndex !== null && (
+        <FileLightbox 
+          files={formData.attachments}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          isReadOnly={isReadOnly}
+        />
+      )}
     </div>
   );
 };

@@ -10,9 +10,16 @@ function AlertDialog({ ...props }) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
 }
 
-function AlertDialogTrigger({ ...props }) {
+function AlertDialogTrigger({ asChild = false, children, ...props }) {
+  if (asChild) {
+    return (
+      <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} render={children} />
+    );
+  }
   return (
-    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
+    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props}>
+      {children}
+    </AlertDialogPrimitive.Trigger>
   );
 }
 

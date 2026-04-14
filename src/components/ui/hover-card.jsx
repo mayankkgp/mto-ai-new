@@ -8,14 +8,16 @@ function HoverCard({ ...props }) {
   return <PreviewCardPrimitive.Root data-slot="hover-card" {...props} />;
 }
 
-function HoverCardTrigger({ asChild = false, ...props }) {
+function HoverCardTrigger({ asChild = false, children, ...props }) {
   if (asChild) {
     return (
-      <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} render={props.children} />
+      <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} render={children} />
     );
   }
   return (
-    <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />
+    <PreviewCardPrimitive.Trigger data-slot="hover-card-trigger" {...props}>
+      {children}
+    </PreviewCardPrimitive.Trigger>
   );
 }
 

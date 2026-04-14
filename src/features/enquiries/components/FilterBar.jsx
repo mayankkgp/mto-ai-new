@@ -2,12 +2,12 @@ import React, { useMemo } from 'react';
 import { Search, SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryContext } from '@/contexts/EnquiryContext.jsx';
+import { useLayoutContext } from '@/contexts/LayoutContext.jsx';
 import { mockUsers } from '@/mockData.js';
 import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 
 const FilterBar = ({ 
-  isCompact, 
   searchQuery, 
   setSearchQuery, 
   activeFilters, 
@@ -15,6 +15,7 @@ const FilterBar = ({
   clearAllFilters
 }) => {
   const { enquiries } = useEnquiryContext();
+  const { isCompact } = useLayoutContext();
   
   const revUsers = useMemo(() => {
     return mockUsers.filter(u => u.department === 'Revenue' || u.department === 'Admin');
