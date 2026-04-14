@@ -48,7 +48,8 @@ const ValidationAlert = ({ isOpen, onClose, errors }) => {
           <AlertDialogFooter className="flex sm:flex-row sm:justify-center gap-3 w-full sm:space-x-0">
             <AlertDialogAction 
               onClick={onClose}
-              className="variant-default flex-1 text-white text-sm font-bold rounded-lg"
+              variant="default"
+              className="flex-1 text-white text-sm font-bold rounded-lg"
             >
               Fix Errors
             </AlertDialogAction>

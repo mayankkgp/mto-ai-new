@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import SystemModal from '@/components/ui/system-modal.jsx';
+import ValidationAlert from '@/components/ui/validation-alert.jsx';
 import { Textarea } from '@/components/ui/textarea.jsx';
 
 /**
@@ -15,6 +16,25 @@ import { Textarea } from '@/components/ui/textarea.jsx';
 const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
   const [isDropModalOpen, setIsDropModalOpen] = useState(false);
   const [dropReason, setDropReason] = useState("");
+  const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
+  const [validationErrors, setValidationErrors] = useState([]);
+
+  const handleSaveClick = () => {
+    const errors = [];
+    if (!enquiry.customer?.name) {
+      errors.push("Customer Name is required");
+    }
+    if (!enquiry.leadDate) {
+      errors.push("Lead Date is missing");
+    }
+    
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      setIsValidationAlertOpen(true);
+    } else {
+      onSave();
+    }
+  };
 
   if (!enquiry) return null;
 
@@ -114,7 +134,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
             <div className="w-px h-6 bg-gray-200 mx-1" />
 
             <Button 
-              onClick={onSave}
+              onClick={handleSaveClick}
               className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none"
             >
               <Save size={14} />
@@ -180,6 +200,12 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
             />
           </div>
         </SystemModal>
+
+        <ValidationAlert
+          isOpen={isValidationAlertOpen}
+          onClose={() => setIsValidationAlertOpen(false)}
+          errors={validationErrors}
+        />
       </div>
     </header>
   );
