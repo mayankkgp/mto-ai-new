@@ -6,6 +6,8 @@
 
 import { mockEnquiries, mockUsers, mockChannels, MOCK_CUSTOMERS } from './mockData.js';
 
+const USE_MOCK = import.meta.env.VITE_USE_MOCK_API !== 'false';
+
 // Simulated network latency (in milliseconds)
 const NETWORK_DELAY = 800;
 
@@ -18,16 +20,23 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * 1. Fetch all enquiries (For the Master List Pane)
  */
 export const fetchEnquiries = async () => {
-  await delay(NETWORK_DELAY);
-  // Simulating a successful fetch
-  return [...mockEnquiries]; 
+  if (USE_MOCK) {
+    await delay(NETWORK_DELAY);
+    // Simulating a successful fetch
+    return [...mockEnquiries];
+  } else {
+    // const response = await fetch('/api/v1/enquiries');
+    // if (!response.ok) throw new Error('Failed to fetch enquiries');
+    // return await response.json();
+    return [];
+  }
 };
 
 /**
  * 1.1 Fetch all users
  */
 export const fetchUsers = async () => {
-  await delay(NETWORK_DELAY);
+  await delay(500);
   return [...mockUsers];
 };
 

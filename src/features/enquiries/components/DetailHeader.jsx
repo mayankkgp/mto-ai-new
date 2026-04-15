@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import SystemModal from '@/components/ui/system-modal.jsx';
@@ -18,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea.jsx';
 const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
   const [isDropModalOpen, setIsDropModalOpen] = useState(false);
   const { users } = useReferenceData();
+  const { isActionLoading } = useUIState();
   const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -161,7 +163,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
               <>
                 <Button 
                   onClick={handleConvertClick}
-                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none"
+                  disabled={isActionLoading}
+                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <CheckCircle2 size={14} />
                   <span>CONVERT</span>
@@ -170,7 +173,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                 <Button 
                   onClick={handleDropClick}
                   variant="ghost"
-                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none"
+                  disabled={isActionLoading}
+                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Ban size={14} />
                   <span>DROP</span>
@@ -182,7 +186,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
             <Button 
               onClick={handleSaveClick}
-              className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none"
+              disabled={isActionLoading}
+              className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Save size={14} />
               <span>SAVE</span>
