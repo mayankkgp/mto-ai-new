@@ -62,7 +62,9 @@ export const saveEnquiry = async (enquiryData) => {
   // Simulate server-side ID generation for new enquiries
   const savedData = {
     ...enquiryData,
-    id: enquiryData.id || `ENQ-2026-${Math.floor(Math.random() * 1000)}`,
+    id: enquiryData.id && enquiryData.id !== "NEW ENQUIRY" 
+      ? enquiryData.id 
+      : `ENQ-2026-${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
   };
 
   return savedData;
@@ -97,7 +99,7 @@ export const uploadAttachment = (file, onProgress) => {
 
         // Resolve with the purely textual DTO (S3 URL simulation)
         resolve({
-          id: `f_${Math.random().toString(36).substr(2, 9)}`,
+          id: `f_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 5)}`,
           name: file.name,
           size: file.size,
           type: file.type,
@@ -160,9 +162,13 @@ export const createTask = async (enquiryId, taskData) => {
   }
 
   // Simulate server-side ID and timestamp generation
+  const timestamp = Date.now().toString(36);
+  const randomStr = Math.random().toString(36).substring(2, 5);
+  const dept = taskData.assignedTo.startsWith('u_001') || taskData.assignedTo.startsWith('u_002') ? 'rev' : 'sup';
+  
   return {
     ...taskData,
-    id: `t_${taskData.assignedTo.startsWith('u_001') || taskData.assignedTo.startsWith('u_002') ? 'rev' : 'sup'}_${Math.floor(Math.random() * 1000)}`,
+    id: `t_${dept}_${timestamp}_${randomStr}`,
     isCompleted: false,
     createdAt: new Date().toISOString()
   };

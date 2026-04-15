@@ -173,6 +173,34 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* -----------------------------------------
+     5. Sonner High-Density Success Pill
+  ------------------------------------------ */
+  [data-sonner-toaster] {
+    @apply !top-10 !right-2 !left-auto !bottom-auto !w-auto !max-w-max !p-0 !m-0;
+  }
+  @media (min-height: 801px) {
+    [data-sonner-toaster] {
+      @apply !top-14 !right-4;
+    }
+  }
+
+  /* Nuke all Sonner animations */
+  [data-sonner-toast] {
+    @apply !transition-none !transform-none !animate-none !duration-0;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  
+  [data-sonner-toast][data-y-position='top'] {
+    @apply !top-0;
+  }
+
+  [data-sonner-toast] > div {
+    @apply !transition-none !transform-none !animate-none;
+  }
 }
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";

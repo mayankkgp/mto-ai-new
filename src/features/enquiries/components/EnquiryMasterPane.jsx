@@ -13,13 +13,12 @@ import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
  */
 const EnquiryMasterPane = ({ isCompact: isCompactProp }) => {
   const { enquiries } = useEnquiryList();
-  const { isCreating } = useUIState();
+  const { isCreating, statusTab, setStatusTab } = useUIState();
   const { activeEnquiryId } = useEnquiryDetail();
   
   // Force compact mode if an enquiry is active or being created (Detail Pane is open)
   const isCompact = (activeEnquiryId || isCreating) ? true : isCompactProp;
   
-  const [statusTab, setStatusTab] = useState('Active');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState({
     type: [],

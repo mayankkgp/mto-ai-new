@@ -16,7 +16,8 @@ const Toaster = ({ ...props }) => {
   return (
     <Sonner
       theme={theme}
-      className="toaster group"
+      className="toaster group !fixed !top-0 !right-0 !left-auto !bottom-auto !flex !flex-col !items-end !pointer-events-none"
+      duration={1500}
       icons={{
         success: <CircleCheckIcon className="size-4" />,
         info: <InfoIcon className="size-4" />,
@@ -24,15 +25,10 @@ const Toaster = ({ ...props }) => {
         error: <OctagonXIcon className="size-4" />,
         loading: <Loader2Icon className="size-4 animate-spin" />,
       }}
-      style={{
-        "--normal-bg": "var(--popover)",
-        "--normal-text": "var(--popover-foreground)",
-        "--normal-border": "var(--border)",
-        "--border-radius": "var(--radius)",
-      }}
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: "!min-h-0 !w-fit !whitespace-nowrap !flex !items-center !justify-center !px-3 !py-1.5 !rounded-md !shadow-md !opacity-100 !border !text-[11px] !font-bold !tracking-tight !transition-none !transform-none !animate-none",
+          success: "!bg-[#ECFDF5] !border-[#A7F3D0] !text-[#065F46]",
         },
       }}
       {...props}

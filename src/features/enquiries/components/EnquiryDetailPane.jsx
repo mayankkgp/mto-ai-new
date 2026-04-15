@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
 import ContextColumn from './form/ContextColumn.jsx';
@@ -17,6 +18,7 @@ import ActionColumn from './form/ActionColumn.jsx';
 const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   const { enquiries } = useEnquiryList();
   const { updateStatus, saveEnquiryDetails } = useEnquiryDetail();
+  const { setStatusTab } = useUIState();
 
   // Find the active enquiry matching activeEnquiryId
   const activeEnquiry = enquiries.find(e => e.id === activeEnquiryId);
@@ -86,15 +88,19 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
 
   const handleConvert = async () => {
     const data = getValues();
-    await saveEnquiryDetails(data);
-    if (activeEnquiryId) updateStatus('Converted');
+    await saveEnquiryDetails(data, false);
+    if (activeEnquiryId) {
+      updateStatus('Converted');
+      setStatusTab('Converted');
+    }
   };
 
   const handleDrop = async (reason) => {
     const data = getValues();
-    await saveEnquiryDetails(data);
+    await saveEnquiryDetails(data, false);
     if (activeEnquiryId) {
       updateStatus('Dropped', reason);
+      setStatusTab('Dropped');
       reset({
         ...formData,
         status: 'Dropped',
@@ -104,7 +110,10 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   };
 
   const handleReopen = () => {
-    if (activeEnquiryId) updateStatus('Active');
+    if (activeEnquiryId) {
+      updateStatus('Active');
+      setStatusTab('Active');
+    }
   };
 
   return (

@@ -39,7 +39,7 @@ export const EnquiryDetailProvider = ({ children }) => {
     setIsCreating(false);
   };
 
-  const saveEnquiryDetails = async (formData) => {
+  const saveEnquiryDetails = async (formData, showToast = true) => {
     setIsActionLoading(true);
     try {
       const saved = await api.saveEnquiry(formData);
@@ -52,7 +52,9 @@ export const EnquiryDetailProvider = ({ children }) => {
         }
         return [...prev, { ...saved }];
       });
-      toast.success("Enquiry saved successfully");
+      if (showToast) {
+        toast.success("Changes saved");
+      }
       return saved;
     } catch (error) {
       toast.error("Failed to save enquiry", { description: error.message });

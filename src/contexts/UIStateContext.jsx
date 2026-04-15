@@ -13,6 +13,7 @@ export const UIStateProvider = ({ children }) => {
   const [isGlobalLoading, setIsGlobalLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [statusTab, setStatusTab] = useState('Active');
 
   const startCreating = () => setIsCreating(true);
   const stopCreating = () => setIsCreating(false);
@@ -26,6 +27,8 @@ export const UIStateProvider = ({ children }) => {
     setIsActionLoading,
     uploadProgress,
     setUploadProgress,
+    statusTab,
+    setStatusTab,
     startCreating,
     stopCreating
   };
