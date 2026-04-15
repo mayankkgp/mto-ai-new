@@ -77,6 +77,11 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   if (formErrors.type) errorList.push("Enquiry Type");
   if (formErrors.roles?.revenue) errorList.push("Revenue Role");
 
+  if (errorList.length === 0 && Object.keys(formErrors).length > 0) {
+    errorList.push("Format Error (Check Numerical Inputs or Dates)");
+    console.error("Unmapped validation errors:", formErrors);
+  }
+
   return (
     <header className="bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 sticky top-0 z-50 h-header-fluid px-nav-fluid py-nav-fluid">
       {/* 1. Left Group (Identity, Status & Avatars) */}

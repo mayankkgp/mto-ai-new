@@ -84,24 +84,25 @@ export const EnquiryDetailProvider = ({ children }) => {
   };
 
   const handleFileUpload = async (file) => {
-    if (!activeEnquiryId) return;
     setUploadProgress(0);
     try {
       const fileData = await api.uploadAttachment(file, (progress) => {
         setUploadProgress(progress);
       });
+      fileData.url = URL.createObjectURL(file);
       
-      setEnquiries(prev => {
-        return prev.map(e => {
-          if (e.id === activeEnquiryId) {
-            const updatedEnquiry = JSON.parse(JSON.stringify(e));
-            updatedEnquiry.files = [...(updatedEnquiry.files || []), fileData];
-            return updatedEnquiry;
-          }
-          return e;
+      if (activeEnquiryId) {
+        setEnquiries(prev => {
+          return prev.map(e => {
+            if (e.id === activeEnquiryId) {
+              const updatedEnquiry = JSON.parse(JSON.stringify(e));
+              updatedEnquiry.attachments = [...(updatedEnquiry.attachments || []), fileData];
+              return updatedEnquiry;
+            }
+            return e;
+          });
         });
-      });
-      toast.success(`File "${file.name}" uploaded successfully`);
+      }
       return fileData;
     } catch (error) {
       toast.error("Upload failed", { description: error.message });
@@ -112,21 +113,21 @@ export const EnquiryDetailProvider = ({ children }) => {
   };
 
   const handleFileDelete = async (fileId) => {
-    if (!activeEnquiryId) return;
     setIsActionLoading(true);
     try {
       await api.deleteAttachment(fileId);
-      setEnquiries(prev => {
-        return prev.map(e => {
-          if (e.id === activeEnquiryId) {
-            const updatedEnquiry = JSON.parse(JSON.stringify(e));
-            updatedEnquiry.files = updatedEnquiry.files.filter(f => f.id !== fileId);
-            return updatedEnquiry;
-          }
-          return e;
+      if (activeEnquiryId) {
+        setEnquiries(prev => {
+          return prev.map(e => {
+            if (e.id === activeEnquiryId) {
+              const updatedEnquiry = JSON.parse(JSON.stringify(e));
+              updatedEnquiry.attachments = (updatedEnquiry.attachments || []).filter(f => f.id !== fileId);
+              return updatedEnquiry;
+            }
+            return e;
+          });
         });
-      });
-      toast.success("File deleted successfully");
+      }
       return true;
     } catch (error) {
       toast.error("Delete failed", { description: error.message });
@@ -153,7 +154,6 @@ export const EnquiryDetailProvider = ({ children }) => {
           return e;
         });
       });
-      toast.success("Task added successfully");
     } catch (error) {
       toast.error("Failed to add task", { description: error.message });
       throw error;
@@ -183,7 +183,6 @@ export const EnquiryDetailProvider = ({ children }) => {
           return e;
         });
       });
-      toast.success(isCompleted ? "Task marked as completed" : "Task marked as pending");
     } catch (error) {
       toast.error("Failed to update task", { description: error.message });
       throw error;
