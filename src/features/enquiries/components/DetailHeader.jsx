@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
+import { X, Save, CheckCircle2, Ban, RotateCcw, Loader2 } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
@@ -21,6 +21,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const [isDropModalOpen, setIsDropModalOpen] = useState(false);
   const { users } = useReferenceData();
   const { isActionLoading } = useUIState();
+  const [activeLoading, setActiveLoading] = useState(null);
   const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
@@ -29,9 +30,17 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
   const { trigger, formState: { errors: formErrors } } = useFormContext();
 
+  // Reset activeLoading when global loading finishes
+  React.useEffect(() => {
+    if (!isActionLoading) {
+      setActiveLoading(null);
+    }
+  }, [isActionLoading]);
+
   const handleSaveClick = async () => {
     const isValid = await trigger();
     if (isValid) {
+      setActiveLoading('save');
       onSave();
     } else {
       setPendingAction('save');
@@ -153,10 +162,11 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         {(enquiry.status === ENQUIRY_STATUS.CONVERTED || enquiry.status === ENQUIRY_STATUS.DROPPED) ? (
           <Button 
             onClick={() => setIsReopenModalOpen(true)}
-            className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none"
+            disabled={isActionLoading}
+            className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <RotateCcw size={14} />
-            <span>RE-OPEN</span>
+            {isActionLoading && activeLoading === 'reopen' ? <Loader2 size={14} className="animate-spin" /> : <RotateCcw size={14} />}
+            <span>{isActionLoading && activeLoading === 'reopen' ? 'RE-OPENING...' : 'RE-OPEN'}</span>
           </Button>
         ) : (
           <>
@@ -167,8 +177,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                   disabled={isActionLoading}
                   className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <CheckCircle2 size={14} />
-                  <span>CONVERT</span>
+                  {isActionLoading && activeLoading === 'convert' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                  <span>{isActionLoading && activeLoading === 'convert' ? 'CONVERTING...' : 'CONVERT'}</span>
                 </Button>
 
                 <Button 
@@ -177,8 +187,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                   disabled={isActionLoading}
                   className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Ban size={14} />
-                  <span>DROP</span>
+                  {isActionLoading && activeLoading === 'drop' ? <Loader2 size={14} className="animate-spin" /> : <Ban size={14} />}
+                  <span>{isActionLoading && activeLoading === 'drop' ? 'DROPPING...' : 'DROP'}</span>
                 </Button>
               </>
             )}
@@ -190,8 +200,8 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
               disabled={isActionLoading}
               className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save size={14} />
-              <span>SAVE</span>
+              {isActionLoading && activeLoading === 'save' ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+              <span>{isActionLoading && activeLoading === 'save' ? 'SAVING...' : 'SAVE'}</span>
             </Button>
           </>
         )}
@@ -229,6 +239,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                 variant="destructive"
                 onClick={() => {
                   console.log("Drop reason:", dropReason);
+                  setActiveLoading('drop');
                   onDrop(dropReason);
                   setIsDropModalOpen(false);
                   setDropReason("");
@@ -279,6 +290,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
               <Button
                 onClick={() => {
                   setIsConvertModalOpen(false);
+                  setActiveLoading('convert');
                   onConvert();
                 }}
                 className="text-xs font-bold rounded-lg bg-primary hover:bg-primary/90 text-white"
@@ -310,6 +322,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
               <Button
                 onClick={() => {
                   setIsReopenModalOpen(false);
+                  setActiveLoading('reopen');
                   onReopen();
                 }}
                 className="text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
