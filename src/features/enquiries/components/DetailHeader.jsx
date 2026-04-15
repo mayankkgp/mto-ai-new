@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { ENQUIRY_STATUS } from '@/constants/enquiryConstants.js';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import SystemModal from '@/components/ui/system-modal.jsx';
@@ -69,11 +70,11 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
   const getStatusClasses = (status) => {
     switch (status) {
-      case 'Active':
+      case ENQUIRY_STATUS.ACTIVE:
         return 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]';
-      case 'Converted':
+      case ENQUIRY_STATUS.CONVERTED:
         return 'bg-[#F3F4F6] text-[#374151] border-[#E5E7EB]';
-      case 'Dropped':
+      case ENQUIRY_STATUS.DROPPED:
         return 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]';
       default:
         return 'bg-gray-100 text-gray-600 border-gray-200';
@@ -149,7 +150,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
 
       {/* 2. Right Group (Actions) */}
       <div className="flex items-center gap-2">
-        {(enquiry.status === 'Converted' || enquiry.status === 'Dropped') ? (
+        {(enquiry.status === ENQUIRY_STATUS.CONVERTED || enquiry.status === ENQUIRY_STATUS.DROPPED) ? (
           <Button 
             onClick={() => setIsReopenModalOpen(true)}
             className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none"
@@ -159,7 +160,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
           </Button>
         ) : (
           <>
-            {enquiry.status === 'Active' && (
+            {enquiry.status === ENQUIRY_STATUS.ACTIVE && (
               <>
                 <Button 
                   onClick={handleConvertClick}

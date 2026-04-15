@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { ENQUIRY_STATUS } from '@/constants/enquiryConstants.js';
 
 const UIStateContext = createContext(null);
 
@@ -13,7 +14,7 @@ export const UIStateProvider = ({ children }) => {
   const [isGlobalLoading, setIsGlobalLoading] = useState(true);
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [statusTab, setStatusTab] = useState('Active');
+  const [statusTab, setStatusTab] = useState(ENQUIRY_STATUS.ACTIVE);
 
   const startCreating = () => setIsCreating(true);
   const stopCreating = () => setIsCreating(false);

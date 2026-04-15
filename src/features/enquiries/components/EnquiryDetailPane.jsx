@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { ENQUIRY_STATUS, ENQUIRY_TYPE } from '@/constants/enquiryConstants.js';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
 import ContextColumn from './form/ContextColumn.jsx';
@@ -27,11 +28,11 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     resolver: zodResolver(enquirySchema),
     defaultValues: {
       id: "NEW ENQUIRY",
-      status: "DRAFT",
+      status: ENQUIRY_STATUS.DRAFT,
       customer: { name: '', city: '', poc: '', contact: '' },
       leadOverview: '',
       leadDetails: '',
-      type: 'MTO',
+      type: ENQUIRY_TYPE.MTO,
       leadDate: new Date().toISOString().split('T')[0],
       channel: 'Direct',
       commercials: { orderValue: 0, probability: 50, expectedValue: 0 },
@@ -52,11 +53,11 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     if (isCreating) {
       reset({
         id: "NEW ENQUIRY",
-        status: "DRAFT",
+        status: ENQUIRY_STATUS.DRAFT,
         customer: { name: '', city: '', poc: '', contact: '' },
         leadOverview: '',
         leadDetails: '',
-        type: 'MTO',
+        type: ENQUIRY_TYPE.MTO,
         leadDate: new Date().toISOString().split('T')[0],
         channel: 'Direct',
         commercials: { orderValue: 0, probability: 50, expectedValue: 0 },
@@ -80,7 +81,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     return null;
   }
 
-  const isReadOnly = formData.status === 'Converted' || formData.status === 'Dropped';
+  const isReadOnly = formData.status === ENQUIRY_STATUS.CONVERTED || formData.status === ENQUIRY_STATUS.DROPPED;
 
   const handleSave = async (data) => {
     await saveEnquiryDetails(data);
@@ -90,8 +91,8 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     const data = getValues();
     await saveEnquiryDetails(data, false);
     if (activeEnquiryId) {
-      updateStatus('Converted');
-      setStatusTab('Converted');
+      updateStatus(ENQUIRY_STATUS.CONVERTED);
+      setStatusTab(ENQUIRY_STATUS.CONVERTED);
     }
   };
 
@@ -99,11 +100,11 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     const data = getValues();
     await saveEnquiryDetails(data, false);
     if (activeEnquiryId) {
-      updateStatus('Dropped', reason);
-      setStatusTab('Dropped');
+      updateStatus(ENQUIRY_STATUS.DROPPED, reason);
+      setStatusTab(ENQUIRY_STATUS.DROPPED);
       reset({
         ...formData,
-        status: 'Dropped',
+        status: ENQUIRY_STATUS.DROPPED,
         dropReason: reason
       });
     }
@@ -111,8 +112,8 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
 
   const handleReopen = () => {
     if (activeEnquiryId) {
-      updateStatus('Active');
-      setStatusTab('Active');
+      updateStatus(ENQUIRY_STATUS.ACTIVE);
+      setStatusTab(ENQUIRY_STATUS.ACTIVE);
     }
   };
 

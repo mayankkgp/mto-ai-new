@@ -5,6 +5,7 @@
  */
 
 import { mockEnquiries, mockUsers, mockChannels, MOCK_CUSTOMERS } from './mockData.js';
+import { ENQUIRY_STATUS } from '../constants/enquiryConstants.js';
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK_API !== 'false';
 
@@ -147,14 +148,14 @@ export const changeEnquiryStatus = async (enquiryId, newStatus, dropReason = nul
   await delay(600);
   
   if (!enquiryId) throw new Error("Enquiry ID is required.");
-  if (!['Active', 'Converted', 'Dropped'].includes(newStatus)) {
+  if (![ENQUIRY_STATUS.ACTIVE, ENQUIRY_STATUS.CONVERTED, ENQUIRY_STATUS.DROPPED].includes(newStatus)) {
     throw new Error("Invalid status provided.");
   }
 
   return {
     id: enquiryId,
     status: newStatus,
-    dropReason: newStatus === 'Dropped' ? dropReason : null,
+    dropReason: newStatus === ENQUIRY_STATUS.DROPPED ? dropReason : null,
     updatedAt: new Date().toISOString()
   };
 };
