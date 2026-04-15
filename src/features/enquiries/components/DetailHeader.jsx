@@ -20,52 +20,33 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const { users } = useReferenceData();
   const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
-  const [validationErrors, setValidationErrors] = useState([]);
   const [pendingAction, setPendingAction] = useState(null);
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
   const [isReopenModalOpen, setIsReopenModalOpen] = useState(false);
 
   const { trigger, formState: { errors: formErrors } } = useFormContext();
 
-  const handleValidation = async (action) => {
-    const isValid = await trigger();
-    if (!isValid) {
-      const errorList = [];
-      // Manually map zod errors to the legacy ribbons
-      if (formErrors.customer?.name) errorList.push("Customer Name");
-      if (formErrors.customer?.poc) errorList.push("POC Name");
-      if (formErrors.customer?.city) errorList.push("City");
-      if (formErrors.customer?.contact) errorList.push("Contact");
-      if (formErrors.leadOverview) errorList.push("Lead Overview");
-      if (formErrors.type) errorList.push("Enquiry Type");
-      if (formErrors.roles?.revenue) errorList.push("Revenue Role");
-      
-      setPendingAction(action);
-      setValidationErrors(errorList);
-      setIsValidationAlertOpen(true);
-      return false;
-    }
-    return true;
-  };
-
   const handleSaveClick = async () => {
-    const isValid = await handleValidation('save');
+    const isValid = await trigger();
     if (isValid) {
       onSave();
+    } else {
+      setPendingAction('save');
+      setIsValidationAlertOpen(true);
     }
   };
 
-  const handleCloseClick = async () => {
-    const isValid = await handleValidation('close');
-    if (isValid) {
-      onClose();
-    }
+  const handleCloseClick = () => {
+    onClose();
   };
 
   const handleConvertClick = async () => {
-    const isValid = await handleValidation('convert');
+    const isValid = await trigger();
     if (isValid) {
       setIsConvertModalOpen(true);
+    } else {
+      setPendingAction('convert');
+      setIsValidationAlertOpen(true);
     }
   };
 
@@ -86,6 +67,15 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         return 'bg-gray-100 text-gray-600 border-gray-200';
     }
   };
+
+  const errorList = [];
+  if (formErrors.customer?.name) errorList.push("Customer Name");
+  if (formErrors.customer?.poc) errorList.push("POC Name");
+  if (formErrors.customer?.city) errorList.push("City");
+  if (formErrors.customer?.contact) errorList.push("Contact");
+  if (formErrors.leadOverview) errorList.push("Lead Overview");
+  if (formErrors.type) errorList.push("Enquiry Type");
+  if (formErrors.roles?.revenue) errorList.push("Revenue Role");
 
   return (
     <header className="bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 sticky top-0 z-50 h-header-fluid px-nav-fluid py-nav-fluid">
@@ -237,7 +227,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         <ValidationAlert
           isOpen={isValidationAlertOpen}
           onClose={() => setIsValidationAlertOpen(false)}
-          errors={validationErrors}
+          errors={errorList}
           showDiscardOption={pendingAction === 'close'}
           onDiscard={() => { setIsValidationAlertOpen(false); onClose(); }}
         />

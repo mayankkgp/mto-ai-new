@@ -15,9 +15,9 @@ export const enquirySchema = z.object({
   leadDate: z.string().optional(),
   channel: z.string().optional(),
   commercials: z.object({
-    orderValue: z.number().default(0),
-    probability: z.number().min(0).max(100).default(50),
-    expectedValue: z.number().default(0),
+    orderValue: z.coerce.number().default(0),
+    probability: z.coerce.number().min(0).max(100).default(50),
+    expectedValue: z.coerce.number().default(0),
   }).optional(),
   roles: z.object({
     revenue: z.array(z.object({
