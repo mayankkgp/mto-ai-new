@@ -50,6 +50,16 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
     }
   };
 
+  const handleDropClick = async () => {
+    const isValid = await trigger();
+    if (isValid) {
+      setIsDropModalOpen(true);
+    } else {
+      setPendingAction('drop');
+      setIsValidationAlertOpen(true);
+    }
+  };
+
   if (!enquiry) return null;
 
   const revInitials = getUserInitials(enquiry.roles?.revenue?.map(r => r.id) || [], users);
@@ -68,18 +78,27 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
     }
   };
 
-  const errorList = [];
-  if (formErrors.customer?.name) errorList.push("Customer Name");
-  if (formErrors.customer?.poc) errorList.push("POC Name");
-  if (formErrors.customer?.city) errorList.push("City");
-  if (formErrors.customer?.contact) errorList.push("Contact");
-  if (formErrors.leadOverview) errorList.push("Lead Overview");
-  if (formErrors.type) errorList.push("Enquiry Type");
-  if (formErrors.roles?.revenue) errorList.push("Revenue Role");
+  const getErrorFields = (errors) => {
+    const fields = [];
+    if (errors.customer?.name) fields.push("Customer Name");
+    if (errors.customer?.poc) fields.push("POC Name");
+    if (errors.customer?.city) fields.push("City");
+    if (errors.customer?.contact) fields.push("Contact");
+    if (errors.leadOverview) fields.push("Lead Overview");
+    if (errors.type) fields.push("Enquiry Type");
+    if (errors.roles?.revenue) fields.push("Revenue Role");
+    if (errors.roles?.supply) fields.push("Supply Role");
+    if (errors.commercials) fields.push("Commercials (Numerical Values)");
+    if (errors.leadDate) fields.push("Lead Date");
+    if (errors.channel) fields.push("Channel");
+    return fields;
+  };
+
+  const errorList = getErrorFields(formErrors);
 
   if (errorList.length === 0 && Object.keys(formErrors).length > 0) {
-    errorList.push("Format Error (Check Numerical Inputs or Dates)");
-    console.error("Unmapped validation errors:", formErrors);
+    const unmappedKeys = Object.keys(formErrors);
+    errorList.push(...unmappedKeys.map(k => `Field: ${k}`));
   }
 
   return (
@@ -149,7 +168,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
                 </Button>
 
                 <Button 
-                  onClick={() => setIsDropModalOpen(true)}
+                  onClick={handleDropClick}
                   variant="ghost"
                   className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none"
                 >

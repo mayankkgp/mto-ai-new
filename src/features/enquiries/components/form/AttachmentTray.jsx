@@ -16,7 +16,8 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
     <HoverCard openDelay={200} closeDelay={100}>
       <HoverCardTrigger asChild>
         <div 
-          className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-default transition-all"
+          onClick={() => onOpenLightbox(index)}
+          className="relative group bg-gray-50 rounded border border-gray-100 overflow-hidden w-16 h-16 shrink-0 flex flex-col cursor-pointer transition-all"
         >
           <div className="flex-1 flex items-center justify-center bg-gray-100/50">
             {isImage ? (

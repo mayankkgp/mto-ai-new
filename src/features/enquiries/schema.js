@@ -10,14 +10,14 @@ export const enquirySchema = z.object({
     contact: z.string().min(1, "Contact is required"),
   }),
   leadOverview: z.string().min(1, "Lead Overview is required"),
-  leadDetails: z.string().optional(),
+  leadDetails: z.string().nullish(),
   type: z.string().min(1, "Enquiry Type is required"),
-  leadDate: z.string().optional(),
-  channel: z.string().optional(),
+  leadDate: z.string().nullish(),
+  channel: z.string().nullish(),
   commercials: z.object({
-    orderValue: z.coerce.number().default(0),
-    probability: z.coerce.number().min(0).max(100).default(50),
-    expectedValue: z.coerce.number().default(0),
+    orderValue: z.coerce.number().catch(0),
+    probability: z.coerce.number().catch(50),
+    expectedValue: z.coerce.number().catch(0),
   }).optional(),
   roles: z.object({
     revenue: z.array(z.object({
@@ -34,5 +34,5 @@ export const enquirySchema = z.object({
     revenue: z.array(z.any()).optional().default([]),
     supply: z.array(z.any()).optional().default([]),
   }).optional().default({ revenue: [], supply: [] }),
-  dropReason: z.string().optional(),
+  dropReason: z.string().nullish(),
 });

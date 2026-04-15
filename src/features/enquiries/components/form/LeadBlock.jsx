@@ -40,13 +40,21 @@ const LeadBlock = ({ isReadOnly }) => {
           Lead Overview *
         </Label>
         <textarea
-          {...overviewRegisterRest}
+          {...(() => {
+            const { onChange, ...rest } = overviewRegisterRest;
+            return {
+              ...rest,
+              onChange: (e) => {
+                onChange(e);
+                handleInput(e);
+              }
+            };
+          })()}
           ref={(el) => {
             overviewRef.current = el;
             overviewRegisterRef(el);
           }}
           rows={1}
-          onInput={handleInput}
           className={cn(
             "w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal",
             errors.leadOverview && "border-red-500 bg-red-50"
@@ -61,13 +69,21 @@ const LeadBlock = ({ isReadOnly }) => {
           Lead Details
         </Label>
         <textarea
-          {...detailsRegisterRest}
+          {...(() => {
+            const { onChange, ...rest } = detailsRegisterRest;
+            return {
+              ...rest,
+              onChange: (e) => {
+                onChange(e);
+                handleInput(e);
+              }
+            };
+          })()}
           ref={(el) => {
             detailsRef.current = el;
             detailsRegisterRef(el);
           }}
           rows={1}
-          onInput={handleInput}
           className="w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal"
           disabled={isReadOnly}
           placeholder="Detailed requirements, specifications, etc..."

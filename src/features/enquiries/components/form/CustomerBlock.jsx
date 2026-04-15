@@ -66,8 +66,16 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
             "w-full font-semibold",
             errors.customer?.name && "border-red-500 bg-red-50"
           )}
-          {...register('customer.name')}
-          onChange={(e) => handleCustomerNameChange(e.target.value)}
+          {...(() => {
+            const { onChange, ...rest } = register('customer.name');
+            return {
+              ...rest,
+              onChange: (e) => {
+                onChange(e);
+                handleCustomerNameChange(e.target.value);
+              }
+            };
+          })()}
           onFocus={() => setIsOpen(true)}
           disabled={isReadOnly}
         />

@@ -42,7 +42,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     }
   });
 
-  const { reset, watch } = methods;
+  const { reset, watch, getValues } = methods;
   const formData = watch();
 
   // Initialize form when activeEnquiry or isCreating changes
@@ -84,11 +84,15 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     await saveEnquiryDetails(data);
   };
 
-  const handleConvert = () => {
+  const handleConvert = async () => {
+    const data = getValues();
+    await saveEnquiryDetails(data);
     if (activeEnquiryId) updateStatus('Converted');
   };
 
-  const handleDrop = (reason) => {
+  const handleDrop = async (reason) => {
+    const data = getValues();
+    await saveEnquiryDetails(data);
     if (activeEnquiryId) {
       updateStatus('Dropped', reason);
       reset({

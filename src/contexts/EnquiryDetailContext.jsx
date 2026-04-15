@@ -23,7 +23,7 @@ export const EnquiryDetailProvider = ({ children }) => {
   useEffect(() => {
     if (activeEnquiryId) {
       const found = enquiries.find(e => e.id === activeEnquiryId);
-      setActiveEnquiry(found ? JSON.parse(JSON.stringify(found)) : null);
+      setActiveEnquiry(found ? { ...found } : null);
     } else {
       setActiveEnquiry(null);
     }
@@ -47,10 +47,10 @@ export const EnquiryDetailProvider = ({ children }) => {
         const index = prev.findIndex(e => e.id === saved.id);
         if (index !== -1) {
           const newList = [...prev];
-          newList[index] = JSON.parse(JSON.stringify(saved));
+          newList[index] = { ...saved };
           return newList;
         }
-        return [...prev, JSON.parse(JSON.stringify(saved))];
+        return [...prev, { ...saved }];
       });
       toast.success("Enquiry saved successfully");
       return saved;
@@ -95,7 +95,7 @@ export const EnquiryDetailProvider = ({ children }) => {
         setEnquiries(prev => {
           return prev.map(e => {
             if (e.id === activeEnquiryId) {
-              const updatedEnquiry = JSON.parse(JSON.stringify(e));
+              const updatedEnquiry = { ...e };
               updatedEnquiry.attachments = [...(updatedEnquiry.attachments || []), fileData];
               return updatedEnquiry;
             }
@@ -120,7 +120,7 @@ export const EnquiryDetailProvider = ({ children }) => {
         setEnquiries(prev => {
           return prev.map(e => {
             if (e.id === activeEnquiryId) {
-              const updatedEnquiry = JSON.parse(JSON.stringify(e));
+              const updatedEnquiry = { ...e };
               updatedEnquiry.attachments = (updatedEnquiry.attachments || []).filter(f => f.id !== fileId);
               return updatedEnquiry;
             }
@@ -145,7 +145,7 @@ export const EnquiryDetailProvider = ({ children }) => {
       setEnquiries(prev => {
         return prev.map(e => {
           if (e.id === activeEnquiryId) {
-            const updatedEnquiry = JSON.parse(JSON.stringify(e));
+            const updatedEnquiry = { ...e };
             const dept = newTask.id.includes('rev') ? 'revenue' : 'supply';
             if (!updatedEnquiry.tasks) updatedEnquiry.tasks = { revenue: [], supply: [] };
             updatedEnquiry.tasks[dept] = [...(updatedEnquiry.tasks[dept] || []), newTask];
@@ -169,7 +169,7 @@ export const EnquiryDetailProvider = ({ children }) => {
       setEnquiries(prev => {
         return prev.map(e => {
           if (e.id === activeEnquiryId) {
-            const updatedEnquiry = JSON.parse(JSON.stringify(e));
+            const updatedEnquiry = { ...e };
             ['revenue', 'supply'].forEach(dept => {
               if (updatedEnquiry.tasks && updatedEnquiry.tasks[dept]) {
                 updatedEnquiry.tasks[dept] = updatedEnquiry.tasks[dept].map(t => {
