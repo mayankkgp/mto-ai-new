@@ -89,7 +89,7 @@ export const saveEnquiry = async (enquiryData) => {
 export const uploadAttachment = (file, onProgress) => {
   return new Promise((resolve, reject) => {
     // Client-Side Gatekeeping: Validate size before "uploading"
-    const MAX_SIZE_MB = 10;
+    const MAX_SIZE_MB = 100;
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
       return reject(new Error(`File ${file.name} exceeds the ${MAX_SIZE_MB}MB limit.`));
     }

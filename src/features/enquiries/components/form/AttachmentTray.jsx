@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Paperclip, FileText, X } from 'lucide-react';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
@@ -130,11 +131,22 @@ const AttachmentTray = ({ isReadOnly }) => {
   const { uploadProgress } = useUIState();
   const { handleFileUpload, handleFileDelete } = useEnquiryDetail();
 
+  const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+
+  const validateFile = (file) => {
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(`File "${file.name}" exceeds the 100MB limit.`);
+      return false;
+    }
+    return true;
+  };
+
   const attachments = watch('attachments') || [];
 
   const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     for (const file of files) {
+      if (!validateFile(file)) continue;
       const uploadedFile = await handleFileUpload(file);
       if (uploadedFile) {
         const currentAttachments = watch('attachments') || [];
@@ -158,6 +170,7 @@ const AttachmentTray = ({ isReadOnly }) => {
     if (isReadOnly) return;
     const files = Array.from(e.dataTransfer.files);
     for (const file of files) {
+      if (!validateFile(file)) continue;
       const uploadedFile = await handleFileUpload(file);
       if (uploadedFile) {
         const currentAttachments = watch('attachments') || [];
