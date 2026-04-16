@@ -1,12 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { 
-  Hexagon, 
-  LayoutDashboard, 
-  Inbox, 
-  CheckSquare, 
-  BarChart2, 
-  Settings, 
   ChevronLeft, 
   ChevronRight 
 } from 'lucide-react';
@@ -15,22 +9,8 @@ import { Button } from '@/components/ui/button.jsx';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar.jsx';
 import SidebarItem from './SidebarItem.jsx';
 
-const SIDEBAR_CONFIG = {
-  brand: {
-    name: "Fabrito MTO",
-    icon: Hexagon
-  },
-  navItems: [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'enquiries', label: 'Enquiries', icon: Inbox },
-    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
-    { id: 'reports', label: 'Reports', icon: BarChart2 },
-    { id: 'settings', label: 'Settings', icon: Settings }
-  ]
-};
-
-export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiveTab, user }) => {
-  const BrandIcon = SIDEBAR_CONFIG.brand.icon;
+export const GlobalSidebar = ({ config, isCollapsed, setIsCollapsed, activeTab, setActiveTab, user }) => {
+  const BrandIcon = config.brand.icon;
 
   return (
     <motion.aside
@@ -43,7 +23,7 @@ export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiv
         {!isCollapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
             <BrandIcon className="w-5 h-5 text-primary shrink-0" />
-            <span className="font-bold text-sm truncate">{SIDEBAR_CONFIG.brand.name}</span>
+            <span className="font-bold text-sm truncate">{config.brand.name}</span>
           </div>
         )}
         {isCollapsed && <BrandIcon className="w-5 h-5 text-primary mx-auto" />}
@@ -59,7 +39,7 @@ export const GlobalSidebar = ({ isCollapsed, setIsCollapsed, activeTab, setActiv
 
       {/* Navigation */}
       <nav className="flex-1 py-4 space-y-1 overflow-y-auto no-scrollbar">
-        {SIDEBAR_CONFIG.navItems.map((item) => (
+        {config.navItems.map((item) => (
           <SidebarItem
             key={item.id}
             item={item}

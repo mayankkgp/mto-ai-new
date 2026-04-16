@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip.jsx';
 import { GlobalSidebar } from './layout/GlobalSidebar.jsx';
+import { useUIState } from '@/contexts/UIStateContext.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
@@ -10,9 +11,14 @@ const MainWorkspace = ({ children }) => {
   );
 };
 
-export const AppLayout = ({ children }) => {
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [activeTab, setActiveTab] = useState('enquiries');
+export const AppLayout = ({ config, children }) => {
+  const { 
+    activeModule, 
+    setActiveModule, 
+    isCollapsed, 
+    setIsCollapsed, 
+    setIsCompact 
+  } = useUIState();
   
   // Mock user data - in a real app this might come from an AuthContext
   const user = {
@@ -20,9 +26,6 @@ export const AppLayout = ({ children }) => {
     role: "Revenue Manager",
     initials: "MK"
   };
-
-  // Derived state for responsive behaviors
-  const [isCompact, setIsCompact] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,38 +38,21 @@ export const AppLayout = ({ children }) => {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isCollapsed]);
-
-  const renderChildren = (children) => {
-    return React.Children.map(children, child => {
-      if (!React.isValidElement(child)) return child;
-      
-      if (typeof child.type !== 'string') {
-        return React.cloneElement(child, { isCompact });
-      }
-      
-      if (child.props.children) {
-        return React.cloneElement(child, {
-          children: renderChildren(child.props.children)
-        });
-      }
-      
-      return child;
-    });
-  };
+  }, [isCollapsed, setIsCompact]);
 
   return (
     <TooltipProvider>
       <div className="flex h-screen w-full overflow-hidden bg-[#F9FAFB]">
         <GlobalSidebar 
+          config={config}
           isCollapsed={isCollapsed} 
           setIsCollapsed={setIsCollapsed} 
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          activeTab={activeModule}
+          setActiveTab={setActiveModule}
           user={user}
         />
         <MainWorkspace>
-          {renderChildren(children)}
+          {children}
         </MainWorkspace>
       </div>
     </TooltipProvider>

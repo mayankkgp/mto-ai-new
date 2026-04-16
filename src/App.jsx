@@ -2,41 +2,42 @@ import React from 'react';
 import { UIStateProvider, useUIState } from '@/contexts/UIStateContext.jsx';
 import { ReferenceDataProvider } from '@/contexts/ReferenceDataContext.jsx';
 import { EnquiryListProvider } from '@/contexts/EnquiryListContext.jsx';
-import { EnquiryDetailProvider, useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
+import { EnquiryDetailProvider } from '@/contexts/EnquiryDetailContext.jsx';
 import { AppLayout } from '@/components/AppLayout.jsx';
 import { Toaster } from '@/components/ui/sonner.jsx';
-import { cn } from '@/lib/utils.js';
-import EnquiryMasterPane from '@/features/enquiries/components/EnquiryMasterPane.jsx';
-import EnquiryDetailPane from '@/features/enquiries/components/EnquiryDetailPane.jsx';
+import EnquiriesModule from '@/features/enquiries/EnquiriesModule.jsx';
+import { 
+  Hexagon, 
+  LayoutDashboard, 
+  Inbox, 
+  CheckSquare, 
+  BarChart2,
+  Settings
+} from 'lucide-react';
+
+const SIDEBAR_CONFIG = {
+  brand: {
+    name: "Fabrito MTO",
+    icon: Hexagon
+  },
+  navItems: [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'enquiries', label: 'Enquiries', icon: Inbox },
+    { id: 'tasks', label: 'Tasks', icon: CheckSquare },
+    { id: 'reports', label: 'Reports', icon: BarChart2 },
+    { id: 'settings', label: 'Settings', icon: Settings }
+  ]
+};
 
 function AppContent() {
-  const { isCreating } = useUIState();
-  const { activeEnquiryId, closePane } = useEnquiryDetail();
-  const isPaneOpen = !!activeEnquiryId || isCreating;
+  const { activeModule } = useUIState();
 
   return (
-    <AppLayout>
-      {/* AppLayout will pass isCompact to this child */}
-      <div className="flex h-full w-full overflow-hidden">
-        {/* Master Pane: Always visible, but width changes if Detail Pane is open */}
-        <div className={cn(
-          "transition-all duration-300 shrink-0",
-          isPaneOpen ? "w-[35%]" : "w-full"
-        )}>
-          <EnquiryMasterPane />
-        </div>
-
-        {/* Detail Pane: Animated entry/exit */}
-        {isPaneOpen && (
-          <div className="w-[65%] shrink-0">
-            <EnquiryDetailPane 
-              activeEnquiryId={activeEnquiryId} 
-              isCreating={isCreating}
-              onClose={closePane} 
-            />
-          </div>
-        )}
-      </div>
+    <AppLayout config={SIDEBAR_CONFIG}>
+      {activeModule === 'enquiries' && <EnquiriesModule />}
+      {activeModule !== 'enquiries' && (
+        <div className="p-8 text-gray-500">Module: {activeModule}</div>
+      )}
     </AppLayout>
   );
 }

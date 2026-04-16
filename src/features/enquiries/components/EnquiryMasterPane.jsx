@@ -11,9 +11,9 @@ import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
  * Main container for the left side of the screen (Master Pane).
  * Assembles the Header, FilterBar, and DataGrid.
  */
-const EnquiryMasterPane = ({ isCompact: isCompactProp }) => {
+const EnquiryMasterPane = () => {
   const { enquiries } = useEnquiryList();
-  const { isCreating, statusTab, setStatusTab } = useUIState();
+  const { isCreating, statusTab, setStatusTab, isCompact: isCompactProp } = useUIState();
   const { activeEnquiryId } = useEnquiryDetail();
   
   // Force compact mode if an enquiry is active or being created (Detail Pane is open)

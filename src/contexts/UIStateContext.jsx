@@ -15,6 +15,9 @@ export const UIStateProvider = ({ children }) => {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [statusTab, setStatusTab] = useState(ENQUIRY_STATUS.ACTIVE);
+  const [activeModule, setActiveModule] = useState('enquiries');
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isCompact, setIsCompact] = useState(false);
 
   const startCreating = () => setIsCreating(true);
   const stopCreating = () => setIsCreating(false);
@@ -30,6 +33,12 @@ export const UIStateProvider = ({ children }) => {
     setUploadProgress,
     statusTab,
     setStatusTab,
+    activeModule,
+    setActiveModule,
+    isCollapsed,
+    setIsCollapsed,
+    isCompact,
+    setIsCompact,
     startCreating,
     stopCreating
   };
