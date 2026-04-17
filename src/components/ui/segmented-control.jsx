@@ -39,8 +39,8 @@ const segmentedControlTriggerVariants = cva(
         'header-toggle': [
           "px-4 py-1 text-xs font-semibold rounded-md transition-all",
           "text-gray-500 hover:text-gray-700",
-          "data-active:bg-white data-active:text-primary data-active:shadow-sm",
-          "dark:data-active:bg-gray-800 dark:data-active:text-white"
+          "data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-sm",
+          "dark:data-[state=active]:bg-gray-800 dark:data-[state=active]:text-white"
         ].join(" "),
       },
     },

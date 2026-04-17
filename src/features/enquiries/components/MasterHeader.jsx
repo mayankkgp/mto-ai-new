@@ -25,14 +25,12 @@ const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
       variant="master-header" 
       className="flex items-center justify-between sticky top-0 z-10"
     >
-      <div className="flex items-center gap-4">
-        <SegmentedControl
-          value={statusTab}
-          onValueChange={setStatusTab}
-          options={['Active', 'Converted', 'Dropped'].map(s => ({ value: s, label: `${s} (${counts[s]})` }))}
-          variant="header-toggle"
-        />
-      </div>
+      <SegmentedControl
+        value={statusTab}
+        onValueChange={setStatusTab}
+        options={['Active', 'Converted', 'Dropped'].map(s => ({ value: s, label: `${s} (${counts[s]})` }))}
+        variant="header-toggle"
+      />
 
       <Button 
         onClick={startCreating}

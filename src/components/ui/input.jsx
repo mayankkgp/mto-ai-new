@@ -12,19 +12,24 @@ const inputVariants = cva(
         default: "h-8 px-2.5 py-1 text-base md:text-sm",
         micro: "h-[26px] min-h-[26px] px-1.5 py-0 text-[11px] leading-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1E40AF] disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal",
       },
+      variant: {
+        default: "",
+        search: "bg-gray-50 border-gray-200 focus-visible:ring-1 focus-visible:ring-primary focus-visible:border-primary",
+      },
     },
     defaultVariants: {
       size: "default",
+      variant: "default",
     },
   }
 );
 
-function Input({ className, type, size = "default", ...props }) {
+function Input({ className, type, size = "default", variant = "default", ...props }) {
   return (
     <InputPrimitive
       type={type}
       data-slot="input"
-      className={cn(inputVariants({ size }), className)}
+      className={cn(inputVariants({ size, variant }), className)}
       {...props}
     />
   );

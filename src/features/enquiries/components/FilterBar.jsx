@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
-import { Search, SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
+import PaneHeader from '@/components/ui/pane-header.jsx';
+import { SearchBar } from '@/components/ui/search-bar.jsx';
 
 const FilterBar = ({ 
   isCompact, 
@@ -50,25 +52,14 @@ const FilterBar = ({
   const isRevActive = activeFilters.revRole.length > 0;
 
   return (
-    <div className="bg-white border-b border-gray-200 px-2 min-[height:801px]:px-4 py-1 min-[height:801px]:py-1.5 flex items-center gap-3 shrink-0 h-[40px] min-[height:801px]:h-[48px] relative z-40">
+    <PaneHeader variant="filter-bar" className="flex items-center gap-3 relative z-40">
       <div className="flex items-center gap-2 flex-1 max-w-md">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
-          <input 
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search enquiries..." 
-            className="w-full pl-9 pr-8 py-1.5 bg-gray-50 border border-gray-200 rounded text-xs focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-          />
-          {searchQuery.length > 0 && (
-            <button 
-              onClick={() => setSearchQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200/50 transition-colors"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          )}
-        </div>
+        <SearchBar 
+          variant="header-search-bar" 
+          value={searchQuery} 
+          onChange={(val) => setSearchQuery(val)} 
+          placeholder="Search enquiries..." 
+        />
       </div>
 
       <div className="flex items-center gap-2 ml-auto">
@@ -176,7 +167,7 @@ const FilterBar = ({
           )}
         </div>
       </div>
-    </div>
+    </PaneHeader>
   );
 };
 
