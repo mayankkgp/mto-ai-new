@@ -3,15 +3,12 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
-import { cn } from '@/lib/utils.js';
+import PaneHeader from '@/components/ui/pane-header.jsx';
+import SegmentedControl from '@/components/ui/segmented-control.jsx';
 
 /**
  * MasterHeader Component
- * Fixes visual deviations to match legacy UI:
- * 1. Default pill-style TabsList (removed variant="line")
- * 2. text-xs font-semibold on TabsTrigger with parenthesized counts
- * 3. CREATE NEW ENQUIRY text in all caps
- * 4. text-xs font-bold on the Create Button
+ * Uses dynamic PaneHeader primitive for standardized height and layout.
  */
 const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   const { enquiries } = useEnquiryList();
@@ -24,35 +21,28 @@ const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   };
 
   return (
-    <header className="flex items-center justify-between h-header-fluid px-nav-fluid border-b bg-background sticky top-0 z-10">
+    <PaneHeader 
+      variant="master-header" 
+      className="flex items-center justify-between sticky top-0 z-10"
+    >
       <div className="flex items-center gap-4">
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-lg">
-          {['Active', 'Converted', 'Dropped'].map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusTab(status)}
-              className={cn(
-                "px-4 py-1 text-xs font-semibold rounded-md transition-all",
-                statusTab === status 
-                  ? "bg-white text-primary shadow-sm" 
-                  : "text-gray-500 hover:text-gray-700"
-              )}
-            >
-              {status} ({counts[status]})
-            </button>
-          ))}
-        </div>
+        <SegmentedControl
+          value={statusTab}
+          onValueChange={setStatusTab}
+          options={['Active', 'Converted', 'Dropped'].map(s => ({ value: s, label: `${s} (${counts[s]})` }))}
+          variant="header-toggle"
+        />
       </div>
 
       <Button 
         onClick={startCreating}
         size={isCompact ? "icon" : "default"}
-        className="gap-2 text-xs font-bold"
+        className="gap-2"
       >
         <Plus className="h-4 w-4" />
         {!isCompact && <span>CREATE NEW ENQUIRY</span>}
       </Button>
-    </header>
+    </PaneHeader>
   );
 };
 
