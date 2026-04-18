@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import { SearchBar } from '@/components/ui/search-bar.jsx';
+import { Wrapper } from '@/components/ui/wrapper.jsx';
 
 const FilterBar = ({ 
   isCompact, 
@@ -53,7 +54,7 @@ const FilterBar = ({
 
   return (
     <PaneHeader variant="filter-bar" className="flex items-center gap-3 relative z-40">
-      <div className="flex items-center gap-2 flex-1 max-w-md">
+      <div className="flex items-center flex-1 max-w-md">
         <SearchBar 
           variant="header-search-bar" 
           value={searchQuery} 
@@ -62,7 +63,7 @@ const FilterBar = ({
         />
       </div>
 
-      <div className="flex items-center gap-2 ml-auto">
+      <Wrapper variant="header-filter">
         {/* Type Filter */}
         {!isCompact && (
           <Popover>
@@ -166,7 +167,7 @@ const FilterBar = ({
             </button>
           )}
         </div>
-      </div>
+      </Wrapper>
     </PaneHeader>
   );
 };
