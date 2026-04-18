@@ -8,6 +8,7 @@ import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import { SearchBar } from '@/components/ui/search-bar.jsx';
 import { Wrapper } from '@/components/ui/wrapper.jsx';
+import { Button } from '@/components/ui/button.jsx';
 
 const FilterBar = ({ 
   isCompact, 
@@ -49,9 +50,6 @@ const FilterBar = ({
     });
   };
 
-  const isTypeActive = activeFilters.type.length > 0;
-  const isRevActive = activeFilters.revRole.length > 0;
-
   return (
     <PaneHeader variant="filter-bar" className="flex items-center gap-3 relative z-40">
       <div className="flex items-center flex-1 max-w-md">
@@ -68,16 +66,11 @@ const FilterBar = ({
         {!isCompact && (
           <Popover>
             <PopoverTrigger asChild>
-              <button className={cn(
-                "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold transition-colors",
-                isTypeActive 
-                  ? "bg-[#F3F4F6] text-[#374151] border border-[#E5E7EB]" 
-                  : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-              )}>
+              <Button variant="header-filter" size="header-filter">
                 <Layers className="h-3.5 w-3.5" />
                 <span>Type</span>
                 <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
-              </button>
+              </Button>
             </PopoverTrigger>
             <PopoverContent className="w-40 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
               {['MTO', 'Ready'].map(type => (
@@ -97,16 +90,11 @@ const FilterBar = ({
         {/* Rev Role Filter */}
         <Popover>
           <PopoverTrigger asChild>
-            <button className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold transition-colors",
-              isRevActive 
-                ? "bg-[#F3F4F6] text-[#374151] border border-[#E5E7EB]" 
-                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-            )}>
+            <Button variant="header-filter" size="header-filter">
               <User className="h-3.5 w-3.5" />
               {!isCompact && <span>Rev Role</span>}
               <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
-            </button>
+            </Button>
           </PopoverTrigger>
           <PopoverContent className="w-56 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
             <div className="max-h-60 overflow-y-auto no-scrollbar">
