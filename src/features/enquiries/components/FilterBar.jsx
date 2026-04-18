@@ -3,12 +3,12 @@ import { SlidersHorizontal, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
-import { cn } from '@/lib/utils.js';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import { SearchBar } from '@/components/ui/search-bar.jsx';
 import { Wrapper } from '@/components/ui/wrapper.jsx';
 import { Button } from '@/components/ui/button.jsx';
+import { AdvancedFilterButton } from '@/components/ui/advanced-filter-button.jsx';
 
 const FilterBar = ({ 
   isCompact, 
@@ -111,15 +111,10 @@ const FilterBar = ({
         </Popover>
 
         {/* Advanced Filter Group */}
-        <div className={cn(
-          "flex items-center rounded transition-colors overflow-hidden", 
-          activeFilterCount > 0 
-            ? "bg-[#F3F4F6] text-[#374151] border border-[#E5E7EB]" 
-            : "bg-gray-100 text-gray-700"
-        )}>
+        <AdvancedFilterButton state={activeFilterCount > 0 ? "active" : "inactive"}>
           <Popover>
             <PopoverTrigger asChild>
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold hover:bg-black/5 transition-colors shrink-0">
+              <AdvancedFilterButton.Main>
                 <SlidersHorizontal className="h-3.5 w-3.5" />
                 {isCompact ? (
                   activeFilterCount > 0 && (
@@ -132,8 +127,9 @@ const FilterBar = ({
                     {activeFilterCount === 0 ? "Filters" : `Filter (${activeFilterCount})`}
                   </span>
                 )}
-              </button>
+              </AdvancedFilterButton.Main>
             </PopoverTrigger>
+
             <PopoverContent className="w-auto p-0 bg-transparent border-none shadow-none" align="end">
               <AdvancedFilterMenu 
                 enquiries={enquiries} 
@@ -145,14 +141,11 @@ const FilterBar = ({
           </Popover>
           
           {activeFilterCount > 0 && (
-            <button 
-              onClick={clearAllFilters}
-              className="px-2 py-1.5 border-l border-[#E5E7EB] hover:bg-black/5 transition-colors"
-            >
+            <AdvancedFilterButton.Cross onClick={clearAllFilters}>
               <X className="h-3.5 w-3.5" />
-            </button>
+            </AdvancedFilterButton.Cross>
           )}
-        </div>
+        </AdvancedFilterButton>
       </Wrapper>
     </PaneHeader>
   );
