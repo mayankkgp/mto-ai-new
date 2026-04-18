@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { SlidersHorizontal, ChevronDown, User, Layers, X, Check } from 'lucide-react';
+import { SlidersHorizontal, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
@@ -69,7 +69,6 @@ const FilterBar = ({
               <Button variant="header-filter" size="header-filter">
                 <Layers className="h-3.5 w-3.5" />
                 <span>Type</span>
-                <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-40 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
@@ -93,7 +92,6 @@ const FilterBar = ({
             <Button variant="header-filter" size="header-filter">
               <User className="h-3.5 w-3.5" />
               {!isCompact && <span>Rev Role</span>}
-              <ChevronDown className="h-3 w-3 opacity-50 ml-0.5" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-56 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
