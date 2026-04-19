@@ -11,6 +11,7 @@ const inputVariants = cva(
       size: {
         default: "h-8 px-2.5 py-1 text-base md:text-sm",
         micro: "h-[26px] min-h-[26px] px-1.5 py-0 text-[11px] leading-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-[#1E40AF] disabled:bg-gray-50 disabled:opacity-100 disabled:text-gray-500 placeholder:text-gray-400 placeholder:font-normal",
+        "advanced-filter": "h-auto px-2 py-1 text-[10px] border border-gray-200 rounded focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-primary",
       },
       variant: {
         default: "",

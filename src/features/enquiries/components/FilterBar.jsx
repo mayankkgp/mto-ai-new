@@ -131,14 +131,14 @@ const FilterBar = ({
                     </span>
                   )
                 ) : (
-                  <span>
+                  <span className="inline-block w-[64px] text-left">
                     {activeFilterCount === 0 ? "Filters" : `Filter (${activeFilterCount})`}
                   </span>
                 )}
               </AdvancedFilterButton.Main>
             </PopoverTrigger>
 
-            <PopoverContent className="w-auto p-0 bg-transparent border-none shadow-none" align="end">
+            <PopoverContent variant="advanced-filter" align="end">
               <AdvancedFilterMenu 
                 enquiries={enquiries} 
                 activeFilters={activeFilters}
