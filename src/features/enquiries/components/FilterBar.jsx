@@ -9,6 +9,8 @@ import { SearchBar } from '@/components/ui/search-bar.jsx';
 import { Wrapper } from '@/components/ui/wrapper.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { AdvancedFilterButton } from '@/components/ui/advanced-filter-button.jsx';
+import { QuickFilterPopoverContent } from '@/components/ui/quick-filter-popover.jsx';
+import { Command, CommandItem, CommandList } from '@/components/ui/command.jsx';
 
 const FilterBar = ({ 
   isCompact, 
@@ -71,18 +73,22 @@ const FilterBar = ({
                 <span>Type</span>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-40 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
-              {['MTO', 'Ready'].map(type => (
-                <button 
-                  key={type}
-                  onClick={() => toggleFilter('type', type)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 rounded transition-colors"
-                >
-                  <span>{type}</span>
-                  {activeFilters.type.includes(type) && <Check className="h-3 w-3 text-primary" />}
-                </button>
-              ))}
-            </PopoverContent>
+            <QuickFilterPopoverContent size="type-filter" align="end">
+              <Command>
+                <CommandList>
+                  {['MTO', 'Ready'].map(type => (
+                    <CommandItem 
+                      key={type}
+                      onSelect={() => toggleFilter('type', type)}
+                      className="flex w-full items-center px-3 py-2 text-xs text-gray-700 rounded aria-selected:bg-gray-50 aria-selected:text-gray-900"
+                    >
+                      <Check className={`mr-2 h-3 w-3 text-primary transition-opacity ${activeFilters.type.includes(type) ? "opacity-100" : "opacity-0"}`} />
+                      <span>{type}</span>
+                    </CommandItem>
+                  ))}
+                </CommandList>
+              </Command>
+            </QuickFilterPopoverContent>
           </Popover>
         )}
 
@@ -94,20 +100,22 @@ const FilterBar = ({
               {!isCompact && <span>Rev Role</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-56 p-1 bg-white border border-gray-200 rounded-lg shadow-xl" align="end">
-            <div className="max-h-60 overflow-y-auto no-scrollbar">
-              {revUsers.map(user => (
-                <button 
-                  key={user.id}
-                  onClick={() => toggleFilter('revRole', user.id)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 rounded transition-colors"
-                >
-                  <span>{user.name}</span>
-                  {activeFilters.revRole.includes(user.id) && <Check className="h-3 w-3 text-primary" />}
-                </button>
-              ))}
-            </div>
-          </PopoverContent>
+          <QuickFilterPopoverContent size="rev-role-filter" align="end">
+            <Command>
+              <CommandList className="max-h-60 overflow-y-auto overflow-x-hidden no-scrollbar">
+                {revUsers.map(user => (
+                  <CommandItem 
+                    key={user.id}
+                    onSelect={() => toggleFilter('revRole', user.id)}
+                    className="flex w-full items-center px-3 py-2 text-xs text-gray-700 rounded aria-selected:bg-gray-50 aria-selected:text-gray-900"
+                  >
+                    <Check className={`mr-2 h-3 w-3 text-primary transition-opacity ${activeFilters.revRole.includes(user.id) ? "opacity-100" : "opacity-0"}`} />
+                    <span>{user.name}</span>
+                  </CommandItem>
+                ))}
+              </CommandList>
+            </Command>
+          </QuickFilterPopoverContent>
         </Popover>
 
         {/* Advanced Filter Group */}
