@@ -10,8 +10,9 @@ import { cn } from '@/lib/utils.js';
 import { ENQUIRY_STATUS, ENQUIRY_TYPE } from '@/constants/enquiryConstants.js';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
-import ContextColumn from './form/ContextColumn.jsx';
 import ActionColumn from './form/ActionColumn.jsx';
+import CustomerDetails from './form/CustomerDetails.jsx';
+import OtherDetails from './form/OtherDetails.jsx';
 
 /**
  * EnquiryDetailPane Component
@@ -147,10 +148,10 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
             animate={{ width: isCreating ? "70%" : "35%" }}
             className="@container overflow-y-auto no-scrollbar bg-white min-w-[300px] p-1.5 min-[height:801px]:p-3"
           >
-            <ContextColumn 
-              isCreating={isCreating} 
-              isReadOnly={isReadOnly} 
-            />
+            <div className="flex flex-col gap-3">
+              <CustomerDetails isCreating={isCreating} isReadOnly={isReadOnly} />
+              <OtherDetails isReadOnly={isReadOnly} />
+            </div>
           </motion.div>
 
           {/* 2. Right Pane (Action Items & Workspace) */}
