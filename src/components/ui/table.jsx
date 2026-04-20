@@ -1,8 +1,36 @@
 import * as React from "react";
+import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils.js";
 
-function Table({ className, ...props }) {
+const tableVariants = cva("w-full border-separate border-spacing-0 min-w-[1000px] table-fixed");
+const tableHeaderVariants = cva("sticky top-0 z-30 bg-gray-50 border-b border-gray-200");
+const tableRowVariants = cva("", {
+  variants: {
+    variant: {
+      "data-grid-header": "hover:bg-transparent border-b text-gray-500",
+      "data-grid-body": "cursor-pointer transition-colors group align-top hover:bg-gray-50 data-[state=selected]:bg-[#F4F5FB] data-[state=selected]:hover:bg-[#E9ECF7]",
+    },
+  },
+});
+const tableHeadVariants = cva("h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group", {
+  variants: {
+    variant: {
+      "data-grid": "",
+      "data-grid-sticky": "sticky left-0 z-40 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-200",
+    },
+  },
+});
+const tableCellVariants = cva("px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-100", {
+  variants: {
+    variant: {
+      "data-grid": "",
+      "data-grid-sticky": "sticky left-0 z-20 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] text-[11px] font-semibold max-w-0 truncate bg-white group-hover:bg-gray-50 border-l-[3px] border-transparent data-[state=selected]:bg-[#F4F5FB] data-[state=selected]:group-hover:bg-[#E9ECF7] data-[state=selected]:border-primary",
+    },
+  },
+});
+
+function Table({ className, variant = "data-grid", ...props }) {
   return (
     <div
       data-slot="table-container"
@@ -10,18 +38,18 @@ function Table({ className, ...props }) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn(tableVariants({ variant }), className)}
         {...props}
       />
     </div>
   );
 }
 
-function TableHeader({ className, ...props }) {
+function TableHeader({ className, variant = "data-grid", ...props }) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b", className)}
+      className={cn(tableHeaderVariants({ variant }), className)}
       {...props}
     />
   );
@@ -49,41 +77,31 @@ function TableFooter({ className, ...props }) {
     />
   );
 }
-
-function TableRow({ className, ...props }) {
+function TableRow({ className, variant = "data-grid-body", ...props }) {
   return (
     <tr
       data-slot="table-row"
-      className={cn(
-        "border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted",
-        className,
-      )}
+      className={cn(tableRowVariants({ variant }), className)}
       {...props}
     />
   );
 }
 
-function TableHead({ className, ...props }) {
+function TableHead({ className, variant = "data-grid", ...props }) {
   return (
     <th
       data-slot="table-head"
-      className={cn(
-        "h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0",
-        className,
-      )}
+      className={cn(tableHeadVariants({ variant }), className)}
       {...props}
     />
   );
 }
 
-function TableCell({ className, ...props }) {
+function TableCell({ className, variant = "data-grid", ...props }) {
   return (
     <td
       data-slot="table-cell"
-      className={cn(
-        "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0",
-        className,
-      )}
+      className={cn(tableCellVariants({ variant }), className)}
       {...props}
     />
   );

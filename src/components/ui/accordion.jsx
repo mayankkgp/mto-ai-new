@@ -17,7 +17,7 @@ const accordionTriggerVariants = cva("group/accordion-trigger relative flex flex
   variants: {
     variant: {
       default: "",
-      "advanced-filter": "w-full pl-3 pr-4 py-2.5 text-xs text-gray-700 hover:bg-gray-50 hover:no-underline data-[state=open]:bg-primary/5 data-[state=open]:text-primary data-[state=open]:font-bold",
+      "advanced-filter": "w-full px-3 py-2.5 text-xs text-gray-700 hover:bg-gray-50 hover:no-underline data-[state=open]:bg-primary/5 data-[state=open]:text-primary data-[state=open]:font-bold",
     },
   },
 });
@@ -26,7 +26,7 @@ const accordionContentVariants = cva("text-sm data-open:animate-accordion-down d
   variants: {
     variant: {
         default: "overflow-hidden",
-        "advanced-filter": "bg-gray-50/50 py-1 pl-3 pr-4 space-y-1",
+        "advanced-filter": "bg-gray-50/50 py-1 px-3 space-y-1",
     }
   }
 });

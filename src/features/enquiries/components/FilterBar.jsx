@@ -124,17 +124,7 @@ const FilterBar = ({
             <PopoverTrigger asChild>
               <AdvancedFilterButton.Main>
                 <SlidersHorizontal className="h-3.5 w-3.5" />
-                {isCompact ? (
-                  activeFilterCount > 0 && (
-                    <span className="flex items-center justify-center bg-gray-700 text-white text-[9px] w-3.5 h-3.5 rounded-full leading-none">
-                      {activeFilterCount}
-                    </span>
-                  )
-                ) : (
-                  <span className="inline-block w-[64px] text-left">
-                    {activeFilterCount === 0 ? "Filters" : `Filter (${activeFilterCount})`}
-                  </span>
-                )}
+                {!isCompact && <span>Filters</span>}
               </AdvancedFilterButton.Main>
             </PopoverTrigger>
 
@@ -149,8 +139,9 @@ const FilterBar = ({
           </Popover>
           
           {activeFilterCount > 0 && (
-            <AdvancedFilterButton.Cross onClick={clearAllFilters}>
-              <X className="h-3.5 w-3.5" />
+            <AdvancedFilterButton.Cross onClick={clearAllFilters} className="flex items-center justify-center gap-1.5 px-2 h-full">
+              <span className="text-xs font-medium">{activeFilterCount}</span>
+              <X className="w-3.5 h-3.5" />
             </AdvancedFilterButton.Cross>
           )}
         </AdvancedFilterButton>

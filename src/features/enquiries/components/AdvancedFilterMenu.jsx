@@ -1,7 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { 
-  ChevronDown, 
-  ChevronRight, 
   Filter, 
   Truck, 
   Calendar, 
@@ -11,7 +9,6 @@ import {
   X
 } from 'lucide-react';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
-import { cn } from '@/lib/utils.js';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Input } from '@/components/ui/input.jsx';
@@ -87,8 +84,8 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
   }, [activeFilters]);
 
   return (
-    <div className="w-64">
-      <div className="pl-3 pr-4 py-2 border-b border-gray-100 flex items-center justify-between">
+    <div className="w-full flex flex-col">
+      <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Advanced Filters</span>
         <button onClick={clearAllFilters} className="text-[10px] text-primary font-bold hover:underline">Clear</button>
       </div>
@@ -106,94 +103,96 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
         </div>
       )}
 
-      <Accordion type="single" collapsible>
-        {categories.map((cat) => {
-          const Icon = cat.icon;
-          
-          return (
-            <AccordionItem key={cat.id} variant="advanced-filter">
-              <AccordionTrigger variant="advanced-filter">
-                <div className="flex items-center gap-2">
-                  <Icon size={14} className="text-gray-400" />
-                  <span>{cat.label}</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent variant="advanced-filter">
-                {cat.options && cat.options.map((opt) => (
-                  <AdvancedFilterMultipleSelect 
-                    key={opt} 
-                    isSelected={cat.id === 'supply' ? activeFilters.supply?.includes(opt) : activeFilters[cat.id] === opt}
-                    onClick={() => cat.id === 'supply' ? toggleArrayFilter('supply', opt) : updateFilter(cat.id, opt)}
-                  >
-                    <span className="text-xs text-gray-600">{opt}</span>
-                  </AdvancedFilterMultipleSelect>
-                ))}
-                
-                {cat.isDate && (
-                  <div className="flex flex-col gap-2 py-2">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase">Start Date</label>
-                      <Input 
-                        type="date" 
-                        size="advanced-filter"
-                        value={activeFilters[cat.startKey]}
-                        onChange={(e) => updateFilter(cat.startKey, e.target.value)}
-                      />
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase">End Date</label>
-                      <Input 
-                        type="date" 
-                        size="advanced-filter"
-                        value={activeFilters[cat.endKey]}
-                        onChange={(e) => updateFilter(cat.endKey, e.target.value)}
-                      />
-                    </div>
+      <div className="max-h-[80vh] overflow-y-auto no-scrollbar">
+        <Accordion type="single" collapsible>
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            
+            return (
+              <AccordionItem key={cat.id} variant="advanced-filter">
+                <AccordionTrigger variant="advanced-filter">
+                  <div className="flex items-center gap-2">
+                    <Icon size={14} className="text-gray-400" />
+                    <span>{cat.label}</span>
                   </div>
-                )}
+                </AccordionTrigger>
+                <AccordionContent variant="advanced-filter">
+                  {cat.options && cat.options.map((opt) => (
+                    <AdvancedFilterMultipleSelect 
+                      key={opt} 
+                      isSelected={cat.id === 'supply' ? activeFilters.supply?.includes(opt) : activeFilters[cat.id] === opt}
+                      onClick={() => cat.id === 'supply' ? toggleArrayFilter('supply', opt) : updateFilter(cat.id, opt)}
+                    >
+                      <span className="text-xs text-gray-600">{opt}</span>
+                    </AdvancedFilterMultipleSelect>
+                  ))}
+                  
+                  {cat.isDate && (
+                    <div className="flex flex-col gap-2 py-2">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">Start Date</label>
+                        <Input 
+                          type="date" 
+                          size="advanced-filter"
+                          value={activeFilters[cat.startKey]}
+                          onChange={(e) => updateFilter(cat.startKey, e.target.value)}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">End Date</label>
+                        <Input 
+                          type="date" 
+                          size="advanced-filter"
+                          value={activeFilters[cat.endKey]}
+                          onChange={(e) => updateFilter(cat.endKey, e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
 
-                {cat.isRange && (
-                  <div className="flex gap-2 py-2">
-                    <div className="flex flex-col gap-1 w-1/2">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase">Min Value</label>
-                      <Input 
-                        type="number" 
-                        size="advanced-filter"
-                        value={activeFilters[cat.minKey]}
-                        onChange={(e) => updateFilter(cat.minKey, e.target.value)}
-                        placeholder="Min" 
-                      />
+                  {cat.isRange && (
+                    <div className="flex gap-2 py-2">
+                      <div className="flex flex-col gap-1 w-1/2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">Min Value</label>
+                        <Input 
+                          type="number" 
+                          size="advanced-filter"
+                          value={activeFilters[cat.minKey]}
+                          onChange={(e) => updateFilter(cat.minKey, e.target.value)}
+                          placeholder="Min" 
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1 w-1/2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase">Max Value</label>
+                        <Input 
+                          type="number" 
+                          size="advanced-filter"
+                          value={activeFilters[cat.maxKey]}
+                          onChange={(e) => updateFilter(cat.maxKey, e.target.value)}
+                          placeholder="Max" 
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-1 w-1/2">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase">Max Value</label>
-                      <Input 
-                        type="number" 
-                        size="advanced-filter"
-                        value={activeFilters[cat.maxKey]}
-                        onChange={(e) => updateFilter(cat.maxKey, e.target.value)}
-                        placeholder="Max" 
-                      />
-                    </div>
-                  </div>
-                )}
+                  )}
 
-                {cat.isInput && (
-                  <div className="py-2 flex flex-col gap-1">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase">Source</label>
-                    <Input 
-                      type="text" 
-                      size="advanced-filter"
-                      value={activeFilters[cat.key]}
-                      onChange={(e) => updateFilter(cat.key, e.target.value)}
-                      placeholder="Type source..." 
-                    />
-                  </div>
-                )}
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
+                  {cat.isInput && (
+                    <div className="py-2 flex flex-col gap-1">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase">Source</label>
+                      <Input 
+                        type="text" 
+                        size="advanced-filter"
+                        value={activeFilters[cat.key]}
+                        onChange={(e) => updateFilter(cat.key, e.target.value)}
+                        placeholder="Type source..." 
+                      />
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      </div>
     </div>
   );
 };

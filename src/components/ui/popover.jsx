@@ -24,7 +24,7 @@ const popoverContentVariants = cva(
     variants: {
       variant: {
         default: "w-72",
-        "advanced-filter": "w-[288px] max-h-[80vh] overflow-y-auto overflow-x-hidden p-0 bg-white border border-gray-200 rounded-lg shadow-xl no-scrollbar",
+        "advanced-filter": "w-[288px] p-0 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden",
       },
     },
     defaultVariants: {

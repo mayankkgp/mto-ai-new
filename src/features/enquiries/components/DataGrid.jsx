@@ -38,77 +38,77 @@ const DataGrid = ({ isCompact, filteredEnquiries }) => {
 
   return (
     <div className="flex-1 overflow-auto no-scrollbar relative">
-      <Table className="border-separate border-spacing-0 min-w-[1000px] table-fixed">
-        <TableHeader className="sticky top-0 z-30 bg-gray-50 border-b border-gray-200">
-          <TableRow className="hover:bg-transparent border-b text-gray-500">
+      <Table variant="data-grid">
+        <TableHeader variant="data-grid">
+          <TableRow variant="data-grid-header">
             {/* 1. Customer (Sticky) */}
-            <TableHead className="h-auto sticky left-0 z-40 bg-white shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)] border-r border-gray-200 px-table-fluid py-0.5 min-[height:801px]:py-1 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap min-w-[180px] group">
+            <TableHead variant="data-grid-sticky" className="min-w-[180px] group">
               <div className="flex items-center gap-1">
                 Customer
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 2. Overview */}
-            <TableHead className={cn(
-              "h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group",
-              isCompact ? "w-[200px]" : "w-[25%]"
-            )}>
+            <TableHead 
+              variant="data-grid"
+              className={cn(isCompact ? "w-[200px]" : "w-[25%]")}
+            >
               <div className="flex items-center gap-1">
                 Overview
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 3. Rev Role */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group text-center min-w-[100px]">
+            <TableHead variant="data-grid" className={cn("text-center min-w-[100px]")}>
               <div className="flex items-center justify-center gap-1">
                 Rev Role
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 4. ID */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group min-w-[120px]">
+            <TableHead variant="data-grid" className={cn("min-w-[120px]")}>
               <div className="flex items-center gap-1">
                 ID
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 5. Type */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group text-center min-w-[80px]">
+            <TableHead variant="data-grid" className={cn("text-center min-w-[80px]")}>
               <div className="flex items-center justify-center gap-1">
                 Type
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 6. Supply */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group text-center min-w-[100px]">
+            <TableHead variant="data-grid" className={cn("text-center min-w-[100px]")}>
               <div className="flex items-center justify-center gap-1">
                 Supply
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 7. Rev Action */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group min-w-[100px]">
+            <TableHead variant="data-grid" className={cn("min-w-[100px]")}>
               <div className="flex items-center gap-1">
                 Rev Action
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 8. Sup Action */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group min-w-[100px]">
+            <TableHead variant="data-grid" className={cn("min-w-[100px]")}>
               <div className="flex items-center gap-1">
                 Sup Action
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 9. Exp Value */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group text-right min-w-[120px]">
+            <TableHead variant="data-grid" className={cn("text-right min-w-[120px]")}>
               <div className="flex items-center justify-end gap-1">
                 Exp Value
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
               </div>
             </TableHead>
             {/* 10. Created On */}
-            <TableHead className="h-auto px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-200 text-[10px] font-bold uppercase tracking-wider text-gray-500 whitespace-nowrap cursor-pointer hover:bg-gray-100 transition-colors group min-w-[100px]">
+            <TableHead variant="data-grid" className={cn("min-w-[100px]")}>
               <div className="flex items-center gap-1">
                 Created On
                 <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
