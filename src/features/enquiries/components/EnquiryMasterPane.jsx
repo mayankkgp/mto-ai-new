@@ -5,7 +5,7 @@ import DataGrid from './DataGrid.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
-import MasterPane from '@/components/ui/master-pane.jsx';
+import Pane from '@/components/ui/pane.jsx';
 
 /**
  * EnquiryMasterPane Component
@@ -153,7 +153,7 @@ const EnquiryMasterPane = () => {
   };
 
   return (
-    <MasterPane variant="gallery-master-pane" className="flex flex-col overflow-hidden">
+    <Pane variant="gallery-master-pane" className="flex flex-col overflow-hidden">
       <MasterHeader 
         isCompact={isCompact} 
         statusTab={statusTab} 
@@ -172,7 +172,7 @@ const EnquiryMasterPane = () => {
         isCompact={isCompact} 
         filteredEnquiries={filteredEnquiries}
       />
-    </MasterPane>
+    </Pane>
   );
 };
 

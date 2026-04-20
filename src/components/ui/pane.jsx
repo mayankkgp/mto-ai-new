@@ -3,10 +3,10 @@ import { cva } from 'class-variance-authority';
 import { cn } from '@/lib/utils.js';
 
 /**
- * masterPaneVariants
- * Defines the structural and thematic variants for the MasterPane component.
+ * paneVariants
+ * Defines the structural and thematic variants for the Pane component.
  */
-const masterPaneVariants = cva(
+const paneVariants = cva(
   "",
   {
     variants: {
@@ -21,20 +21,20 @@ const masterPaneVariants = cva(
 );
 
 /**
- * MasterPane Component
+ * Pane Component
  * A reusable primitive for the left-hand master list views.
  * Standardizes layout and theming across different modules.
  */
-const MasterPane = React.forwardRef(({ className, variant, ...props }, ref) => {
+const Pane = React.forwardRef(({ className, variant, ...props }, ref) => {
   return (
     <div
       ref={ref}
-      className={cn(masterPaneVariants({ variant, className }))}
+      className={cn(paneVariants({ variant, className }))}
       {...props}
     />
   );
 });
 
-MasterPane.displayName = "MasterPane";
+Pane.displayName = "Pane";
 
-export default MasterPane;
+export default Pane;
