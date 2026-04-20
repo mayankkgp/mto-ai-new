@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { paneVariants } from '@/components/ui/pane.jsx';
+import { cn } from '@/lib/utils.js';
 import { ENQUIRY_STATUS, ENQUIRY_TYPE } from '@/constants/enquiryConstants.js';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
@@ -125,7 +127,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="flex-1 h-full overflow-hidden flex flex-col bg-white shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-20"
+        className={cn(paneVariants({ variant: 'details-pane-split' }), "flex-1 h-full overflow-hidden flex flex-col shadow-[-4px_0_15px_rgba(0,0,0,0.05)] z-20")}
       >
         {/* Detail Header */}
         <DetailHeader 

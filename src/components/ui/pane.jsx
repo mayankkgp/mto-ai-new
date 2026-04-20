@@ -6,12 +6,13 @@ import { cn } from '@/lib/utils.js';
  * paneVariants
  * Defines the structural and thematic variants for the Pane component.
  */
-const paneVariants = cva(
+export const paneVariants = cva(
   "",
   {
     variants: {
       variant: {
         'gallery-master-pane': "h-full w-full bg-white border-r border-gray-200",
+        'details-pane-split': "bg-white border-l border-gray-200",
       },
     },
     defaultVariants: {

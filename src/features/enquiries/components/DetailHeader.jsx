@@ -8,6 +8,7 @@ import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { ENQUIRY_STATUS } from '@/constants/enquiryConstants.js';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
+import PaneHeader from '@/components/ui/pane-header.jsx';
 import SystemModal from '@/components/ui/system-modal.jsx';
 import ValidationAlert from '@/components/ui/validation-alert.jsx';
 import { Textarea } from '@/components/ui/textarea.jsx';
@@ -114,7 +115,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   }
 
   return (
-    <header className="bg-gray-50 border-b border-gray-200 flex items-center justify-between shrink-0 sticky top-0 z-50 h-header-fluid px-nav-fluid py-nav-fluid">
+    <PaneHeader variant="detail-header-split" className="flex items-center justify-between sticky top-0 z-50">
       {/* 1. Left Group (Identity, Status & Avatars) */}
       <div className="flex items-center gap-3">
         <h2 className="text-sm font-bold text-gray-800 uppercase tracking-tight">
@@ -161,9 +162,10 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
       <div className="flex items-center gap-2">
         {(enquiry.status === ENQUIRY_STATUS.CONVERTED || enquiry.status === ENQUIRY_STATUS.DROPPED) ? (
           <Button 
+            variant="secondary"
             onClick={() => setIsReopenModalOpen(true)}
             disabled={isActionLoading}
-            className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+            className="gap-1.5"
           >
             {isActionLoading && activeLoading === 'reopen' ? <Loader2 size={14} className="animate-spin" /> : <RotateCcw size={14} />}
             <span>{isActionLoading && activeLoading === 'reopen' ? 'RE-OPENING...' : 'RE-OPEN'}</span>
@@ -173,19 +175,20 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
             {enquiry.status === ENQUIRY_STATUS.ACTIVE && (
               <>
                 <Button 
+                  variant="secondary"
                   onClick={handleConvertClick}
                   disabled={isActionLoading}
-                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-[#111827] hover:bg-[#111827]/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="gap-1.5"
                 >
                   {isActionLoading && activeLoading === 'convert' ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
                   <span>{isActionLoading && activeLoading === 'convert' ? 'CONVERTING...' : 'CONVERT'}</span>
                 </Button>
 
                 <Button 
+                  variant="destructive"
                   onClick={handleDropClick}
-                  variant="ghost"
                   disabled={isActionLoading}
-                  className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 border-none disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="gap-1.5"
                 >
                   {isActionLoading && activeLoading === 'drop' ? <Loader2 size={14} className="animate-spin" /> : <Ban size={14} />}
                   <span>{isActionLoading && activeLoading === 'drop' ? 'DROPPING...' : 'DROP'}</span>
@@ -198,7 +201,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
             <Button 
               onClick={handleSaveClick}
               disabled={isActionLoading}
-              className="px-3 py-1.5 h-auto text-[11px] font-bold rounded flex items-center gap-1.5 bg-primary hover:bg-primary/90 text-white border-none disabled:opacity-50 disabled:cursor-not-allowed"
+              className="gap-1.5"
             >
               {isActionLoading && activeLoading === 'save' ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
               <span>{isActionLoading && activeLoading === 'save' ? 'SAVING...' : 'SAVE'}</span>
@@ -337,7 +340,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
           </p>
         </SystemModal>
       </div>
-    </header>
+    </PaneHeader>
   );
 };
 
