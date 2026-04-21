@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
-import { useUIState } from '@/contexts/UIStateContext.jsx';
-import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import FileLightbox from './FileLightbox.jsx';
 
 const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) => {
@@ -123,13 +120,15 @@ const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) =>
   );
 };
 
-const AttachmentTray = ({ isReadOnly }) => {
-  const { watch, setValue } = useFormContext();
+const AttachmentTray = ({ 
+  files = [], 
+  onUploadAction, 
+  onDeleteAction, 
+  uploadProgress, 
+  isReadOnly 
+}) => {
   const fileInputRef = React.useRef(null);
   const [lightboxIndex, setLightboxIndex] = useState(null);
-  
-  const { uploadProgress } = useUIState();
-  const { handleFileUpload, handleFileDelete } = useEnquiryDetail();
 
   const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
@@ -141,41 +140,29 @@ const AttachmentTray = ({ isReadOnly }) => {
     return true;
   };
 
-  const attachments = watch('attachments') || [];
+  const attachments = files;
 
   const handleFileChange = async (e) => {
-    const files = Array.from(e.target.files);
-    for (const file of files) {
-      if (!validateFile(file)) continue;
-      const uploadedFile = await handleFileUpload(file);
-      if (uploadedFile) {
-        const currentAttachments = watch('attachments') || [];
-        setValue('attachments', [...currentAttachments, uploadedFile]);
-      }
+    const selectedFiles = Array.from(e.target.files);
+    const validFiles = selectedFiles.filter(validateFile);
+    if (validFiles.length > 0) {
+      onUploadAction(validFiles);
     }
     // Clear input so same file can be selected again
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const removeFile = async (id) => {
-    const success = await handleFileDelete(id);
-    if (success) {
-      const currentAttachments = watch('attachments') || [];
-      setValue('attachments', currentAttachments.filter(f => f.id !== id));
-    }
+    onDeleteAction(id);
   };
 
   const handleDrop = async (e) => {
     e.preventDefault();
     if (isReadOnly) return;
-    const files = Array.from(e.dataTransfer.files);
-    for (const file of files) {
-      if (!validateFile(file)) continue;
-      const uploadedFile = await handleFileUpload(file);
-      if (uploadedFile) {
-        const currentAttachments = watch('attachments') || [];
-        setValue('attachments', [...currentAttachments, uploadedFile]);
-      }
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    const validFiles = droppedFiles.filter(validateFile);
+    if (validFiles.length > 0) {
+      onUploadAction(validFiles);
     }
   };
 

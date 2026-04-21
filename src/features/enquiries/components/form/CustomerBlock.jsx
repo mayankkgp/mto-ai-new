@@ -48,7 +48,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
   return (
     <div className="space-y-0" ref={containerRef}>
       <div className="flex items-center justify-between mb-0.5 h-[18px]">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Customer Name *
         </Label>
         <button 
@@ -115,7 +115,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
               isCreating ? "grid-cols-2 @[500px]:grid-cols-3" : "grid-cols-1 @[500px]:grid-cols-2"
             )}>
               <div className={cn(isCreating ? "" : "col-span-2")}>
-                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label variant="micro" className="mb-0.5">
                   POC Name *
                 </Label>
                 <Input 
@@ -126,7 +126,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
                 />
               </div>
               <div>
-                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label variant="micro" className="mb-0.5">
                   City *
                 </Label>
                 <Input 
@@ -137,7 +137,7 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
                 />
               </div>
               <div>
-                <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">
+                <Label variant="micro" className="mb-0.5">
                   Contact *
                 </Label>
                 <Input 

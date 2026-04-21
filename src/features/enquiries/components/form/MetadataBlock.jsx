@@ -1,5 +1,4 @@
 import React from 'react';
-import { format, isValid } from 'date-fns';
 import { useFormContext, Controller } from 'react-hook-form';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Label } from '@/components/ui/label.jsx';
@@ -11,13 +10,7 @@ import {
   SelectValue 
 } from '@/components/ui/select.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
-import { Button } from '@/components/ui/button.jsx';
-import { Calendar } from '@/components/ui/calendar.jsx';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover.jsx';
+import { Input } from '@/components/ui/input.jsx';
 import { cn } from '@/lib/utils.js';
 
 const MetadataBlock = ({ isReadOnly }) => {
@@ -27,7 +20,7 @@ const MetadataBlock = ({ isReadOnly }) => {
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-start">
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Type *
         </Label>
         <Controller
@@ -39,6 +32,7 @@ const MetadataBlock = ({ isReadOnly }) => {
               value={field.value} 
               onValueChange={(val) => val && field.onChange(val)}
               disabled={isReadOnly}
+              size="micro"
               className={cn(
                 "flex w-full h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]",
                 errors.type && "border-red-500 bg-red-50"
@@ -66,48 +60,26 @@ const MetadataBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Lead Date
         </Label>
         <Controller
           name="leadDate"
           control={control}
-          render={({ field }) => {
-            const dateValue = field.value ? new Date(field.value) : null;
-            return (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="mto-input"
-                    size="micro"
-                    disabled={isReadOnly}
-                    className={cn(
-                      "w-fit justify-start text-left font-normal",
-                      !field.value && "text-gray-500"
-                    )}
-                  >
-                    {field.value ? format(dateValue, "dd/MM/yyyy") : "Select date"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start" sideOffset={0}>
-                  <Calendar
-                    mode="single"
-                    selected={isValid(dateValue) ? dateValue : undefined}
-                    onSelect={(date) => date && field.onChange(format(date, "yyyy-MM-dd"))}
-                    initialFocus
-                    captionLayout="dropdown"
-                    fromYear={2020}
-                    toYear={2030}
-                  />
-                </PopoverContent>
-              </Popover>
-            );
-          }}
+          render={({ field }) => (
+            <Input
+              type="date"
+              size="micro"
+              disabled={isReadOnly}
+              className="w-full text-gray-500"
+              {...field}
+            />
+          )}
         />
       </div>
 
       <div className="flex flex-col gap-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Channel
         </Label>
         <Controller

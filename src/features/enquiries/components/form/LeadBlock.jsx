@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Label } from '@/components/ui/label.jsx';
+import { Textarea } from '@/components/ui/textarea.jsx';
 import { cn } from '@/lib/utils.js';
 
 const LeadBlock = ({ isReadOnly }) => {
@@ -36,10 +37,10 @@ const LeadBlock = ({ isReadOnly }) => {
   return (
     <div className="space-y-1.5">
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Lead Overview *
         </Label>
-        <textarea
+        <Textarea
           {...(() => {
             const { onChange, ...rest } = overviewRegisterRest;
             return {
@@ -54,9 +55,9 @@ const LeadBlock = ({ isReadOnly }) => {
             overviewRef.current = el;
             overviewRegisterRef(el);
           }}
-          rows={1}
+          size="micro"
           className={cn(
-            "w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal",
+            "w-full",
             errors.leadOverview && "border-red-500 bg-red-50"
           )}
           disabled={isReadOnly}
@@ -65,10 +66,10 @@ const LeadBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Lead Details
         </Label>
-        <textarea
+        <Textarea
           {...(() => {
             const { onChange, ...rest } = detailsRegisterRest;
             return {
@@ -83,8 +84,8 @@ const LeadBlock = ({ isReadOnly }) => {
             detailsRef.current = el;
             detailsRegisterRef(el);
           }}
-          rows={1}
-          className="w-full px-1.5 py-1 h-[26px] min-h-[26px] bg-white border border-gray-200 focus:border-[#1E40AF] rounded text-[11px] leading-tight outline-none focus:ring-0 resize-none max-h-[80px] overflow-y-auto placeholder:text-gray-400 placeholder:font-normal"
+          size="micro"
+          className="w-full"
           disabled={isReadOnly}
           placeholder="Detailed requirements, specifications, etc..."
         />

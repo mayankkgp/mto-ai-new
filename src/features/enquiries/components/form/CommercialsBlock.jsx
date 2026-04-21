@@ -47,7 +47,7 @@ const CommercialsBlock = ({ isReadOnly }) => {
   return (
     <div className="grid grid-cols-3 gap-1.5">
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Order Value (₹)
         </Label>
         <div className="relative">
@@ -62,7 +62,7 @@ const CommercialsBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="flex flex-col gap-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Prob (%)
         </Label>
         <Controller
@@ -92,12 +92,15 @@ const CommercialsBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="space-y-0.5">
-        <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+        <Label variant="micro" className="mb-0.5">
           Expected Value
         </Label>
-        <div className="w-full px-1.5 h-[26px] flex items-center justify-end tracking-tight bg-gray-50 border border-gray-200 text-gray-800 rounded text-[11px] font-bold text-right">
-          ₹ {formatIndianCurrency(expectedValue)}
-        </div>
+        <Input
+          disabled
+          size="micro"
+          className="text-right font-bold text-gray-800 tracking-tight"
+          value={`₹ ${formatIndianCurrency(expectedValue)}`}
+        />
       </div>
     </div>
   );

@@ -1,18 +1,32 @@
 import * as React from "react";
-
+import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils.js";
 
-function Textarea({ className, ...props }) {
+const textareaVariants = cva(
+  "flex w-full rounded-md border border-input bg-transparent outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-[#1E40AF] disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50",
+  {
+    variants: {
+      size: {
+        default: "min-h-16 px-2.5 py-2 text-base md:text-sm",
+        micro: "min-h-[26px] max-h-[80px] px-1.5 py-1 text-[11px] leading-tight resize-none overflow-hidden",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  }
+);
+
+const Textarea = React.forwardRef(({ className, size = "default", ...props }, ref) => {
   return (
     <textarea
       data-slot="textarea"
-      className={cn(
-        "flex field-sizing-content min-h-16 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40",
-        className,
-      )}
+      className={cn(textareaVariants({ size }), className)}
+      ref={ref}
       {...props}
     />
   );
-}
+});
+Textarea.displayName = "Textarea";
 
 export { Textarea };

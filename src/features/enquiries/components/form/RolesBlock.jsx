@@ -23,7 +23,7 @@ const UserSelector = ({ label, selectedUsers, onToggle, isReadOnly, hasError, us
 
   return (
     <div className="space-y-0.5">
-      <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal">
+      <Label variant="micro" className="mb-0.5">
         {label}
       </Label>
       
