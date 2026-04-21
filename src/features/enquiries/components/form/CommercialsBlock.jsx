@@ -46,8 +46,8 @@ const CommercialsBlock = ({ isReadOnly }) => {
 
   return (
     <div className="grid grid-cols-3 gap-1.5">
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Order Value (₹)
         </Label>
         <div className="relative">
@@ -62,7 +62,7 @@ const CommercialsBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="flex flex-col gap-0.5">
-        <Label variant="micro" className="mb-0.5">
+        <Label variant="micro">
           Prob (%)
         </Label>
         <Controller
@@ -91,8 +91,8 @@ const CommercialsBlock = ({ isReadOnly }) => {
         />
       </div>
 
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Expected Value
         </Label>
         <Input

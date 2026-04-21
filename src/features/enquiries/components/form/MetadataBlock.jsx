@@ -19,8 +19,8 @@ const MetadataBlock = ({ isReadOnly }) => {
 
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-start">
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Type *
         </Label>
         <Controller
@@ -56,8 +56,8 @@ const MetadataBlock = ({ isReadOnly }) => {
         />
       </div>
 
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Lead Date
         </Label>
         <Controller
@@ -76,7 +76,7 @@ const MetadataBlock = ({ isReadOnly }) => {
       </div>
 
       <div className="flex flex-col gap-0.5">
-        <Label variant="micro" className="mb-0.5">
+        <Label variant="micro">
           Channel
         </Label>
         <Controller

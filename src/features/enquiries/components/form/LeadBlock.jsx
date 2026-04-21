@@ -36,8 +36,8 @@ const LeadBlock = ({ isReadOnly }) => {
 
   return (
     <div className="space-y-1.5">
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Lead Overview *
         </Label>
         <Textarea
@@ -65,8 +65,8 @@ const LeadBlock = ({ isReadOnly }) => {
         />
       </div>
 
-      <div className="space-y-0.5">
-        <Label variant="micro" className="mb-0.5">
+      <div className="flex flex-col gap-0.5">
+        <Label variant="micro">
           Lead Details
         </Label>
         <Textarea

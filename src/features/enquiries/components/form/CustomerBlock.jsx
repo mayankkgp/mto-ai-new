@@ -46,60 +46,62 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
   );
 
   return (
-    <div className="space-y-0" ref={containerRef}>
-      <div className="flex items-center justify-between mb-0.5 h-[18px]">
-        <Label variant="micro" className="mb-0.5">
-          Customer Name *
-        </Label>
-        <button 
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="text-gray-400 hover:text-primary transition-colors"
-        >
-          {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-        </button>
-      </div>
+    <div ref={containerRef}>
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center justify-between">
+          <Label variant="micro">
+            Customer Name *
+          </Label>
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-gray-400 hover:text-primary transition-colors"
+          >
+            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        </div>
 
-      <div className="relative w-full">
-        <Input 
-          size="micro"
-          className={cn(
-            "w-full font-semibold",
-            errors.customer?.name && "border-red-500 bg-red-50"
+        <div className="relative w-full">
+          <Input 
+            size="micro"
+            className={cn(
+              "w-full font-semibold",
+              errors.customer?.name && "border-red-500 bg-red-50"
+            )}
+            {...(() => {
+              const { onChange, ...rest } = register('customer.name');
+              return {
+                ...rest,
+                onChange: (e) => {
+                  onChange(e);
+                  handleCustomerNameChange(e.target.value);
+                }
+              };
+            })()}
+            onFocus={() => setIsOpen(true)}
+            disabled={isReadOnly}
+          />
+          
+          {isOpen && filteredCustomers.length > 0 && (
+            <div className="absolute z-50 w-full bg-popover border rounded-md shadow-md max-h-48 overflow-y-auto">
+              {filteredCustomers.map(customer => (
+                <div
+                  key={customer.id}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    setValue('customer.name', customer.name);
+                    setValue('customer.poc', customer.poc);
+                    setValue('customer.city', customer.city);
+                    setValue('customer.contact', customer.contact);
+                    setIsOpen(false);
+                  }}
+                  className="px-2 py-1.5 text-[11px] cursor-pointer hover:bg-accent"
+                >
+                  {customer.name}
+                </div>
+              ))}
+            </div>
           )}
-          {...(() => {
-            const { onChange, ...rest } = register('customer.name');
-            return {
-              ...rest,
-              onChange: (e) => {
-                onChange(e);
-                handleCustomerNameChange(e.target.value);
-              }
-            };
-          })()}
-          onFocus={() => setIsOpen(true)}
-          disabled={isReadOnly}
-        />
-        
-        {isOpen && filteredCustomers.length > 0 && (
-          <div className="absolute z-50 w-full bg-popover border rounded-md shadow-md max-h-48 overflow-y-auto">
-            {filteredCustomers.map(customer => (
-              <div
-                key={customer.id}
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => {
-                  setValue('customer.name', customer.name);
-                  setValue('customer.poc', customer.poc);
-                  setValue('customer.city', customer.city);
-                  setValue('customer.contact', customer.contact);
-                  setIsOpen(false);
-                }}
-                className="px-2 py-1.5 text-[11px] cursor-pointer hover:bg-accent"
-              >
-                {customer.name}
-              </div>
-            ))}
-          </div>
-        )}
+        </div>
       </div>
 
       <AnimatePresence>
@@ -114,8 +116,8 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
               "grid gap-1.5 mt-1.5",
               isCreating ? "grid-cols-2 @[500px]:grid-cols-3" : "grid-cols-1 @[500px]:grid-cols-2"
             )}>
-              <div className={cn(isCreating ? "" : "col-span-2")}>
-                <Label variant="micro" className="mb-0.5">
+              <div className={cn("flex flex-col gap-0.5", isCreating ? "" : "col-span-2")}>
+                <Label variant="micro">
                   POC Name *
                 </Label>
                 <Input 
@@ -125,8 +127,8 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
                   disabled={isReadOnly}
                 />
               </div>
-              <div>
-                <Label variant="micro" className="mb-0.5">
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">
                   City *
                 </Label>
                 <Input 
@@ -136,8 +138,8 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
                   disabled={isReadOnly}
                 />
               </div>
-              <div>
-                <Label variant="micro" className="mb-0.5">
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">
                   Contact *
                 </Label>
                 <Input 

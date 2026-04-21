@@ -12,15 +12,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog.jsx";
-import { InputGroup, InputGroupAddon } from "@/components/ui/input-group.jsx";
-import { SearchIcon, CheckIcon } from "lucide-react";
+import { CheckIcon } from "lucide-react";
 
 function Command({ className, ...props }) {
   return (
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        "flex size-full flex-col overflow-hidden rounded-xl! bg-popover p-1 text-popover-foreground",
+        "flex size-full flex-col overflow-hidden rounded-xl! bg-popover text-popover-foreground",
         className,
       )}
       {...props}
@@ -62,6 +61,7 @@ const commandInputVariants = cva(
       size: {
         default: "",
         micro: "py-1 text-[10px] h-auto leading-none",
+        "micro-search": "h-[26px] px-2 py-1 text-[11px] border-b border-gray-100",
       },
     },
     defaultVariants: {
@@ -72,19 +72,11 @@ const commandInputVariants = cva(
 
 function CommandInput({ className, size = "default", ...props }) {
   return (
-    <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
-        <CommandPrimitive.Input
-          data-slot="command-input"
-          className={cn(commandInputVariants({ size }), className)}
-          {...props}
-        />
-
-        <InputGroupAddon>
-          <SearchIcon className="size-4 shrink-0 opacity-50" />
-        </InputGroupAddon>
-      </InputGroup>
-    </div>
+    <CommandPrimitive.Input
+      data-slot="command-input"
+      className={cn(commandInputVariants({ size }), className)}
+      {...props}
+    />
   );
 }
 
@@ -138,22 +130,23 @@ const commandItemVariants = cva(
   "group/command-item relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg! data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50 data-selected:bg-muted data-selected:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-selected:*:[svg]:text-foreground",
   {
     variants: {
-      size: {
+      variant: {
         default: "px-2 py-1.5 text-sm",
         micro: "py-1 px-2 text-[10px]",
+        "micro-dropdown-items": "text-[11px] py-1 cursor-pointer justify-between",
       },
     },
     defaultVariants: {
-      size: "default",
+      variant: "default",
     },
   }
 );
 
-function CommandItem({ className, size = "default", children, ...props }) {
+function CommandItem({ className, variant = "default", children, ...props }) {
   return (
     <CommandPrimitive.Item
       data-slot="command-item"
-      className={cn(commandItemVariants({ size }), className)}
+      className={cn(commandItemVariants({ variant }), className)}
       {...props}
     >
       {children}
