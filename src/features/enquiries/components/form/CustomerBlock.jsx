@@ -7,12 +7,7 @@ import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-/**
- * CustomerDetails Component
- * Refactored from CustomerBlock.jsx
- * Manages Customer Identity with Smart Typehead and Details Toggle.
- */
-const CustomerDetails = ({ isCreating, isReadOnly }) => {
+const CustomerBlock = ({ isCreating, isReadOnly }) => {
   const { register, setValue, watch, formState: { errors } } = useFormContext();
   const { customers } = useReferenceData();
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
@@ -57,7 +52,6 @@ const CustomerDetails = ({ isCreating, isReadOnly }) => {
           Customer Name *
         </Label>
         <button 
-          type="button"
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-gray-400 hover:text-primary transition-colors"
         >
@@ -161,4 +155,4 @@ const CustomerDetails = ({ isCreating, isReadOnly }) => {
   );
 };
 
-export default CustomerDetails;
+export default CustomerBlock;
