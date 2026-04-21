@@ -11,6 +11,7 @@ const toggleVariants = cva(
         default: "bg-transparent",
         outline: "border border-input bg-transparent hover:bg-muted",
         mto: "border-gray-200 text-gray-500 hover:bg-gray-200 hover:text-gray-500 data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white data-[state=on]:shadow-sm data-[state=on]:hover:bg-[#1E40AF] data-[state=on]:hover:text-white aria-pressed:bg-[#1E40AF] aria-pressed:text-white aria-pressed:hover:bg-[#1E40AF] aria-pressed:hover:text-white transition-all group-data-[spacing=0]/toggle-group:rounded group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded",
+        flat: "border-none rounded-none bg-transparent text-gray-500 hover:bg-gray-100 hover:text-gray-700 data-[state=on]:bg-[#1E40AF] data-[state=on]:text-white aria-pressed:bg-[#1E40AF] aria-pressed:text-white transition-colors",
       },
       size: {
         default:

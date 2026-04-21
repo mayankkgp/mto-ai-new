@@ -32,24 +32,21 @@ const MetadataBlock = ({ isReadOnly }) => {
               value={field.value} 
               onValueChange={(val) => val && field.onChange(val)}
               disabled={isReadOnly}
+              variant="flat"
               size="micro"
               className={cn(
-                "flex w-full h-[26px] gap-0 space-x-0 p-0.5 border border-gray-200 rounded bg-white focus-within:border-[#1E40AF]",
-                errors.type && "border-red-500 bg-red-50"
+                "w-full h-[26px]",
+                errors.type && "border-red-500 divide-red-200"
               )}
             >
               <ToggleGroupItem 
                 value="MTO" 
-                variant="mto"
-                size="micro"
                 className="flex-1"
               >
                 MTO
               </ToggleGroupItem>
               <ToggleGroupItem 
                 value="Ready" 
-                variant="mto"
-                size="micro"
                 className="flex-1"
               >
                 Ready
@@ -71,7 +68,7 @@ const MetadataBlock = ({ isReadOnly }) => {
               type="date"
               size="micro"
               disabled={isReadOnly}
-              className="w-full text-gray-500"
+              className="w-[96px] text-gray-500 date-micro"
               {...field}
             />
           )}

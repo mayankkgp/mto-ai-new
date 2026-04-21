@@ -1,9 +1,25 @@
 import * as React from "react";
 import { Toggle as TogglePrimitive } from "@base-ui/react/toggle";
 import { ToggleGroup as ToggleGroupPrimitive } from "@base-ui/react/toggle-group";
+import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils.js";
 import { toggleVariants } from "@/components/ui/toggle.jsx";
+
+const toggleGroupVariants = cva(
+  "group/toggle-group flex flex-row items-center data-vertical:flex-col data-vertical:items-stretch",
+  {
+    variants: {
+      variant: {
+        default: "w-fit gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)]",
+        flat: "gap-0 rounded-lg border border-gray-200 divide-x divide-gray-200 overflow-hidden bg-white focus-within:border-[#1E40AF] transition-colors",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 const ToggleGroupContext = React.createContext({
   size: "default",
@@ -29,10 +45,7 @@ function ToggleGroup({
       data-spacing={spacing}
       data-orientation={orientation}
       style={{ "--gap": spacing }}
-      className={cn(
-        "group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch",
-        className,
-      )}
+      className={cn(toggleGroupVariants({ variant }), className)}
       {...props}
     >
       <ToggleGroupContext.Provider

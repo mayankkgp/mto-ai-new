@@ -219,9 +219,17 @@
     @apply bg-background text-foreground antialiased;
     }
   
-  input[type="date"]::-webkit-calendar-picker-indicator {
+  input[type="date"].date-micro {
+    position: relative;
+  }
+  
+  input[type="date"].date-micro::-webkit-calendar-picker-indicator {
     opacity: 0.5;
     cursor: pointer;
+    position: absolute;
+    left: 80px;
+    margin: 0;
+    padding: 0;
   }
   input[type="date"]::-webkit-calendar-picker-indicator:hover {
     opacity: 0.8;
