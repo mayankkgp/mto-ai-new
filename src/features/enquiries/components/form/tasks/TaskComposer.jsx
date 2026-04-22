@@ -25,7 +25,7 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
 
   const handleTextareaChange = (e, field) => {
     e.target.style.height = 'auto';
-    e.target.style.height = (e.target.scrollHeight + 2) + 'px';
+    e.target.style.height = e.target.scrollHeight + 'px';
     setNewAction({ ...newAction, [field]: e.target.value });
   };
 
@@ -50,136 +50,146 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
   };
 
   return (
-    <div className="p-3 bg-white border-b border-gray-200 shadow-sm">
-      {isCreating ? (
-        <div className="flex flex-col gap-1.5">
-          <div className="flex flex-col gap-0.5">
-            <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Action Item *</Label>
-            <Textarea 
-              ref={actionRef}
-              rows={1}
-              placeholder="What needs to be done?"
-              value={newAction.text}
-              onChange={(e) => handleTextareaChange(e, 'text')}
-              className="min-h-[26px] max-h-[120px] text-[11px] tracking-tight font-bold text-gray-800 px-1 py-1 resize-none overflow-y-auto rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-              disabled={isReadOnly}
-            />
-          </div>
-          <div className="flex flex-col gap-0.5">
-            <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Remark</Label>
-            <Textarea 
-              ref={remarkRef}
-              rows={1}
-              placeholder="Add a remark (optional)"
-              value={newAction.remark}
-              onChange={(e) => handleTextareaChange(e, 'remark')}
-              className="min-h-[26px] max-h-[80px] text-[11px] tracking-tight italic text-gray-500 placeholder:not-italic placeholder:text-gray-400 px-1 py-1 resize-none overflow-y-auto rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-              disabled={isReadOnly}
-            />
-          </div>
-          <div className="grid grid-cols-[auto_1fr_auto] gap-1.5 items-end">
+    <div className="p-1.5 min-[height:801px]:p-3 bg-white border-b border-gray-200 shadow-sm">
+      <div className="flex flex-col gap-1.5">
+        {isCreating ? (
+          <>
             <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Type *</Label>
-              <ToggleGroup 
-                type="single" 
-                value={newAction.type} 
-                onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
-                className="h-[26px] min-h-[26px] border border-gray-200 rounded p-0.5 bg-gray-50 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                disabled={isReadOnly}
-              >
-                <ToggleGroupItem value="revenue" className="text-[9px] px-2 h-full uppercase font-bold data-[state=on]:bg-white data-[state=on]:shadow-sm">Rev</ToggleGroupItem>
-                <ToggleGroupItem value="supply" className="text-[9px] px-2 h-full uppercase font-bold data-[state=on]:bg-white data-[state=on]:shadow-sm">Sup</ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Due Date *</Label>
-              <Input 
-                type="date"
+              <Label variant="micro">Action Item *</Label>
+              <Textarea 
+                ref={actionRef}
+                rows={1}
                 size="micro"
-                value={newAction.dueDate}
-                onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
-                className="h-[26px] min-h-[26px] text-[11px] tracking-tight text-gray-800 px-1 py-1 rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                placeholder="What needs to be done?"
+                value={newAction.text}
+                onChange={(e) => handleTextareaChange(e, 'text')}
+                className="w-full font-semibold"
                 disabled={isReadOnly}
               />
             </div>
             <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-transparent uppercase tracking-normal mb-0.5 select-none">Action</Label>
-              <Button 
-                size="sm" 
-                onClick={handleAddTask}
-                disabled={isReadOnly || !newAction.text.trim()}
-                className="h-[26px] w-[26px] min-h-[26px] p-0 bg-primary text-white hover:bg-primary/90 rounded"
-              >
-                <CornerDownLeft size={14} />
-              </Button>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-1.5">
-          <div className="flex flex-col gap-0.5">
-            <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Action Item *</Label>
-            <Textarea 
-              ref={actionRef}
-              rows={1}
-              placeholder="What needs to be done?"
-              value={newAction.text}
-              onChange={(e) => handleTextareaChange(e, 'text')}
-              className="min-h-[26px] max-h-[120px] text-[11px] tracking-tight font-bold text-gray-800 px-1 py-1 resize-none overflow-y-auto rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-              disabled={isReadOnly}
-            />
-          </div>
-          <div className="grid grid-cols-[auto_auto_1fr_auto] gap-1.5 items-end">
-            <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Type *</Label>
-              <ToggleGroup 
-                type="single" 
-                value={newAction.type} 
-                onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
-                className="h-[26px] min-h-[26px] border border-gray-200 rounded p-0.5 bg-gray-50 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                disabled={isReadOnly}
-              >
-                <ToggleGroupItem value="revenue" className="text-[9px] px-2 h-full uppercase font-bold data-[state=on]:bg-white data-[state=on]:shadow-sm">Rev</ToggleGroupItem>
-                <ToggleGroupItem value="supply" className="text-[9px] px-2 h-full uppercase font-bold data-[state=on]:bg-white data-[state=on]:shadow-sm">Sup</ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Due Date *</Label>
-              <Input 
-                type="date"
-                size="micro"
-                value={newAction.dueDate}
-                onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
-                className="h-[26px] min-h-[26px] w-28 text-[11px] tracking-tight text-gray-800 px-1 py-1 rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                disabled={isReadOnly}
-              />
-            </div>
-            <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-gray-500 uppercase tracking-normal mb-0.5">Remark</Label>
+              <Label variant="micro">Remark</Label>
               <Textarea 
                 ref={remarkRef}
                 rows={1}
+                size="micro"
                 placeholder="Add a remark (optional)"
                 value={newAction.remark}
                 onChange={(e) => handleTextareaChange(e, 'remark')}
-                className="min-h-[26px] max-h-[80px] text-[11px] tracking-tight italic text-gray-500 placeholder:not-italic placeholder:text-gray-400 px-1 py-1 resize-none overflow-y-auto rounded focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-primary outline-none border-gray-200 disabled:opacity-100 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                className="w-full"
                 disabled={isReadOnly}
               />
             </div>
-            <div className="flex flex-col gap-0.5">
-              <Label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-transparent uppercase tracking-normal mb-0.5 select-none">Action</Label>
-              <Button 
-                size="sm" 
-                onClick={handleAddTask}
-                disabled={isReadOnly || !newAction.text.trim()}
-                className="h-[26px] w-[26px] min-h-[26px] p-0 bg-primary text-white hover:bg-primary/90 rounded"
-              >
-                <CornerDownLeft size={14} />
-              </Button>
+            <div className="grid grid-cols-[auto_1fr_auto] gap-1.5 items-end">
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">Type *</Label>
+                <ToggleGroup 
+                  type="single" 
+                  value={newAction.type} 
+                  onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
+                  variant="flat"
+                  size="micro"
+                  disabled={isReadOnly}
+                  className="w-full h-[26px]"
+                >
+                  <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
+                  <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">Due Date *</Label>
+                <Input 
+                  type="date"
+                  size="micro"
+                  value={newAction.dueDate}
+                  onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
+                  className="w-[96px] text-gray-500 date-micro"
+                  disabled={isReadOnly}
+                />
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro" className="text-transparent select-none">Action</Label>
+                <Button 
+                  size="icon" 
+                  onClick={handleAddTask}
+                  disabled={isReadOnly || !newAction.text.trim()}
+                  className="h-[26px] w-[26px] p-0 rounded"
+                >
+                  <CornerDownLeft size={14} />
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-0.5">
+              <Label variant="micro">Action Item *</Label>
+              <Textarea 
+                ref={actionRef}
+                rows={1}
+                size="micro"
+                placeholder="What needs to be done?"
+                value={newAction.text}
+                onChange={(e) => handleTextareaChange(e, 'text')}
+                className="w-full font-semibold"
+                disabled={isReadOnly}
+              />
+            </div>
+            <div className="grid grid-cols-[auto_auto_1fr_auto] gap-1.5 items-end">
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">Type *</Label>
+                <ToggleGroup 
+                  type="single" 
+                  value={newAction.type} 
+                  onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
+                  variant="flat"
+                  size="micro"
+                  disabled={isReadOnly}
+                  className="w-full h-[26px]"
+                >
+                  <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
+                  <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
+                </ToggleGroup>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">Due Date *</Label>
+                <Input 
+                  type="date"
+                  size="micro"
+                  value={newAction.dueDate}
+                  onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
+                  className="w-[96px] text-gray-500 date-micro"
+                  disabled={isReadOnly}
+                />
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro">Remark</Label>
+                <Textarea 
+                  ref={remarkRef}
+                  rows={1}
+                  size="micro"
+                  placeholder="Add a remark (optional)"
+                  value={newAction.remark}
+                  onChange={(e) => handleTextareaChange(e, 'remark')}
+                  className="w-full"
+                  disabled={isReadOnly}
+                />
+              </div>
+              <div className="flex flex-col gap-0.5">
+                <Label variant="micro" className="text-transparent select-none">Action</Label>
+                <Button 
+                  size="icon" 
+                  onClick={handleAddTask}
+                  disabled={isReadOnly || !newAction.text.trim()}
+                  className="h-[26px] w-[26px] p-0 rounded"
+                >
+                  <CornerDownLeft size={14} />
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
