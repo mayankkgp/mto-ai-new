@@ -30,7 +30,12 @@ const MetadataBlock = ({ isReadOnly }) => {
             <ToggleGroup 
               type="single" 
               value={field.value} 
-              onValueChange={(val) => val && field.onChange(val)}
+              onValueChange={(val) => {
+                if (!val) return;
+                // Safely extract string if Base UI passes an array or event object
+                const stringVal = Array.isArray(val) ? val[0] : (typeof val === 'object' && val.target ? val.target.value : val);
+                if (stringVal) field.onChange(stringVal);
+              }}
               disabled={isReadOnly}
               variant="flat"
               size="micro"

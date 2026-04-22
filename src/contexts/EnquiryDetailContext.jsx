@@ -150,7 +150,12 @@ export const EnquiryDetailProvider = ({ children }) => {
             const updatedEnquiry = { ...e };
             const dept = newTask.id.includes('rev') ? 'revenue' : 'supply';
             if (!updatedEnquiry.tasks) updatedEnquiry.tasks = { revenue: [], supply: [] };
-            updatedEnquiry.tasks[dept] = [...(updatedEnquiry.tasks[dept] || []), newTask];
+            // Filter out any existing instance to prevent mock reference duplication
+            const currentTasks = updatedEnquiry.tasks[dept] || [];
+            updatedEnquiry.tasks[dept] = [
+              ...currentTasks.filter(t => t.id !== newTask.id), 
+              newTask
+            ];
             return updatedEnquiry;
           }
           return e;

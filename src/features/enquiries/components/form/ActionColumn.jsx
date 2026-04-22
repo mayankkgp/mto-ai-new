@@ -18,11 +18,6 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
     if (task) {
       await toggleTaskCompletion(taskId, !task.isCompleted);
     }
-
-    const updatedTasks = currentTasks.map(t => 
-      t.id === taskId ? { ...t, isCompleted: !t.isCompleted, completedAt: !t.isCompleted ? Date.now() : undefined } : t
-    );
-    setValue(`tasks.${type}`, updatedTasks);
   };
 
   const updateTask = (type, taskId, updates) => {

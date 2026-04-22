@@ -25,7 +25,7 @@ const MultiSelect = ({ label, selectedUsers, onToggle, isReadOnly, hasError, use
             type="button"
             disabled={isReadOnly}
             className={cn(
-              "flex flex-wrap items-center gap-1 min-h-[26px] p-[2px] w-full bg-white border border-gray-200 rounded text-left focus-within:border-[#1E40AF] focus-within:ring-1 focus-within:ring-[#1E40AF]/20",
+              "flex flex-wrap items-center gap-1 min-h-[26px] p-[2px] w-full bg-white border border-gray-200 rounded text-left focus-within:border-[#1E40AF]",
               isReadOnly 
                 ? "bg-gray-50 cursor-not-allowed" 
                 : "cursor-pointer hover:border-primary/40",

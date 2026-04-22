@@ -86,7 +86,11 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                 <ToggleGroup 
                   type="single" 
                   value={newAction.type} 
-                  onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
+                  onValueChange={(val) => {
+                    if (!val) return;
+                    const stringVal = Array.isArray(val) ? val[0] : (typeof val === 'object' && val.target ? val.target.value : val);
+                    if (stringVal) setNewAction({ ...newAction, type: stringVal });
+                  }}
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
@@ -140,7 +144,11 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                 <ToggleGroup 
                   type="single" 
                   value={newAction.type} 
-                  onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
+                  onValueChange={(val) => {
+                    if (!val) return;
+                    const stringVal = Array.isArray(val) ? val[0] : (typeof val === 'object' && val.target ? val.target.value : val);
+                    if (stringVal) setNewAction({ ...newAction, type: stringVal });
+                  }}
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
