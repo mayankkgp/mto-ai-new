@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '@/lib/utils.js';
 import TaskCard from './TaskCard.jsx';
 
-const TaskBoard = ({ title, type, icon: Icon, tasks, isReadOnly, toggleTaskStatus, updateTask, editingTask, setEditingTask }) => {
+const TaskBoard = ({ title, type, icon: Icon, tasks, isReadOnly, toggleTaskStatus, updateTask }) => {
   const activeCount = tasks.filter(t => !t.isCompleted).length;
 
   return (
@@ -30,13 +30,10 @@ const TaskBoard = ({ title, type, icon: Icon, tasks, isReadOnly, toggleTaskStatu
           }).map(task => (
             <TaskCard 
               key={task.id} 
-              task={task} 
-              type={type}
+              task={task}
               isReadOnly={isReadOnly}
-              toggleTaskStatus={toggleTaskStatus}
-              updateTask={updateTask}
-              editingTask={editingTask}
-              setEditingTask={setEditingTask}
+              onToggle={() => toggleTaskStatus(type, task.id)}
+              onUpdate={(updates) => updateTask(type, task.id, updates)}
             />
           ))
         )}

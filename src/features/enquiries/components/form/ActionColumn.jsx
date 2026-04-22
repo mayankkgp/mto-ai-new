@@ -10,7 +10,6 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
   const { watch, setValue } = useFormContext();
   const { toggleTaskCompletion } = useEnquiryDetail();
   const formData = watch();
-  const [editingTask, setEditingTask] = React.useState(null);
 
   const toggleTaskStatus = async (type, taskId) => {
     const currentTasks = formData.tasks[type] || [];
@@ -67,9 +66,7 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
             tasks={formData.tasks?.revenue || []} 
             isReadOnly={isReadOnly} 
             toggleTaskStatus={toggleTaskStatus} 
-            updateTask={updateTask} 
-            editingTask={editingTask} 
-            setEditingTask={setEditingTask} 
+            updateTask={updateTask}
           />
           <TaskBoard 
             title="Supply Tasks" 
@@ -78,9 +75,7 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
             tasks={formData.tasks?.supply || []} 
             isReadOnly={isReadOnly} 
             toggleTaskStatus={toggleTaskStatus} 
-            updateTask={updateTask} 
-            editingTask={editingTask} 
-            setEditingTask={setEditingTask} 
+            updateTask={updateTask}
           />
         </div>
       </div>
