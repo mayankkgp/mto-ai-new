@@ -80,8 +80,8 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                 disabled={isReadOnly}
               />
             </div>
-            <div className="grid grid-cols-[auto_1fr_auto] gap-1.5 items-end">
-              <div className="flex flex-col gap-0.5">
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-end">
+              <div className="flex flex-col gap-0.5 min-w-0">
                 <Label variant="micro">Type *</Label>
                 <ToggleGroup 
                   type="single" 
@@ -90,7 +90,7 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
-                  className="w-full h-[26px]"
+                  className="w-full h-[26px] min-w-[60px]"
                 >
                   <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
                   <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
@@ -107,13 +107,12 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   disabled={isReadOnly}
                 />
               </div>
-              <div className="flex flex-col gap-0.5">
-                <Label variant="micro" className="text-transparent select-none">Action</Label>
+              <div className="min-w-0">
                 <Button 
                   size="icon" 
                   onClick={handleAddTask}
                   disabled={isReadOnly || !newAction.text.trim()}
-                  className="h-[26px] w-[26px] p-0 rounded"
+                  className="h-[26px] w-full p-0 rounded"
                 >
                   <CornerDownLeft size={14} />
                 </Button>
@@ -145,7 +144,7 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
-                  className="w-full h-[26px]"
+                  className="w-full h-[26px] min-w-[60px]"
                 >
                   <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
                   <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
@@ -175,17 +174,14 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   disabled={isReadOnly}
                 />
               </div>
-              <div className="flex flex-col gap-0.5">
-                <Label variant="micro" className="text-transparent select-none">Action</Label>
-                <Button 
-                  size="icon" 
-                  onClick={handleAddTask}
-                  disabled={isReadOnly || !newAction.text.trim()}
-                  className="h-[26px] w-[26px] p-0 rounded"
-                >
-                  <CornerDownLeft size={14} />
-                </Button>
-              </div>
+              <Button 
+                size="icon" 
+                onClick={handleAddTask}
+                disabled={isReadOnly || !newAction.text.trim()}
+                className="h-[26px] w-[26px] p-0 rounded"
+              >
+                <CornerDownLeft size={14} />
+              </Button>
             </div>
           </>
         )}

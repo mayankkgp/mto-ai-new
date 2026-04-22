@@ -8,7 +8,7 @@ const textareaVariants = cva(
     variants: {
       size: {
         default: "min-h-16 px-2.5 py-2 text-base md:text-sm",
-        micro: "min-h-[26px] max-h-[80px] px-1.5 py-1 text-[11px] leading-tight resize-none overflow-hidden",
+        micro: "min-h-[26px] max-h-[80px] px-1.5 py-1 text-[11px] leading-tight resize-none overflow-y-auto",
       },
     },
     defaultVariants: {

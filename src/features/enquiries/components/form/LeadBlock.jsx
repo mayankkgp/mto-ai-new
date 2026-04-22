@@ -55,6 +55,7 @@ const LeadBlock = ({ isReadOnly }) => {
             overviewRef.current = el;
             overviewRegisterRef(el);
           }}
+          rows={1}
           size="micro"
           className={cn(
             "w-full",
@@ -84,6 +85,7 @@ const LeadBlock = ({ isReadOnly }) => {
             detailsRef.current = el;
             detailsRegisterRef(el);
           }}
+          rows={1}
           size="micro"
           className="w-full"
           disabled={isReadOnly}
