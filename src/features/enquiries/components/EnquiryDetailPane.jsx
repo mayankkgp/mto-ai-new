@@ -28,6 +28,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
 
   const methods = useForm({
     resolver: zodResolver(enquirySchema),
+    mode: 'onChange',
     defaultValues: {
       id: "NEW ENQUIRY",
       status: ENQUIRY_STATUS.DRAFT,
