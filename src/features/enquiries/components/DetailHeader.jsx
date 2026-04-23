@@ -23,7 +23,7 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const { openModal, closeModal } = useModals();
   const [activeLoading, setActiveLoading] = useState(null);
 
-  const { trigger, formState: { errors: formErrors } } = useFormContext();
+  const { handleSubmit } = useFormContext();
 
   // Reset activeLoading when global loading finishes
   React.useEffect(() => {
@@ -32,55 +32,47 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
     }
   }, [isActionLoading]);
 
-  const handleSaveClick = async () => {
-    const isValid = await trigger();
-    if (isValid) {
-      setActiveLoading('save');
-      onSave();
-    } else {
-      toast.error("Validation Failed", { 
-        description: "Missing fields: " + errorList.join(", ") 
-      });
+  const onValidationFailed = (errors) => {
+    const fields = getErrorFields(errors);
+    if (fields.length === 0 && Object.keys(errors).length > 0) {
+      const unmappedKeys = Object.keys(errors);
+      fields.push(...unmappedKeys.map(k => `Field: ${k}`));
     }
+
+    toast.error("Validation Failed", { 
+      id: 'validation-toast',
+      description: "Missing fields: " + fields.join(", ") 
+    });
   };
+
+  const handleSaveClick = handleSubmit(() => {
+    setActiveLoading('save');
+    onSave();
+  }, onValidationFailed);
 
   const handleCloseClick = () => {
     onClose();
   };
 
-  const handleConvertClick = async () => {
-    const isValid = await trigger();
-    if (isValid) {
-      openModal('CONVERT_ENQUIRY', { 
-        onConfirm: () => { 
-          setActiveLoading('convert');
-          onConvert(); 
-          closeModal(); 
-        } 
-      });
-    } else {
-      toast.error("Validation Failed", { 
-        description: "Missing fields: " + errorList.join(", ") 
-      });
-    }
-  };
+  const handleConvertClick = handleSubmit(() => {
+    openModal('CONVERT_ENQUIRY', { 
+      onConfirm: () => { 
+        setActiveLoading('convert');
+        onConvert(); 
+        closeModal(); 
+      } 
+    });
+  }, onValidationFailed);
 
-  const handleDropClick = async () => {
-    const isValid = await trigger();
-    if (isValid) {
-      openModal('DROP_ENQUIRY', { 
-        onConfirm: (reason) => { 
-          setActiveLoading('drop');
-          onDrop(reason); 
-          closeModal(); 
-        } 
-      });
-    } else {
-      toast.error("Validation Failed", { 
-        description: "Missing fields: " + errorList.join(", ") 
-      });
-    }
-  };
+  const handleDropClick = handleSubmit(() => {
+    openModal('DROP_ENQUIRY', { 
+      onConfirm: (reason) => { 
+        setActiveLoading('drop');
+        onDrop(reason); 
+        closeModal(); 
+      } 
+    });
+  }, onValidationFailed);
 
   if (!enquiry) return null;
 
@@ -115,13 +107,6 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
     if (errors.channel) fields.push("Channel");
     return fields;
   };
-
-  const errorList = getErrorFields(formErrors);
-
-  if (errorList.length === 0 && Object.keys(formErrors).length > 0) {
-    const unmappedKeys = Object.keys(formErrors);
-    errorList.push(...unmappedKeys.map(k => `Field: ${k}`));
-  }
 
   return (
     <PaneHeader variant="detail-header-split" className="flex items-center justify-between sticky top-0 z-50">

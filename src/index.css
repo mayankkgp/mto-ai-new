@@ -178,11 +178,11 @@
      5. Sonner High-Density Success Pill
   ------------------------------------------ */
   [data-sonner-toaster] {
-    @apply !top-10 !right-2 !left-auto !bottom-auto !w-auto !max-w-max !p-0 !m-0;
+    @apply !top-10 !right-0 !left-auto !bottom-auto !w-auto !max-w-max !p-0 !m-0;
   }
   @media (min-height: 801px) {
     [data-sonner-toaster] {
-      @apply !top-14 !right-4;
+      @apply !top-14 !right-0;
     }
   }
 

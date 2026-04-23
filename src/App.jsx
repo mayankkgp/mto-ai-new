@@ -53,17 +53,9 @@ export default function App() {
               <AppContent />
               <Toaster 
                 position="top-right" 
-                offset={{ top: '80px', right: '24px' }}
+                offset={{ top: '80px', right: '0px' }}
                 duration={5000}
                 closeButton
-                toastOptions={{
-                  classNames: {
-                    error: 'bg-red-50 border border-red-100 text-red-900 shadow-xl rounded-xl p-4',
-                    title: 'text-sm font-bold',
-                    description: 'text-xs font-medium text-red-700 mt-1',
-                    closeButton: 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-200'
-                  }
-                }}
               />
             </ModalProvider>
           </EnquiryDetailProvider>

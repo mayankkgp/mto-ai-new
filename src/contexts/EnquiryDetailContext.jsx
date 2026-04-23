@@ -53,7 +53,7 @@ export const EnquiryDetailProvider = ({ children }) => {
         return [...prev, { ...saved }];
       });
       if (showToast) {
-        toast.success("Changes saved");
+        toast.success("Changes saved", { id: 'save-success' });
       }
       return saved;
     } catch (error) {
