@@ -29,6 +29,7 @@ const Toaster = ({ ...props }) => {
         classNames: {
           toast: "!min-h-0 !w-fit !whitespace-nowrap !flex !items-center !justify-center !px-3 !py-1.5 !rounded-md !shadow-md !opacity-100 !border !text-[11px] !font-bold !tracking-tight !transition-none !transform-none !animate-none",
           success: "!bg-[#ECFDF5] !border-[#A7F3D0] !text-[#065F46]",
+          error: "!bg-destructive !border-destructive !text-destructive-foreground",
         },
       }}
       {...props}

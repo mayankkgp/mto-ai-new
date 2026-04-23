@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip.jsx';
 import { GlobalSidebar } from './layout/GlobalSidebar.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useModals } from '@/contexts/ModalContext.jsx';
+import DropEnquiryModal from '@/features/enquiries/components/modals/DropEnquiryModal.jsx';
+import ConvertEnquiryModal from '@/features/enquiries/components/modals/ConvertEnquiryModal.jsx';
+import ReopenEnquiryModal from '@/features/enquiries/components/modals/ReopenEnquiryModal.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
@@ -17,8 +21,11 @@ export const AppLayout = ({ config, children }) => {
     setActiveModule, 
     isCollapsed, 
     setIsCollapsed, 
-    setIsCompact 
+    setIsCompact,
+    isActionLoading
   } = useUIState();
+
+  const { activeModal, modalProps, closeModal } = useModals();
   
   // Mock user data - in a real app this might come from an AuthContext
   const user = {
@@ -54,6 +61,25 @@ export const AppLayout = ({ config, children }) => {
         <MainWorkspace>
           {children}
         </MainWorkspace>
+
+        <DropEnquiryModal 
+          isOpen={activeModal === 'DROP_ENQUIRY'}
+          onClose={closeModal}
+          isProcessing={isActionLoading}
+          {...modalProps}
+        />
+        <ConvertEnquiryModal 
+          isOpen={activeModal === 'CONVERT_ENQUIRY'}
+          onClose={closeModal}
+          isProcessing={isActionLoading}
+          {...modalProps}
+        />
+        <ReopenEnquiryModal 
+          isOpen={activeModal === 'REOPEN_ENQUIRY'}
+          onClose={closeModal}
+          isProcessing={isActionLoading}
+          {...modalProps}
+        />
       </div>
     </TooltipProvider>
   );

@@ -5,14 +5,12 @@ import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useModals } from '@/contexts/ModalContext.jsx';
 import { ENQUIRY_STATUS } from '@/constants/enquiryConstants.js';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import PaneHeader from '@/components/ui/pane-header.jsx';
-import ValidationAlert from '@/components/ui/validation-alert.jsx';
-import DropEnquiryModal from './modals/DropEnquiryModal.jsx';
-import ConvertEnquiryModal from './modals/ConvertEnquiryModal.jsx';
-import ReopenEnquiryModal from './modals/ReopenEnquiryModal.jsx';
+import { toast } from 'sonner';
 
 /**
  * DetailHeader Component
@@ -20,14 +18,10 @@ import ReopenEnquiryModal from './modals/ReopenEnquiryModal.jsx';
  * Implements Identity Group, Status Badge, and Action Group.
  */
 const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen }) => {
-  const [isDropModalOpen, setIsDropModalOpen] = useState(false);
   const { users } = useReferenceData();
   const { isActionLoading } = useUIState();
+  const { openModal, closeModal } = useModals();
   const [activeLoading, setActiveLoading] = useState(null);
-  const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null);
-  const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
-  const [isReopenModalOpen, setIsReopenModalOpen] = useState(false);
 
   const { trigger, formState: { errors: formErrors } } = useFormContext();
 
@@ -44,8 +38,9 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
       setActiveLoading('save');
       onSave();
     } else {
-      setPendingAction('save');
-      setIsValidationAlertOpen(true);
+      toast.error("Validation Failed", { 
+        description: "Missing fields: " + errorList.join(", ") 
+      });
     }
   };
 
@@ -56,20 +51,34 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const handleConvertClick = async () => {
     const isValid = await trigger();
     if (isValid) {
-      setIsConvertModalOpen(true);
+      openModal('CONVERT_ENQUIRY', { 
+        onConfirm: () => { 
+          setActiveLoading('convert');
+          onConvert(); 
+          closeModal(); 
+        } 
+      });
     } else {
-      setPendingAction('convert');
-      setIsValidationAlertOpen(true);
+      toast.error("Validation Failed", { 
+        description: "Missing fields: " + errorList.join(", ") 
+      });
     }
   };
 
   const handleDropClick = async () => {
     const isValid = await trigger();
     if (isValid) {
-      setIsDropModalOpen(true);
+      openModal('DROP_ENQUIRY', { 
+        onConfirm: (reason) => { 
+          setActiveLoading('drop');
+          onDrop(reason); 
+          closeModal(); 
+        } 
+      });
     } else {
-      setPendingAction('drop');
-      setIsValidationAlertOpen(true);
+      toast.error("Validation Failed", { 
+        description: "Missing fields: " + errorList.join(", ") 
+      });
     }
   };
 
@@ -163,7 +172,13 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         {(enquiry.status === ENQUIRY_STATUS.CONVERTED || enquiry.status === ENQUIRY_STATUS.DROPPED) ? (
           <Button 
             variant="secondary"
-            onClick={() => setIsReopenModalOpen(true)}
+            onClick={() => openModal('REOPEN_ENQUIRY', { 
+              onConfirm: () => { 
+                setActiveLoading('reopen');
+                onReopen(); 
+                closeModal(); 
+              } 
+            })}
             disabled={isActionLoading}
             className="gap-1.5"
           >
@@ -217,47 +232,6 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
         >
           <X size={18} />
         </Button>
-
-        <ValidationAlert
-          isOpen={isValidationAlertOpen}
-          onClose={() => setIsValidationAlertOpen(false)}
-          errors={errorList}
-          showDiscardOption={pendingAction === 'close'}
-          onDiscard={() => { setIsValidationAlertOpen(false); onClose(); }}
-        />
-
-        <DropEnquiryModal 
-          isOpen={isDropModalOpen} 
-          onClose={() => setIsDropModalOpen(false)}
-          isProcessing={isActionLoading && activeLoading === 'drop'}
-          onConfirm={(reason) => {
-            setActiveLoading('drop');
-            onDrop(reason);
-            setIsDropModalOpen(false);
-          }}
-        />
-
-        <ConvertEnquiryModal 
-          isOpen={isConvertModalOpen} 
-          onClose={() => setIsConvertModalOpen(false)}
-          isProcessing={isActionLoading && activeLoading === 'convert'}
-          onConfirm={() => {
-            setActiveLoading('convert');
-            onConvert();
-            setIsConvertModalOpen(false);
-          }}
-        />
-
-        <ReopenEnquiryModal 
-          isOpen={isReopenModalOpen} 
-          onClose={() => setIsReopenModalOpen(false)}
-          isProcessing={isActionLoading && activeLoading === 'reopen'}
-          onConfirm={() => {
-            setActiveLoading('reopen');
-            onReopen();
-            setIsReopenModalOpen(false);
-          }}
-        />
       </div>
     </PaneHeader>
   );
