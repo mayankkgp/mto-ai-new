@@ -11,9 +11,14 @@ import { Dialog, DialogPortal, DialogOverlay } from "@/components/ui/dialog.jsx"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { Button } from "@/components/ui/button.jsx";
 import { cn } from "@/lib/utils.js";
+import { useModals } from "@/contexts/ModalContext.jsx";
 
-const FileLightbox = ({ files, initialIndex, onClose, isReadOnly }) => {
+const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
+  const { closeModal } = useModals();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+  if (!files || files.length === 0) return null;
+
   const activeFile = files[currentIndex];
 
   if (!activeFile) return null;
@@ -42,12 +47,12 @@ const FileLightbox = ({ files, initialIndex, onClose, isReadOnly }) => {
   };
 
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && onClose()}>
+    <Dialog open={true} onOpenChange={(open) => !open && closeModal()}>
       <DialogPortal>
-        <DialogOverlay className="bg-black/80 backdrop-blur-sm z-[80]" />
+        <DialogOverlay className="bg-black/80 backdrop-blur-sm z-[100]" />
         <DialogPrimitive.Popup
           className={cn(
-            "fixed top-1/2 left-1/2 z-[81] -translate-x-1/2 -translate-y-1/2",
+            "fixed top-1/2 left-1/2 z-[101] -translate-x-1/2 -translate-y-1/2",
             "max-w-5xl w-full max-h-full flex flex-col items-center justify-center border-none bg-transparent shadow-none p-4 sm:p-8 outline-none",
             "data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95"
           )}
@@ -75,7 +80,7 @@ const FileLightbox = ({ files, initialIndex, onClose, isReadOnly }) => {
               variant="ghost" 
               size="icon" 
               className="text-white hover:bg-white/10"
-              onClick={onClose}
+              onClick={closeModal}
             >
               <X size={18} />
             </Button>

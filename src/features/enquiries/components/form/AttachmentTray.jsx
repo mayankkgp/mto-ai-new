@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Paperclip, FileText, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils.js';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card.jsx';
-import FileLightbox from './FileLightbox.jsx';
+import { useModals } from '@/contexts/ModalContext.jsx';
 
 const FileThumbnail = ({ file, index, onRemove, onOpenLightbox, isReadOnly }) => {
   const isImage = file.type?.startsWith('image/');
@@ -127,8 +127,8 @@ const AttachmentTray = ({
   uploadProgress, 
   isReadOnly 
 }) => {
+  const { openModal } = useModals();
   const fileInputRef = React.useRef(null);
-  const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
@@ -180,7 +180,7 @@ const AttachmentTray = ({
               file={file} 
               index={index}
               onRemove={removeFile} 
-              onOpenLightbox={setLightboxIndex}
+              onOpenLightbox={(idx) => openModal('FILE_LIGHTBOX', { files: attachments, initialIndex: idx, isReadOnly: isReadOnly })}
               isReadOnly={isReadOnly}
             />
           ))}
@@ -222,15 +222,6 @@ const AttachmentTray = ({
         className="hidden" 
         onChange={handleFileChange}
       />
-
-      {lightboxIndex !== null && (
-        <FileLightbox 
-          files={attachments}
-          initialIndex={lightboxIndex}
-          onClose={() => setLightboxIndex(null)}
-          isReadOnly={isReadOnly}
-        />
-      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { useModals } from '@/contexts/ModalContext.jsx';
 import DropEnquiryModal from '@/features/enquiries/components/modals/DropEnquiryModal.jsx';
 import ConvertEnquiryModal from '@/features/enquiries/components/modals/ConvertEnquiryModal.jsx';
 import ReopenEnquiryModal from '@/features/enquiries/components/modals/ReopenEnquiryModal.jsx';
+import FileLightbox from '@/features/enquiries/components/form/FileLightbox.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
@@ -80,6 +81,10 @@ export const AppLayout = ({ config, children }) => {
           isProcessing={isActionLoading}
           {...modalProps}
         />
+
+        {activeModal === 'FILE_LIGHTBOX' && (
+          <FileLightbox {...modalProps} onClose={closeModal} />
+        )}
       </div>
     </TooltipProvider>
   );
