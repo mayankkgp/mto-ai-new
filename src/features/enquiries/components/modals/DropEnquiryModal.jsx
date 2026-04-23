@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SystemPopup from '@/components/ui/system-popup.jsx';
 import { Textarea } from '@/components/ui/textarea.jsx';
+import { Ban } from 'lucide-react';
 
 /**
  * DropEnquiryModal component
@@ -34,6 +35,7 @@ const DropEnquiryModal = ({ isOpen, onClose, onConfirm, isProcessing }) => {
       title="Drop Enquiry"
       variant="destructive"
       actionLabel="Drop Enquiry"
+      actionIcon={<Ban size={14} />}
       onAction={handleConfirm}
       isProcessing={isProcessing}
       isActionDisabled={!reason.trim()}

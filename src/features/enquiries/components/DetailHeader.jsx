@@ -9,9 +9,10 @@ import { ENQUIRY_STATUS } from '@/constants/enquiryConstants.js';
 import { getUserInitials } from '@/utils/formatters.js';
 import { cn } from '@/lib/utils.js';
 import PaneHeader from '@/components/ui/pane-header.jsx';
-import SystemModal from '@/components/ui/system-modal.jsx';
 import ValidationAlert from '@/components/ui/validation-alert.jsx';
-import { Textarea } from '@/components/ui/textarea.jsx';
+import DropEnquiryModal from './modals/DropEnquiryModal.jsx';
+import ConvertEnquiryModal from './modals/ConvertEnquiryModal.jsx';
+import ReopenEnquiryModal from './modals/ReopenEnquiryModal.jsx';
 
 /**
  * DetailHeader Component
@@ -23,7 +24,6 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
   const { users } = useReferenceData();
   const { isActionLoading } = useUIState();
   const [activeLoading, setActiveLoading] = useState(null);
-  const [dropReason, setDropReason] = useState("");
   const [isValidationAlertOpen, setIsValidationAlertOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
   const [isConvertModalOpen, setIsConvertModalOpen] = useState(false);
@@ -218,56 +218,6 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
           <X size={18} />
         </Button>
 
-        <SystemModal
-          isOpen={isDropModalOpen}
-          onClose={() => {
-            setIsDropModalOpen(false);
-            setDropReason("");
-          }}
-          title="Drop Enquiry"
-          variant="danger"
-          footer={
-            <>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setIsDropModalOpen(false);
-                  setDropReason("");
-                }}
-                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  console.log("Drop reason:", dropReason);
-                  setActiveLoading('drop');
-                  onDrop(dropReason);
-                  setIsDropModalOpen(false);
-                  setDropReason("");
-                }}
-                disabled={!dropReason.trim()}
-                className="text-xs font-bold rounded-lg"
-              >
-                Drop Enquiry
-              </Button>
-            </>
-          }
-        >
-          <div className="space-y-4">
-            <p className="text-xs text-gray-600 font-medium">
-              Dropping an enquiry is a permanent action. Please provide a reason below.
-            </p>
-            <Textarea
-              value={dropReason}
-              onChange={(e) => setDropReason(e.target.value)}
-              className="w-full min-h-[80px] bg-gray-50 border-gray-200 rounded-lg text-xs resize-none focus-visible:ring-1 focus-visible:ring-primary"
-              placeholder="Enter reason for dropping..."
-            />
-          </div>
-        </SystemModal>
-
         <ValidationAlert
           isOpen={isValidationAlertOpen}
           onClose={() => setIsValidationAlertOpen(false)}
@@ -276,69 +226,38 @@ const DetailHeader = ({ enquiry, onClose, onSave, onConvert, onDrop, onReopen })
           onDiscard={() => { setIsValidationAlertOpen(false); onClose(); }}
         />
 
-        <SystemModal
-          isOpen={isConvertModalOpen}
-          onClose={() => setIsConvertModalOpen(false)}
-          title="Convert Enquiry"
-          variant="default"
-          footer={
-            <>
-              <Button
-                variant="ghost"
-                onClick={() => setIsConvertModalOpen(false)}
-                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsConvertModalOpen(false);
-                  setActiveLoading('convert');
-                  onConvert();
-                }}
-                className="text-xs font-bold rounded-lg bg-primary hover:bg-primary/90 text-white"
-              >
-                Convert
-              </Button>
-            </>
-          }
-        >
-          <p className="text-xs text-gray-600 font-medium">
-            Are you sure you want to convert this enquiry? This action will mark the enquiry as converted and cannot be undone.
-          </p>
-        </SystemModal>
+        <DropEnquiryModal 
+          isOpen={isDropModalOpen} 
+          onClose={() => setIsDropModalOpen(false)}
+          isProcessing={isActionLoading && activeLoading === 'drop'}
+          onConfirm={(reason) => {
+            setActiveLoading('drop');
+            onDrop(reason);
+            setIsDropModalOpen(false);
+          }}
+        />
 
-        <SystemModal
-          isOpen={isReopenModalOpen}
+        <ConvertEnquiryModal 
+          isOpen={isConvertModalOpen} 
+          onClose={() => setIsConvertModalOpen(false)}
+          isProcessing={isActionLoading && activeLoading === 'convert'}
+          onConfirm={() => {
+            setActiveLoading('convert');
+            onConvert();
+            setIsConvertModalOpen(false);
+          }}
+        />
+
+        <ReopenEnquiryModal 
+          isOpen={isReopenModalOpen} 
           onClose={() => setIsReopenModalOpen(false)}
-          title="Re-open Enquiry"
-          variant="default"
-          footer={
-            <>
-              <Button
-                variant="ghost"
-                onClick={() => setIsReopenModalOpen(false)}
-                className="text-xs font-bold text-gray-500 hover:bg-gray-200 rounded-lg"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsReopenModalOpen(false);
-                  setActiveLoading('reopen');
-                  onReopen();
-                }}
-                className="text-xs font-bold rounded-lg bg-blue-600 hover:bg-blue-700 text-white"
-              >
-                Confirm Re-open
-              </Button>
-            </>
-          }
-        >
-          <p className="text-xs text-gray-600 font-medium">
-            Are you sure you want to re-open this item? This will restore all editing capabilities and move it back to the active list.
-          </p>
-        </SystemModal>
+          isProcessing={isActionLoading && activeLoading === 'reopen'}
+          onConfirm={() => {
+            setActiveLoading('reopen');
+            onReopen();
+            setIsReopenModalOpen(false);
+          }}
+        />
       </div>
     </PaneHeader>
   );

@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog.jsx';
 import { Button } from '@/components/ui/button.jsx';
 import { cn } from '@/lib/utils.js';
+import { Loader2 } from 'lucide-react';
 
 /**
  * SystemPopup component
@@ -28,6 +29,7 @@ const SystemPopup = ({
   title,
   variant = 'primary',
   actionLabel,
+  actionIcon,
   onAction,
   isProcessing = false,
   isActionDisabled = false,
@@ -86,9 +88,21 @@ const SystemPopup = ({
             variant={config.actionVariant} 
             onClick={onAction} 
             disabled={isProcessing || isActionDisabled}
-            className="text-xs font-bold rounded-lg h-9 px-4"
+            className="text-xs font-bold rounded-lg h-9 px-4 flex items-center gap-1.5"
           >
-            {isProcessing ? "Processing..." : actionLabel}
+            {isProcessing ? (
+              <>
+                <Loader2 size={14} className="animate-spin" />
+                <span>Processing...</span>
+              </>
+            ) : actionIcon ? (
+              <>
+                {actionIcon}
+                <span>{actionLabel}</span>
+              </>
+            ) : (
+              actionLabel
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

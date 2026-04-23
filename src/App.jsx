@@ -3,6 +3,7 @@ import { UIStateProvider, useUIState } from '@/contexts/UIStateContext.jsx';
 import { ReferenceDataProvider } from '@/contexts/ReferenceDataContext.jsx';
 import { EnquiryListProvider } from '@/contexts/EnquiryListContext.jsx';
 import { EnquiryDetailProvider } from '@/contexts/EnquiryDetailContext.jsx';
+import { ModalProvider } from '@/contexts/ModalContext.jsx';
 import { AppLayout } from '@/components/AppLayout.jsx';
 import { Toaster } from '@/components/ui/sonner.jsx';
 import EnquiriesModule from '@/features/enquiries/EnquiriesModule.jsx';
@@ -48,8 +49,10 @@ export default function App() {
       <ReferenceDataProvider>
         <EnquiryListProvider>
           <EnquiryDetailProvider>
-            <AppContent />
-            <Toaster position="top-right" />
+            <ModalProvider>
+              <AppContent />
+              <Toaster position="top-right" />
+            </ModalProvider>
           </EnquiryDetailProvider>
         </EnquiryListProvider>
       </ReferenceDataProvider>
