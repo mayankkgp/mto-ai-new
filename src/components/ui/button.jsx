@@ -22,6 +22,7 @@ const buttonVariants = cva(
         filter: "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 font-bold text-xs h-8 px-3 gap-1.5",
         "header-filter": "bg-gray-100 text-gray-700 hover:bg-gray-200",
         "mto-input": "w-full justify-start bg-white border-gray-200 text-foreground font-normal hover:bg-white focus-visible:border-[#1E40AF] focus-visible:ring-0",
+        "pane-close": "p-1.5 h-auto w-auto rounded-full hover:bg-gray-200 text-gray-500 transition-colors",
       },
       size: {
         default: "h-8 px-3 py-1 text-xs font-bold",

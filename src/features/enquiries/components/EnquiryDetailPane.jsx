@@ -1,17 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Save, CheckCircle2, Ban, RotateCcw } from 'lucide-react';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
+import { useModals } from '@/contexts/ModalContext.jsx';
+import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { paneVariants } from '@/components/ui/pane.jsx';
 import { cn } from '@/lib/utils.js';
 import { ENQUIRY_STATUS, ENQUIRY_TYPE } from '@/constants/enquiryConstants.js';
+import { getUserInitials } from '@/utils/formatters.js';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
 import ContextColumn from './form/ContextColumn.jsx';
 import ActionColumn from './form/ActionColumn.jsx';
+import { toast } from 'sonner';
 
 /**
  * EnquiryDetailPane Component
@@ -21,10 +26,20 @@ import ActionColumn from './form/ActionColumn.jsx';
 const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
   const { enquiries } = useEnquiryList();
   const { updateStatus, saveEnquiryDetails } = useEnquiryDetail();
-  const { setStatusTab } = useUIState();
+  const { isActionLoading, setStatusTab } = useUIState();
+  const { openModal, closeModal } = useModals();
+  const { users } = useReferenceData();
+  const [activeLoading, setActiveLoading] = useState(null);
 
   // Find the active enquiry matching activeEnquiryId
   const activeEnquiry = enquiries.find(e => e.id === activeEnquiryId);
+
+  // Reset activeLoading when global loading finishes
+  React.useEffect(() => {
+    if (!isActionLoading) {
+      setActiveLoading(null);
+    }
+  }, [isActionLoading]);
 
   const methods = useForm({
     resolver: zodResolver(enquirySchema),
@@ -120,6 +135,132 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
     }
   };
 
+  const getErrorFields = (errors) => {
+    const fields = [];
+    if (errors.customer?.name) fields.push("Customer Name");
+    if (errors.customer?.poc) fields.push("POC Name");
+    if (errors.customer?.city) fields.push("City");
+    if (errors.customer?.contact) fields.push("Contact");
+    if (errors.leadOverview) fields.push("Lead Overview");
+    if (errors.type) fields.push("Enquiry Type");
+    if (errors.roles?.revenue) fields.push("Revenue Role");
+    if (errors.roles?.supply) fields.push("Supply Role");
+    if (errors.commercials) fields.push("Commercials (Numerical Values)");
+    if (errors.leadDate) fields.push("Lead Date");
+    if (errors.channel) fields.push("Channel");
+    return fields;
+  };
+
+  const onValidationFailed = (errors) => {
+    const fields = getErrorFields(errors);
+    if (fields.length === 0 && Object.keys(errors).length > 0) {
+      const unmappedKeys = Object.keys(errors);
+      fields.push(...unmappedKeys.map(k => `Field: ${k}`));
+    }
+
+    toast.error("Validation Failed", { 
+      id: 'validation-toast',
+      description: "Missing fields: " + fields.join(", ") 
+    });
+  };
+
+  const handleSaveClick = methods.handleSubmit(async (data) => {
+    setActiveLoading('save');
+    await handleSave(data);
+  }, onValidationFailed);
+
+  const handleConvertClick = methods.handleSubmit(() => {
+    openModal('CONVERT_ENQUIRY', { 
+      onConfirm: async () => { 
+        setActiveLoading('convert');
+        await handleConvert(); 
+        closeModal(); 
+      } 
+    });
+  }, onValidationFailed);
+
+  const handleDropClick = methods.handleSubmit(() => {
+    openModal('DROP_ENQUIRY', { 
+      onConfirm: async (reason) => { 
+        setActiveLoading('drop');
+        await handleDrop(reason); 
+        closeModal(); 
+      } 
+    });
+  }, onValidationFailed);
+
+  const handleReopenClick = () => {
+    openModal('REOPEN_ENQUIRY', { 
+      onConfirm: () => { 
+        setActiveLoading('reopen');
+        handleReopen(); 
+        closeModal(); 
+      } 
+    });
+  };
+
+  // Construct Header Actions
+  const actions = [];
+  if (formData.status === ENQUIRY_STATUS.CONVERTED || formData.status === ENQUIRY_STATUS.DROPPED) {
+    actions.push({
+      id: 'reopen',
+      label: 'RE-OPEN',
+      icon: RotateCcw,
+      variant: 'secondary',
+      onClick: handleReopenClick,
+      isLoading: isActionLoading && activeLoading === 'reopen',
+      loadingText: 'RE-OPENING...'
+    });
+  } else {
+    if (formData.status === ENQUIRY_STATUS.ACTIVE) {
+      actions.push({
+        id: 'convert',
+        label: 'CONVERT',
+        icon: CheckCircle2,
+        variant: 'secondary',
+        onClick: handleConvertClick,
+        isLoading: isActionLoading && activeLoading === 'convert',
+        loadingText: 'CONVERTING...'
+      });
+      actions.push({
+        id: 'drop',
+        label: 'DROP',
+        icon: Ban,
+        variant: 'destructive',
+        onClick: handleDropClick,
+        isLoading: isActionLoading && activeLoading === 'drop',
+        loadingText: 'DROPPING...'
+      });
+    }
+    
+    actions.push({ type: 'separator' });
+    
+    actions.push({
+      id: 'save',
+      label: 'SAVE',
+      icon: Save,
+      onClick: handleSaveClick,
+      isLoading: isActionLoading && activeLoading === 'save',
+      loadingText: 'SAVING...'
+    });
+  }
+
+  const revInitials = getUserInitials(formData.roles?.revenue?.map(r => r.id) || [], users);
+  const supInitials = getUserInitials(formData.roles?.supply?.map(r => r.id) || [], users);
+
+  const getStatusClasses = (status) => {
+    switch (status) {
+      case ENQUIRY_STATUS.ACTIVE:
+        return 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0]';
+      case ENQUIRY_STATUS.CONVERTED:
+        return 'bg-[#F3F4F6] text-[#374151] border-[#E5E7EB]';
+      case ENQUIRY_STATUS.DROPPED:
+        return 'bg-[#FEF2F2] text-[#991B1B] border-[#FECACA]';
+      default:
+        return 'bg-gray-100 text-gray-600 border-gray-200';
+    }
+  };
+
   return (
     <FormProvider {...methods}>
       <motion.div 
@@ -132,12 +273,14 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
       >
         {/* Detail Header */}
         <DetailHeader 
-          enquiry={formData} 
+          title={formData.id}
+          badges={[{ label: formData.status, className: getStatusClasses(formData.status) }]}
+          avatarGroups={[
+            { initials: revInitials },
+            { initials: supInitials }
+          ]}
+          actions={actions}
           onClose={onClose}
-          onSave={methods.handleSubmit(handleSave)}
-          onConvert={handleConvert}
-          onDrop={handleDrop}
-          onReopen={handleReopen}
         />
 
         {/* Split-Pane Container */}
