@@ -8,6 +8,7 @@ import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { useGlobalFilter } from '@/hooks/useGlobalFilter.js';
 import { getEnquiryFilterConfig } from '../config/filterConfig.js';
+import { getEnquiryGridColumns } from '../config/enquiryGridColumns.jsx';
 import Pane from '@/components/ui/pane.jsx';
 
 /**
@@ -18,8 +19,8 @@ import Pane from '@/components/ui/pane.jsx';
 const EnquiryMasterPane = () => {
   const { enquiries } = useEnquiryList();
   const { users, channels: referenceChannels } = useReferenceData();
-  const { isCreating, statusTab, setStatusTab, isCompact: isCompactProp } = useUIState();
-  const { activeEnquiryId } = useEnquiryDetail();
+  const { isGlobalLoading, isCreating, statusTab, setStatusTab, isCompact: isCompactProp } = useUIState();
+  const { activeEnquiryId, selectEnquiry } = useEnquiryDetail();
   
   // Force compact mode if an enquiry is active or being created (Detail Pane is open)
   const isCompact = (activeEnquiryId || isCreating) ? true : isCompactProp;
@@ -38,7 +39,10 @@ const EnquiryMasterPane = () => {
     cities: uniqueCities
   }), [users, referenceChannels, uniqueCities]);
 
-  // 2. Global Filter Hook
+  // 2. Grid Columns Config
+  const columns = useMemo(() => getEnquiryGridColumns({ users }), [users]);
+
+  // 3. Global Filter Hook
   const {
     filteredData,
     activeFilterCount,
@@ -49,7 +53,7 @@ const EnquiryMasterPane = () => {
     clearFilters
   } = useGlobalFilter(filterConfig, enquiries);
 
-  // 3. Base Filtering (Status Tab & Global Search)
+  // 4. Base Filtering (Status Tab & Global Search)
   const finalFilteredData = useMemo(() => {
     return filteredData.filter(enquiry => {
       // Status Tab Filter
@@ -95,8 +99,12 @@ const EnquiryMasterPane = () => {
       />
       
       <DataGrid 
-        isCompact={isCompact} 
-        filteredEnquiries={finalFilteredData}
+        data={finalFilteredData}
+        columns={columns}
+        activeRowId={activeEnquiryId}
+        onRowSelect={selectEnquiry}
+        isLoading={isGlobalLoading}
+        isCompact={isCompact}
       />
     </Pane>
   );
