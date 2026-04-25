@@ -8,15 +8,16 @@ import { cn } from '@/lib/utils.js';
  * A wrapper for form elements that connects to react-hook-form context
  * for validation status and error messaging.
  */
-const FormField = ({ name, label, isRequired, action, children, className }) => {
-  const { formState: { errors } } = useFormContext();
+const FormField = ({ name, label, isRequired, action, error, children, className }) => {
+  const methods = useFormContext();
 
   // Helper to get error for nested names like "customer.name"
   const getNestedError = (obj, path) => {
+    if (!obj || !path) return null;
     return path.split('.').reduce((acc, part) => acc && acc[part], obj);
   };
 
-  const error = getNestedError(errors, name);
+  const finalError = error || (name && methods ? getNestedError(methods.formState.errors, name) : null);
 
   return (
     <div className={cn("flex flex-col gap-0.5 w-full", className)}>
@@ -36,7 +37,7 @@ const FormField = ({ name, label, isRequired, action, children, className }) => 
           className: cn(
             child.props.className,
             "w-full",
-            error && "border-red-500 bg-red-50 focus-visible:border-red-500"
+            finalError && "border-red-500 bg-red-50 focus-visible:border-red-500"
           ),
         });
       })}

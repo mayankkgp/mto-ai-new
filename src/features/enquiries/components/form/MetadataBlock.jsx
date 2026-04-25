@@ -73,7 +73,7 @@ const MetadataBlock = ({ isReadOnly }) => {
               type="date"
               size="micro"
               disabled={isReadOnly}
-              className="w-[96px] text-gray-500 date-micro"
+              className="w-[96px] date-micro"
               {...field}
             />
           )}
