@@ -16,6 +16,7 @@ const FilterBar = ({
   searchQuery, 
   setSearchQuery, 
   activeFilters, 
+  activeFilterCount,
   filterConfig,
   updateFilter,
   toggleFilter,
@@ -27,17 +28,6 @@ const FilterBar = ({
   const revUsers = useMemo(() => {
     return users.filter(u => u.department === 'Revenue' || u.department === 'Admin');
   }, [users]);
-
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    Object.entries(activeFilters).forEach(([, value]) => {
-      if (!value) return;
-      if (Array.isArray(value) && value.length > 0) count++;
-      else if (typeof value === 'object' && (value.start || value.end || value.min || value.max)) count++;
-      else if (typeof value === 'string' && value !== '') count++;
-    });
-    return count;
-  }, [activeFilters]);
 
   return (
     <PaneHeader variant="filter-bar" className="flex items-center gap-3 relative z-40">

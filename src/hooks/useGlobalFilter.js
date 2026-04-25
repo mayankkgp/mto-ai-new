@@ -142,6 +142,21 @@ export const useGlobalFilter = (config, data) => {
     setActiveFilters(initialState);
   }, [initialState]);
 
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    Object.entries(activeFilters).forEach(([, value]) => {
+      if (!value) return;
+      if (Array.isArray(value)) {
+        if (value.length > 0) count++;
+      } else if (typeof value === 'object') {
+        if (value.start || value.end || value.min || value.max) count++;
+      } else if (typeof value === 'string' && value !== '') {
+        count++;
+      }
+    });
+    return count;
+  }, [activeFilters]);
+
   const filteredData = useMemo(() => {
     if (!data) return [];
     return data.filter(item => evaluate(item, activeFilters, config));
@@ -149,6 +164,7 @@ export const useGlobalFilter = (config, data) => {
 
   return {
     filteredData,
+    activeFilterCount,
     activeFilters,
     updateFilter,
     toggleArrayFilter,

@@ -41,6 +41,7 @@ const EnquiryMasterPane = () => {
   // 2. Global Filter Hook
   const {
     filteredData,
+    activeFilterCount,
     activeFilters,
     updateFilter,
     toggleArrayFilter,
@@ -85,6 +86,7 @@ const EnquiryMasterPane = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         activeFilters={activeFilters}
+        activeFilterCount={activeFilterCount}
         filterConfig={filterConfig}
         updateFilter={updateFilter}
         toggleFilter={toggleArrayFilter}
