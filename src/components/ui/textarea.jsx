@@ -17,12 +17,35 @@ const textareaVariants = cva(
   }
 );
 
-const Textarea = React.forwardRef(({ className, size = "default", ...props }, ref) => {
+const Textarea = React.forwardRef(({ className, size = "default", onChange, ...props }, ref) => {
+  const internalRef = React.useRef(null);
+  
+  // Merge refs
+  React.useImperativeHandle(ref, () => internalRef.current);
+
+  const adjustHeight = React.useCallback(() => {
+    const textarea = internalRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+  }, []);
+
+  React.useEffect(() => {
+    adjustHeight();
+  }, [adjustHeight, props.value, props.defaultValue]);
+
+  const handleInput = (e) => {
+    adjustHeight();
+    if (onChange) onChange(e);
+  };
+
   return (
     <textarea
       data-slot="textarea"
       className={cn(textareaVariants({ size }), className)}
-      ref={ref}
+      ref={internalRef}
+      onChange={handleInput}
       {...props}
     />
   );

@@ -2,13 +2,13 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Input } from '@/components/ui/input.jsx';
-import { Label } from '@/components/ui/label.jsx';
+import FormField from '@/components/ui/form-field.jsx';
 import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const CustomerBlock = ({ isCreating, isReadOnly }) => {
-  const { register, setValue, watch, formState: { errors } } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
   const { customers } = useReferenceData();
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
   const [isOpen, setIsOpen] = React.useState(false);
@@ -48,10 +48,10 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
   return (
     <div ref={containerRef}>
       <div className="flex flex-col gap-0.5">
-        <div className="flex items-center justify-between">
-          <Label variant="micro">
-            Customer Name *
-          </Label>
+        <div className="flex items-center justify-between mb-0.5">
+          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-normal">
+            Customer Identification
+          </span>
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-gray-400 hover:text-primary transition-colors"
@@ -61,28 +61,27 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
         </div>
 
         <div className="relative w-full">
-          <Input 
-            size="micro"
-            className={cn(
-              "w-full font-semibold",
-              errors.customer?.name && "border-red-500 bg-red-50"
-            )}
-            {...(() => {
-              const { onChange, ...rest } = register('customer.name');
-              return {
-                ...rest,
-                onChange: (e) => {
-                  onChange(e);
-                  handleCustomerNameChange(e.target.value);
-                }
-              };
-            })()}
-            onFocus={() => setIsOpen(true)}
-            disabled={isReadOnly}
-          />
+          <FormField name="customer.name" label="Customer Name" isRequired>
+            <Input 
+              size="micro"
+              className="font-semibold"
+              {...(() => {
+                const { onChange, ...rest } = register('customer.name');
+                return {
+                  ...rest,
+                  onChange: (e) => {
+                    onChange(e);
+                    handleCustomerNameChange(e.target.value);
+                  }
+                };
+              })()}
+              onFocus={() => setIsOpen(true)}
+              disabled={isReadOnly}
+            />
+          </FormField>
           
           {isOpen && filteredCustomers.length > 0 && (
-            <div className="absolute z-50 w-full bg-popover border rounded-md shadow-md max-h-48 overflow-y-auto">
+            <div className="absolute z-50 w-full bg-popover border rounded-md shadow-md max-h-48 overflow-y-auto mt-1">
               {filteredCustomers.map(customer => (
                 <div
                   key={customer.id}
@@ -116,39 +115,29 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
               "grid gap-1.5 mt-1.5",
               isCreating ? "grid-cols-2 @[500px]:grid-cols-3" : "grid-cols-1 @[500px]:grid-cols-2"
             )}>
-              <div className={cn("flex flex-col gap-0.5", isCreating ? "" : "col-span-2")}>
-                <Label variant="micro">
-                  POC Name *
-                </Label>
-                <Input 
-                  size="micro"
-                  className={cn("w-full", errors.customer?.poc && "border-red-500 bg-red-50")}
-                  {...register('customer.poc')}
-                  disabled={isReadOnly}
-                />
+              <div className={cn(isCreating ? "" : "col-span-2")}>
+                <FormField name="customer.poc" label="POC Name" isRequired>
+                  <Input 
+                    size="micro"
+                    {...register('customer.poc')}
+                    disabled={isReadOnly}
+                  />
+                </FormField>
               </div>
-              <div className="flex flex-col gap-0.5">
-                <Label variant="micro">
-                  City *
-                </Label>
+              <FormField name="customer.city" label="City" isRequired>
                 <Input 
                   size="micro"
-                  className={cn("w-full", errors.customer?.city && "border-red-500 bg-red-50")}
                   {...register('customer.city')}
                   disabled={isReadOnly}
                 />
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <Label variant="micro">
-                  Contact *
-                </Label>
+              </FormField>
+              <FormField name="customer.contact" label="Contact" isRequired>
                 <Input 
                   size="micro"
-                  className={cn("w-full", errors.customer?.contact && "border-red-500 bg-red-50")}
                   {...register('customer.contact')}
                   disabled={isReadOnly}
                 />
-              </div>
+              </FormField>
             </div>
           </motion.div>
         )}
