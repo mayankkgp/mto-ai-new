@@ -48,20 +48,21 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
   return (
     <div ref={containerRef}>
       <div className="flex flex-col gap-0.5">
-        <div className="flex items-center justify-between mb-0.5">
-          <span className="text-[10px] font-bold text-gray-500 uppercase tracking-normal">
-            Customer Identification
-          </span>
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-gray-400 hover:text-primary transition-colors"
-          >
-            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
-        </div>
-
         <div className="relative w-full">
-          <FormField name="customer.name" label="Customer Name" isRequired>
+          <FormField 
+            name="customer.name" 
+            label="Customer Name" 
+            isRequired 
+            action={
+              <button 
+                type="button"
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-gray-400 hover:text-primary transition-colors pr-1"
+              >
+                {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+            }
+          >
             <Input 
               size="micro"
               className="font-semibold"

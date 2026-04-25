@@ -90,12 +90,13 @@ export const getEnquiryGridColumns = (context) => {
       id: 'revAction',
       label: 'Rev Action',
       headerClassName: 'min-w-[100px]',
+      cellClassName: 'max-w-0 truncate',
       render: (row) => {
         const urgency = getUrgencyInfo(row.tasks?.revenue);
         return (
-          <div className={cn("text-[10px] max-w-0 truncate", urgency.color)}>
+          <span className={cn("text-[10px]", urgency.color)}>
             {urgency.text}
-          </div>
+          </span>
         );
       }
     },
@@ -103,12 +104,13 @@ export const getEnquiryGridColumns = (context) => {
       id: 'supAction',
       label: 'Sup Action',
       headerClassName: 'min-w-[100px]',
+      cellClassName: 'max-w-0 truncate',
       render: (row) => {
         const urgency = getUrgencyInfo(row.tasks?.supply);
         return (
-          <div className={cn("text-[10px] max-w-0 truncate", urgency.color)}>
+          <span className={cn("text-[10px]", urgency.color)}>
             {urgency.text}
-          </div>
+          </span>
         );
       }
     },
