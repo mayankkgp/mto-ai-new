@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
-import { SlidersHorizontal, User, Layers, X, Check } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
+import { User, Layers, Check } from 'lucide-react';
+import { Popover, PopoverTrigger } from '@/components/ui/popover.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
+import AdvancedFilterTrigger from './AdvancedFilterTrigger.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import { SearchBar } from '@/components/ui/search-bar.jsx';
 import { Wrapper } from '@/components/ui/wrapper.jsx';
 import { Button } from '@/components/ui/button.jsx';
-import { AdvancedFilterButton } from '@/components/ui/advanced-filter-button.jsx';
 import { QuickFilterPopoverContent } from '@/components/ui/quick-filter-popover.jsx';
 import { Command, CommandItem, CommandList } from '@/components/ui/command.jsx';
 
@@ -106,34 +106,20 @@ const FilterBar = ({
         </Popover>
 
         {/* Advanced Filter Group */}
-        <AdvancedFilterButton state={activeFilterCount > 0 ? "active" : "inactive"}>
-          <Popover>
-            <PopoverTrigger asChild>
-              <AdvancedFilterButton.Main>
-                <SlidersHorizontal className="h-3.5 w-3.5" />
-                {!isCompact && <span>Filters</span>}
-              </AdvancedFilterButton.Main>
-            </PopoverTrigger>
-
-            <PopoverContent variant="advanced-filter" align="end">
-              <AdvancedFilterMenu 
-                config={filterConfig}
-                activeFilters={activeFilters}
-                updateFilter={updateFilter}
-                toggleArrayFilter={toggleFilter}
-                removeFilter={removeFilter}
-                clearFilters={clearAllFilters}
-              />
-            </PopoverContent>
-          </Popover>
-          
-          {activeFilterCount > 0 && (
-            <AdvancedFilterButton.Cross onClick={clearAllFilters} className="flex items-center justify-center gap-1.5 px-2 h-full">
-              <span className="text-xs font-medium">{activeFilterCount}</span>
-              <X className="w-3.5 h-3.5" />
-            </AdvancedFilterButton.Cross>
-          )}
-        </AdvancedFilterButton>
+        <AdvancedFilterTrigger 
+          isCompact={isCompact} 
+          activeFilterCount={activeFilterCount} 
+          onClearAll={clearAllFilters}
+        >
+          <AdvancedFilterMenu 
+            config={filterConfig}
+            activeFilters={activeFilters}
+            updateFilter={updateFilter}
+            toggleArrayFilter={toggleFilter}
+            removeFilter={removeFilter}
+            clearFilters={clearAllFilters}
+          />
+        </AdvancedFilterTrigger>
       </Wrapper>
     </PaneHeader>
   );
