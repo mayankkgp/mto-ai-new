@@ -1,14 +1,5 @@
 import React, { useMemo } from 'react';
-import { 
-  Filter, 
-  Truck, 
-  Calendar, 
-  CheckCircle2, 
-  IndianRupee, 
-  Search,
-  X
-} from 'lucide-react';
-import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
+import { X } from 'lucide-react';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Input } from '@/components/ui/input.jsx';
@@ -16,78 +7,59 @@ import { AdvancedFilterMultipleSelect } from '@/components/ui/advanced-filter-mu
 
 /**
  * Advanced Filter Menu Component
+ * Dynamic, configuration-driven UI for advanced filtering.
  */
-const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearAllFilters }) => {
-  const { users, channels: referenceChannels } = useReferenceData();
+const AdvancedFilterMenu = ({ 
+  config, 
+  activeFilters, 
+  updateFilter, 
+  toggleArrayFilter, 
+  removeFilter, 
+  clearFilters 
+}) => {
   
-  const uniqueCities = useMemo(() => {
-    const cities = enquiries.map(e => e.customer?.city).filter(Boolean);
-    return [...new Set(cities)];
-  }, [enquiries]);
-
-  const supplyUsers = useMemo(() => {
-    return users.filter(u => u.department === 'Supply' || u.department === 'Admin');
-  }, [users]);
-
-  const categories = [
-    { id: 'channel', label: 'Channel', icon: Filter, options: referenceChannels },
-    { id: 'supply', label: 'Supply', icon: Truck, options: supplyUsers.map(u => u.name) },
-    { id: 'city', label: 'City', icon: Filter, options: uniqueCities },
-    { id: 'leadDate', label: 'Lead Date', icon: Calendar, isDate: true, startKey: 'leadDateStart', endKey: 'leadDateEnd' },
-    { id: 'revDue', label: 'Rev Due', icon: CheckCircle2, isDate: true, startKey: 'revDueStart', endKey: 'revDueEnd' },
-    { id: 'supDue', label: 'Sup Due', icon: Truck, isDate: true, startKey: 'supDueStart', endKey: 'supDueEnd' },
-    { id: 'expectedValue', label: 'Expected Value', icon: IndianRupee, isRange: true, minKey: 'minExpValue', maxKey: 'maxExpValue' },
-    { id: 'source', label: 'Source', icon: Search, isInput: true, key: 'source' },
-  ];
-
-  const updateFilter = (key, value) => {
-    setActiveFilters(prev => ({ ...prev, [key]: value, advanced: true }));
-  };
-
-  const toggleArrayFilter = (key, value) => {
-    setActiveFilters(prev => {
-      const current = prev[key] || [];
-      const next = current.includes(value)
-        ? current.filter(v => v !== value)
-        : [...current, value];
-      return { ...prev, [key]: next, advanced: true };
-    });
-  };
-
-  const removeFilter = (key, value = null) => {
-    setActiveFilters(prev => {
-      let nextValue;
-      if (Array.isArray(prev[key])) {
-        nextValue = prev[key].filter(v => v !== value);
-      } else {
-        nextValue = '';
-      }
-      return { ...prev, [key]: nextValue };
-    });
-  };
-
   const activePills = useMemo(() => {
     const pills = [];
-    if (activeFilters.channel) pills.push({ key: 'channel', label: `Channel: ${activeFilters.channel}` });
-    activeFilters.supply?.forEach(s => pills.push({ key: 'supply', value: s, label: `Supply: ${s}` }));
-    if (activeFilters.city) pills.push({ key: 'city', label: `City: ${activeFilters.city}` });
-    if (activeFilters.leadDateStart) pills.push({ key: 'leadDateStart', label: `Lead Start: ${activeFilters.leadDateStart}` });
-    if (activeFilters.leadDateEnd) pills.push({ key: 'leadDateEnd', label: `Lead End: ${activeFilters.leadDateEnd}` });
-    if (activeFilters.revDueStart) pills.push({ key: 'revDueStart', label: `Rev Start: ${activeFilters.revDueStart}` });
-    if (activeFilters.revDueEnd) pills.push({ key: 'revDueEnd', label: `Rev End: ${activeFilters.revDueEnd}` });
-    if (activeFilters.supDueStart) pills.push({ key: 'supDueStart', label: `Sup Start: ${activeFilters.supDueStart}` });
-    if (activeFilters.supDueEnd) pills.push({ key: 'supDueEnd', label: `Sup End: ${activeFilters.supDueEnd}` });
-    if (activeFilters.minExpValue) pills.push({ key: 'minExpValue', label: `Min: ₹${activeFilters.minExpValue}` });
-    if (activeFilters.maxExpValue) pills.push({ key: 'maxExpValue', label: `Max: ₹${activeFilters.maxExpValue}` });
-    if (activeFilters.source) pills.push({ key: 'source', label: `Source: ${activeFilters.source}` });
+    config.forEach(filter => {
+      const value = activeFilters[filter.id];
+      if (!value) return;
+
+      if (Array.isArray(value)) {
+        value.forEach(v => {
+          pills.push({ id: filter.id, value: v, label: `${filter.label}: ${v}` });
+        });
+      } else if (typeof value === 'object') {
+        if (filter.type === 'date-range') {
+          if (value.start) pills.push({ id: filter.id, part: 'start', label: `${filter.label} Start: ${value.start}` });
+          if (value.end) pills.push({ id: filter.id, part: 'end', label: `${filter.label} End: ${value.end}` });
+        } else if (filter.type === 'number-range') {
+          if (value.min) pills.push({ id: filter.id, part: 'min', label: `${filter.label} Min: ₹${value.min}` });
+          if (value.max) pills.push({ id: filter.id, part: 'max', label: `${filter.label} Max: ₹${value.max}` });
+        }
+      } else if (value) {
+        pills.push({ id: filter.id, label: `${filter.label}: ${value}` });
+      }
+    });
     return pills;
-  }, [activeFilters]);
+  }, [config, activeFilters]);
+
+  const handleUpdate = (id, value) => {
+    updateFilter(id, value);
+  };
+
+  const handleToggle = (id, value) => {
+    toggleArrayFilter(id, value);
+  };
+
+  const handleRemove = (pill) => {
+    removeFilter(pill.id, pill.value || pill.part);
+  };
 
   return (
     <div className="w-full flex flex-col">
       <div className="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
         <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Advanced Filters</span>
-        <button onClick={clearAllFilters} className="text-[10px] text-primary font-bold hover:underline">Clear</button>
+        <button onClick={clearFilters} className="text-[10px] text-primary font-bold hover:underline">Clear</button>
       </div>
 
       {activePills.length > 0 && (
@@ -95,7 +67,7 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
           {activePills.map((pill, idx) => (
             <Badge key={idx} variant="advanced-filter" className="flex items-center">
               <span>{pill.label}</span>
-              <button onClick={() => removeFilter(pill.key, pill.value)} className="hover:text-red-500">
+              <button onClick={() => handleRemove(pill)} className="hover:text-red-500">
                 <X size={10} />
               </button>
             </Badge>
@@ -105,37 +77,38 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
 
       <div className="max-h-[80vh] overflow-y-auto no-scrollbar">
         <Accordion type="single" collapsible>
-          {categories.map((cat) => {
-            const Icon = cat.icon;
+          {config.map((filter) => {
+            const Icon = filter.icon;
+            const value = activeFilters[filter.id];
             
             return (
-              <AccordionItem key={cat.id} variant="advanced-filter">
+              <AccordionItem key={filter.id} variant="advanced-filter">
                 <AccordionTrigger variant="advanced-filter">
                   <div className="flex items-center gap-2">
                     <Icon size={14} className="text-gray-400" />
-                    <span>{cat.label}</span>
+                    <span>{filter.label}</span>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent variant="advanced-filter">
-                  {cat.options && cat.options.map((opt) => (
+                  {(filter.type === 'multi-select' || filter.type === 'single-select') && filter.options?.map((opt) => (
                     <AdvancedFilterMultipleSelect 
                       key={opt} 
-                      isSelected={cat.id === 'supply' ? activeFilters.supply?.includes(opt) : activeFilters[cat.id] === opt}
-                      onClick={() => cat.id === 'supply' ? toggleArrayFilter('supply', opt) : updateFilter(cat.id, opt)}
+                      isSelected={Array.isArray(value) ? value.includes(opt) : value === opt}
+                      onClick={() => filter.type === 'multi-select' ? handleToggle(filter.id, opt) : handleUpdate(filter.id, opt)}
                     >
                       <span className="text-xs text-gray-600">{opt}</span>
                     </AdvancedFilterMultipleSelect>
                   ))}
                   
-                  {cat.isDate && (
+                  {filter.type === 'date-range' && (
                     <div className="flex flex-col gap-2 py-2">
                       <div className="flex flex-col gap-1">
                         <label className="text-[10px] font-bold text-gray-400 uppercase">Start Date</label>
                         <Input 
                           type="date" 
                           size="advanced-filter"
-                          value={activeFilters[cat.startKey]}
-                          onChange={(e) => updateFilter(cat.startKey, e.target.value)}
+                          value={value.start}
+                          onChange={(e) => handleUpdate(filter.id, { ...value, start: e.target.value })}
                         />
                       </div>
                       <div className="flex flex-col gap-1">
@@ -143,22 +116,22 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
                         <Input 
                           type="date" 
                           size="advanced-filter"
-                          value={activeFilters[cat.endKey]}
-                          onChange={(e) => updateFilter(cat.endKey, e.target.value)}
+                          value={value.end}
+                          onChange={(e) => handleUpdate(filter.id, { ...value, end: e.target.value })}
                         />
                       </div>
                     </div>
                   )}
 
-                  {cat.isRange && (
+                  {filter.type === 'number-range' && (
                     <div className="flex gap-2 py-2">
                       <div className="flex flex-col gap-1 w-1/2">
                         <label className="text-[10px] font-bold text-gray-400 uppercase">Min Value</label>
                         <Input 
                           type="number" 
                           size="advanced-filter"
-                          value={activeFilters[cat.minKey]}
-                          onChange={(e) => updateFilter(cat.minKey, e.target.value)}
+                          value={value.min}
+                          onChange={(e) => handleUpdate(filter.id, { ...value, min: e.target.value })}
                           placeholder="Min" 
                         />
                       </div>
@@ -167,23 +140,23 @@ const AdvancedFilterMenu = ({ enquiries, activeFilters, setActiveFilters, clearA
                         <Input 
                           type="number" 
                           size="advanced-filter"
-                          value={activeFilters[cat.maxKey]}
-                          onChange={(e) => updateFilter(cat.maxKey, e.target.value)}
+                          value={value.max}
+                          onChange={(e) => handleUpdate(filter.id, { ...value, max: e.target.value })}
                           placeholder="Max" 
                         />
                       </div>
                     </div>
                   )}
 
-                  {cat.isInput && (
+                  {filter.type === 'text-search' && (
                     <div className="py-2 flex flex-col gap-1">
-                      <label className="text-[10px] font-bold text-gray-400 uppercase">Source</label>
+                      <label className="text-[10px] font-bold text-gray-400 uppercase">{filter.label}</label>
                       <Input 
                         type="text" 
                         size="advanced-filter"
-                        value={activeFilters[cat.key]}
-                        onChange={(e) => updateFilter(cat.key, e.target.value)}
-                        placeholder="Type source..." 
+                        value={value}
+                        onChange={(e) => handleUpdate(filter.id, e.target.value)}
+                        placeholder={`Type ${filter.label.toLowerCase()}...`} 
                       />
                     </div>
                   )}

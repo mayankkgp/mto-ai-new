@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { SlidersHorizontal, User, Layers, X, Check } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.jsx';
-import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
@@ -17,10 +16,12 @@ const FilterBar = ({
   searchQuery, 
   setSearchQuery, 
   activeFilters, 
-  setActiveFilters,
+  filterConfig,
+  updateFilter,
+  toggleFilter,
+  removeFilter,
   clearAllFilters
 }) => {
-  const { enquiries } = useEnquiryList();
   const { users } = useReferenceData();
   
   const revUsers = useMemo(() => {
@@ -29,28 +30,14 @@ const FilterBar = ({
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
-    if (activeFilters.type?.length > 0) count++;
-    if (activeFilters.revRole?.length > 0) count++;
-    if (activeFilters.supply?.length > 0) count++;
-    if (activeFilters.channel !== '') count++;
-    if (activeFilters.city !== '') count++;
-    if (activeFilters.source !== '') count++;
-    if (activeFilters.leadDateStart || activeFilters.leadDateEnd) count++;
-    if (activeFilters.revDueStart || activeFilters.revDueEnd) count++;
-    if (activeFilters.supDueStart || activeFilters.supDueEnd) count++;
-    if (activeFilters.minExpValue || activeFilters.maxExpValue) count++;
+    Object.entries(activeFilters).forEach(([, value]) => {
+      if (!value) return;
+      if (Array.isArray(value) && value.length > 0) count++;
+      else if (typeof value === 'object' && (value.start || value.end || value.min || value.max)) count++;
+      else if (typeof value === 'string' && value !== '') count++;
+    });
     return count;
   }, [activeFilters]);
-
-  const toggleFilter = (category, value) => {
-    setActiveFilters(prev => {
-      const current = prev[category];
-      const next = current.includes(value) 
-        ? current.filter(v => v !== value)
-        : [...current, value];
-      return { ...prev, [category]: next };
-    });
-  };
 
   return (
     <PaneHeader variant="filter-bar" className="flex items-center gap-3 relative z-40">
@@ -130,10 +117,12 @@ const FilterBar = ({
 
             <PopoverContent variant="advanced-filter" align="end">
               <AdvancedFilterMenu 
-                enquiries={enquiries} 
+                config={filterConfig}
                 activeFilters={activeFilters}
-                setActiveFilters={setActiveFilters}
-                clearAllFilters={clearAllFilters}
+                updateFilter={updateFilter}
+                toggleArrayFilter={toggleFilter}
+                removeFilter={removeFilter}
+                clearFilters={clearAllFilters}
               />
             </PopoverContent>
           </Popover>
