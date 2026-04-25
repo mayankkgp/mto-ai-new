@@ -1,102 +1,181 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button.jsx';
+import React from 'react';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { Textarea } from '@/components/ui/textarea.jsx';
 import { Input } from '@/components/ui/input.jsx';
+import { Button } from '@/components/ui/button.jsx';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group.jsx';
-import { Plus } from 'lucide-react';
+import { CornerDownLeft } from 'lucide-react';
 import FormField from '@/components/ui/form-field.jsx';
 
-/**
- * TaskComposer Component
- * Inline form to quickly add a new task.
- */
-const TaskComposer = ({ onAdd }) => {
-  const [newAction, setNewAction] = useState({
+const TaskComposer = ({ isCreating, isReadOnly }) => {
+  const { addNewTask } = useEnquiryDetail();
+
+  const [newAction, setNewAction] = React.useState({
     text: '',
-    type: 'Update',
-    dueDate: new Date().toISOString().split('T')[0],
-    remark: ''
+    remark: '',
+    type: 'revenue',
+    dueDate: new Date().toISOString().split('T')[0]
   });
 
-  const handleAddTask = () => {
-    if (!newAction.text) return;
-    
-    // Pass the new task to the parent
-    onAdd(newAction);
-    
-    // Reset local state
+  if (isReadOnly) {
+    return null;
+  }
+
+  const handleAddTask = async () => {
+    if (!newAction.text.trim()) return;
+
+    await addNewTask({
+      actionText: newAction.text,
+      remark: newAction.remark,
+      dueDate: newAction.dueDate,
+      assignedTo: newAction.type === 'revenue' ? 'u_001' : 's_001'
+    });
+
     setNewAction({
+      ...newAction,
       text: '',
-      type: 'Update',
-      dueDate: new Date().toISOString().split('T')[0],
       remark: ''
     });
   };
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-2.5 space-y-2.5">
-      <div className="grid grid-cols-1 gap-2.5">
-        <FormField label="Action Item" isRequired>
-          <Textarea 
-            size="micro"
-            placeholder="Write the next action step..."
-            value={newAction.text}
-            onChange={(e) => setNewAction({ ...newAction, text: e.target.value })}
-            className="min-h-[38px] bg-white border-gray-200"
-          />
-        </FormField>
-        
-        <FormField label="Remark">
-          <Textarea 
-            size="micro"
-            placeholder="Add secondary notes or context..."
-            value={newAction.remark}
-            onChange={(e) => setNewAction({ ...newAction, remark: e.target.value })}
-            className="min-h-[38px] bg-white border-gray-200"
-          />
-        </FormField>
-      </div>
+    <div className="p-1.5 min-[height:801px]:p-3 bg-white border-b border-gray-200 shadow-sm">
+      <div className="flex flex-col gap-1.5">
+        {isCreating ? (
+          <>
+            <FormField label="Action Item" isRequired>
+              <Textarea 
+                rows={1}
+                size="micro"
+                placeholder="What needs to be done?"
+                value={newAction.text}
+                onChange={(e) => setNewAction({ ...newAction, text: e.target.value })}
+                className="font-semibold"
+                disabled={isReadOnly}
+              />
+            </FormField>
+            
+            <FormField label="Remark">
+              <Textarea 
+                rows={1}
+                size="micro"
+                placeholder="Add a remark (optional)"
+                value={newAction.remark}
+                onChange={(e) => setNewAction({ ...newAction, remark: e.target.value })}
+                disabled={isReadOnly}
+              />
+            </FormField>
 
-      <div className="grid grid-cols-[1fr,auto,auto] items-end gap-2">
-        <FormField label="Type">
-          <ToggleGroup 
-            type="single" 
-            size="micro"
-            value={newAction.type}
-            onValueChange={(val) => val && setNewAction({ ...newAction, type: val })}
-            className="justify-start bg-white border border-gray-200 rounded p-0.5 w-fit"
-          >
-            <ToggleGroupItem value="Update" className="px-3 py-1 h-6 text-[10px] font-bold uppercase rounded data-[state=on]:bg-gray-100 data-[state=on]:text-gray-900 border-none shadow-none">
-              Update
-            </ToggleGroupItem>
-            <ToggleGroupItem value="Call" className="px-3 py-1 h-6 text-[10px] font-bold uppercase rounded data-[state=on]:bg-gray-100 data-[state=on]:text-gray-900 border-none shadow-none">
-              Call
-            </ToggleGroupItem>
-            <ToggleGroupItem value="Meeting" className="px-3 py-1 h-6 text-[10px] font-bold uppercase rounded data-[state=on]:bg-gray-100 data-[state=on]:text-gray-900 border-none shadow-none">
-              Meeting
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </FormField>
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-1.5 items-end">
+              <FormField label="Type" isRequired>
+                <ToggleGroup 
+                  type="single" 
+                  value={newAction.type} 
+                  onValueChange={(val) => {
+                    if (!val) return;
+                    const stringVal = Array.isArray(val) ? val[0] : (typeof val === 'object' && val.target ? val.target.value : val);
+                    if (stringVal) setNewAction({ ...newAction, type: stringVal });
+                  }}
+                  variant="flat"
+                  size="micro"
+                  disabled={isReadOnly}
+                  className="h-[26px] min-w-[60px]"
+                >
+                  <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
+                  <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
+                </ToggleGroup>
+              </FormField>
+              
+              <FormField label="Due Date" isRequired>
+                <Input 
+                  type="date"
+                  size="micro"
+                  value={newAction.dueDate}
+                  onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
+                  className="w-[96px] date-micro"
+                  disabled={isReadOnly}
+                />
+              </FormField>
 
-        <FormField label="Due Date" isRequired>
-          <Input 
-            type="date"
-            size="micro"
-            value={newAction.dueDate}
-            onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
-            className="w-[96px] bg-white border-gray-200 date-micro"
-          />
-        </FormField>
-        
-        <Button 
-          size="micro"
-          onClick={handleAddTask}
-          disabled={!newAction.text}
-          className="h-8 pr-3 pl-2.5 gap-1 shadow-none border-gray-200"
-        >
-          <Plus size={14} />
-          <span>ADD TASK</span>
-        </Button>
+              <div className="min-w-0">
+                <Button 
+                  size="icon" 
+                  onClick={handleAddTask}
+                  disabled={isReadOnly || !newAction.text.trim()}
+                  className="h-[26px] w-full p-0 rounded"
+                >
+                  <CornerDownLeft size={14} />
+                </Button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            <FormField label="Action Item" isRequired>
+              <Textarea 
+                rows={1}
+                size="micro"
+                placeholder="What needs to be done?"
+                value={newAction.text}
+                onChange={(e) => setNewAction({ ...newAction, text: e.target.value })}
+                className="font-semibold"
+                disabled={isReadOnly}
+              />
+            </FormField>
+
+            <div className="grid grid-cols-[auto_auto_1fr_auto] gap-1.5 items-end">
+              <FormField label="Type" isRequired>
+                <ToggleGroup 
+                  type="single" 
+                  value={newAction.type} 
+                  onValueChange={(val) => {
+                    if (!val) return;
+                    const stringVal = Array.isArray(val) ? val[0] : (typeof val === 'object' && val.target ? val.target.value : val);
+                    if (stringVal) setNewAction({ ...newAction, type: stringVal });
+                  }}
+                  variant="flat"
+                  size="micro"
+                  disabled={isReadOnly}
+                  className="h-[26px] min-w-[60px]"
+                >
+                  <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
+                  <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
+                </ToggleGroup>
+              </FormField>
+
+              <FormField label="Due Date" isRequired>
+                <Input 
+                  type="date"
+                  size="micro"
+                  value={newAction.dueDate}
+                  onChange={(e) => setNewAction({ ...newAction, dueDate: e.target.value })}
+                  className="w-[96px] date-micro"
+                  disabled={isReadOnly}
+                />
+              </FormField>
+
+              <FormField label="Remark">
+                <Textarea 
+                  rows={1}
+                  size="micro"
+                  placeholder="Add a remark (optional)"
+                  value={newAction.remark}
+                  onChange={(e) => setNewAction({ ...newAction, remark: e.target.value })}
+                  disabled={isReadOnly}
+                />
+              </FormField>
+
+              <Button 
+                size="icon" 
+                onClick={handleAddTask}
+                disabled={isReadOnly || !newAction.text.trim()}
+                className="h-[26px] w-[26px] p-0 rounded"
+              >
+                <CornerDownLeft size={14} />
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
