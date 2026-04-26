@@ -14,7 +14,7 @@ const Toaster = ({ ...props }) => {
   return (
     <Sonner
       theme={theme}
-      className="toaster group"
+      className="toaster group !fixed !top-0 !right-0 !left-auto !bottom-auto !flex !flex-col !items-end"
       duration={1500}
       icons={{
         success: null,
@@ -24,18 +24,12 @@ const Toaster = ({ ...props }) => {
         loading: <Loader2Icon className="size-4 animate-spin" />,
       }}
       toastOptions={{
-        style: {
-          '--toast-padding': '6px 12px',
-          '--toast-min-height': '28px',
-          '--toast-width': 'max-content',
-        },
         classNames: {
-          toast: "!text-[11px] !font-bold !tracking-tight !border !shadow-md !rounded-md !flex !items-center",
-          description: "!text-xs !font-medium !text-gray-600 !mt-0",
+          toast: "!min-h-0 !w-fit !whitespace-nowrap !flex !items-center !justify-center !px-3 !py-1.5 !rounded-md !shadow-md !opacity-100 !border !text-[11px] !font-bold !tracking-tight !transition-none !transform-none !animate-none",
           success: "!bg-[#ECFDF5] !border-[#A7F3D0] !text-[#065F46]",
-          error: "!bg-red-50 !border-red-200 !text-red-800",
-          info: "!bg-blue-50 !border-blue-200 !text-blue-800",
-          warning: "!bg-yellow-50 !border-yellow-200 !text-yellow-800",
+          error: "!bg-destructive !border-destructive !text-destructive-foreground !shadow-xl !rounded-xl !p-4",
+          title: "!text-sm !font-bold",
+          description: "!text-xs !font-medium !mt-0",
           closeButton: "!bg-white !text-gray-500 hover:!bg-gray-100 !border !border-gray-200"
         },
       }}
