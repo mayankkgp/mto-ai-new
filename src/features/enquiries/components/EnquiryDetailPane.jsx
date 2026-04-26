@@ -10,13 +10,13 @@ import { useModals } from '@/contexts/ModalContext.jsx';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { paneVariants } from '@/components/ui/pane.jsx';
 import { cn } from '@/lib/utils.js';
+import { triggerValidationToast } from '@/utils/validation.js';
 import { ENQUIRY_STATUS, ENQUIRY_TYPE } from '@/constants/enquiryConstants.js';
 import { getUserInitials } from '@/utils/formatters.js';
 import { enquirySchema } from '../schema.js';
 import DetailHeader from './DetailHeader.jsx';
 import ContextColumn from './form/ContextColumn.jsx';
 import ActionColumn from './form/ActionColumn.jsx';
-import { toast } from 'sonner';
 
 /**
  * EnquiryDetailPane Component
@@ -158,10 +158,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
       fields.push(...unmappedKeys.map(k => `Field: ${k}`));
     }
 
-    toast.error("Validation Failed", { 
-      id: 'validation-toast',
-      description: "Missing fields: " + fields.join(", ") 
-    });
+    triggerValidationToast(fields);
   };
 
   const handleSaveClick = methods.handleSubmit(async (data) => {
