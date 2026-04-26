@@ -79,7 +79,7 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
-                  className="h-[26px] min-w-[60px]"
+                  className="min-w-[60px]"
                 >
                   <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
                   <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>
@@ -136,7 +136,7 @@ const TaskComposer = ({ isCreating, isReadOnly }) => {
                   variant="flat"
                   size="micro"
                   disabled={isReadOnly}
-                  className="h-[26px] min-w-[60px]"
+                  className="min-w-[60px]"
                 >
                   <ToggleGroupItem value="revenue" className="flex-1">Rev</ToggleGroupItem>
                   <ToggleGroupItem value="supply" className="flex-1">Sup</ToggleGroupItem>

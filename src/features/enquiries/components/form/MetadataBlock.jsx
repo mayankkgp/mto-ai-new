@@ -40,7 +40,7 @@ const MetadataBlock = ({ isReadOnly }) => {
               variant="flat"
               size="micro"
               className={cn(
-                "w-full h-[26px]",
+                "w-full",
                 errors.type && "border-red-500 divide-red-200"
               )}
             >

@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils.js';
 import { CheckCircle2, Circle } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea.jsx';
 
 const TaskCard = ({ task, isReadOnly, onToggle, onUpdate }) => {
   const [editingField, setEditingField] = React.useState(null);
@@ -64,29 +65,29 @@ const TaskCard = ({ task, isReadOnly, onToggle, onUpdate }) => {
 
           <div className="w-full mt-0.5">
             {editingField === 'remark' ? (
-              <div className="grid w-full mt-1">
-                <textarea 
-                  autoFocus
-                  rows={1}
-                  value={editValue}
-                  onFocus={(e) => { 
-                    e.target.setSelectionRange(e.target.value.length, e.target.value.length); 
-                  }}
-                  onChange={(e) => { 
-                    setEditValue(e.target.value); 
-                  }}
-                  onBlur={() => {
-                    onUpdate({ remark: editValue });
-                    setEditingField(null);
-                  }}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && e.target.blur()}
-                  placeholder="Add remark..."
-                  className="w-full h-full bg-white border border-gray-200 rounded px-1 py-0.5 text-[10px] italic outline-none focus:border-[#1E40AF] focus:ring-0 resize-none block placeholder:not-italic placeholder:text-gray-400 col-start-1 col-end-2 row-start-1 row-end-2 overflow-hidden"
-                />
-                <div className="invisible whitespace-pre-wrap break-words col-start-1 col-end-2 row-start-1 row-end-2 px-1 py-0.5 text-[10px] italic min-h-[1.5em]">
-                  {editValue + ' '}
-                </div>
-              </div>
+              <Textarea
+                autoFocus
+                size="micro"
+                rows={1}
+                value={editValue}
+                onFocus={(e) => {
+                  e.target.setSelectionRange(e.target.value.length, e.target.value.length);
+                }}
+                onChange={(e) => {
+                  setEditValue(e.target.value);
+                }}
+                onBlur={() => {
+                  onUpdate({ remark: editValue });
+                  setEditingField(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.target.blur();
+                  }
+                }}
+                placeholder="Add remark..."
+                className="mt-1 w-full text-[10px] italic bg-white border-gray-200 placeholder:not-italic placeholder:text-gray-400 focus-visible:outline-none focus-visible:border-[#1E40AF] focus-visible:ring-0"
+              />
             ) : task.remark ? (
               <p 
                 onClick={() => !isReadOnly && (setEditingField('remark'), setEditValue(task.remark))}
