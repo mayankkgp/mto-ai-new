@@ -11,10 +11,19 @@ import { Dialog, DialogPortal, DialogOverlay } from "@/components/ui/dialog.jsx"
 import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import { Button } from "@/components/ui/button.jsx";
 import { cn } from "@/lib/utils.js";
-import { useModals } from "@/contexts/ModalContext.jsx";
 
-const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
-  const { closeModal } = useModals();
+/**
+ * Lightbox Component
+ * A generic media viewer for images, PDFs, and files.
+ */
+const Lightbox = ({ 
+  isOpen, 
+  onClose, 
+  onDelete,
+  files = [], 
+  initialIndex = 0, 
+  isReadOnly 
+}) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   if (!files || files.length === 0) return null;
@@ -46,8 +55,15 @@ const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
     document.body.removeChild(link);
   };
 
+  const handleDelete = (e) => {
+    e?.stopPropagation();
+    if (onDelete) {
+      onDelete(activeFile);
+    }
+  };
+
   return (
-    <Dialog open={true} onOpenChange={(open) => !open && closeModal()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPortal>
         <DialogOverlay className="bg-black/80 backdrop-blur-sm z-[100]" />
         <DialogPrimitive.Popup
@@ -72,6 +88,7 @@ const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
                 variant="ghost" 
                 size="icon" 
                 className="text-white hover:bg-red-500/20 hover:text-red-500"
+                onClick={handleDelete}
               >
                 <Trash2 size={18} />
               </Button>
@@ -80,7 +97,7 @@ const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
               variant="ghost" 
               size="icon" 
               className="text-white hover:bg-white/10"
-              onClick={closeModal}
+              onClick={onClose}
             >
               <X size={18} />
             </Button>
@@ -171,4 +188,4 @@ const FileLightbox = ({ files = [], initialIndex = 0, isReadOnly }) => {
   );
 };
 
-export default FileLightbox;
+export default Lightbox;

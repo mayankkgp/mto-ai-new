@@ -6,7 +6,7 @@ import { useModals } from '@/contexts/ModalContext.jsx';
 import DropEnquiryModal from '@/features/enquiries/components/modals/DropEnquiryModal.jsx';
 import ConvertEnquiryModal from '@/features/enquiries/components/modals/ConvertEnquiryModal.jsx';
 import ReopenEnquiryModal from '@/features/enquiries/components/modals/ReopenEnquiryModal.jsx';
-import FileLightbox from '@/features/enquiries/components/form/FileLightbox.jsx';
+import Lightbox from '@/components/ui/lightbox.jsx';
 
 const MainWorkspace = ({ children }) => {
   return (
@@ -82,9 +82,11 @@ export const AppLayout = ({ config, children }) => {
           {...modalProps}
         />
 
-        {activeModal === 'FILE_LIGHTBOX' && (
-          <FileLightbox {...modalProps} onClose={closeModal} />
-        )}
+        <Lightbox 
+          isOpen={activeModal === 'FILE_LIGHTBOX'} 
+          onClose={closeModal} 
+          {...modalProps} 
+        />
       </div>
     </TooltipProvider>
   );

@@ -180,7 +180,12 @@ const AttachmentTray = ({
               file={file} 
               index={index}
               onRemove={removeFile} 
-              onOpenLightbox={(idx) => openModal('FILE_LIGHTBOX', { files: attachments, initialIndex: idx, isReadOnly: isReadOnly })}
+              onOpenLightbox={(idx) => openModal('FILE_LIGHTBOX', { 
+                files: attachments, 
+                initialIndex: idx, 
+                isReadOnly: isReadOnly,
+                onDelete: (file) => onDeleteAction(file.id)
+              })}
               isReadOnly={isReadOnly}
             />
           ))}
