@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { cn } from '@/lib/utils.js';
@@ -17,12 +18,15 @@ export const EnquiriesModule = () => {
   return (
     <div className="flex h-full w-full overflow-hidden">
       {/* Master Pane: Always visible, but width changes if Detail Pane is open */}
-      <div className={cn(
-        "transition-all duration-300 shrink-0",
-        isPaneOpen ? "w-[35%]" : "w-full"
-      )}>
+      <motion.div 
+        layout
+        className={cn(
+          "shrink-0",
+          isPaneOpen ? "w-[35%]" : "w-full"
+        )}
+      >
         <EnquiryMasterPane />
-      </div>
+      </motion.div>
 
       {/* Detail Pane: Animated entry/exit */}
       {isPaneOpen && (
