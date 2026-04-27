@@ -5,7 +5,7 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table.jsx';
-import DataGridRow from './DataGridRow.jsx';
+import DataGridRow from './data-grid-row.jsx';
 import { ArrowUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils.js';
 

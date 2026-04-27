@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { User, Layers } from 'lucide-react';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
-import AdvancedFilterMenu from './AdvancedFilterMenu.jsx';
-import AdvancedFilterTrigger from './AdvancedFilterTrigger.jsx';
+import AdvancedFilterMenu from '@/components/ui/advanced-filter-menu.jsx';
+import AdvancedFilterTrigger from '@/components/ui/advanced-filter-trigger.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import { SearchBar } from '@/components/ui/search-bar.jsx';
 import { Wrapper } from '@/components/ui/wrapper.jsx';

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import MasterHeader from './MasterHeader.jsx';
 import FilterBar from './FilterBar.jsx';
-import DataGrid from './DataGrid.jsx';
+import DataGrid from '@/components/ui/data-grid.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';

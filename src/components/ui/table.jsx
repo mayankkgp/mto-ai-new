@@ -21,7 +21,7 @@ const tableHeadVariants = cva("h-auto px-table-fluid py-0.5 min-[height:801px]:p
     },
   },
 });
-const tableCellVariants = cva("px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-100", {
+const tableCellVariants = cva("px-table-fluid py-0.5 min-[height:801px]:py-1 border-r border-gray-100 text-[11px]", {
   variants: {
     variant: {
       "data-grid": "",
