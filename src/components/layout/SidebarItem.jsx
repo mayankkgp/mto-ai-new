@@ -31,7 +31,6 @@ const SidebarItem = ({ item, isCollapsed, isActive, onClick }) => {
             layoutId="activeIndicator"
             className="absolute left-0 top-0 w-1 h-full bg-[#818CF8]"
             initial={false}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         )}
       </TooltipTrigger>
