@@ -117,8 +117,8 @@ export const getEnquiryGridColumns = (context) => {
     {
       id: 'expectedValue',
       label: 'Exp Value',
-      headerClassName: 'text-right min-w-[120px]',
-      cellClassName: 'text-right font-bold text-gray-700',
+      headerClassName: 'min-w-[120px]',
+      cellClassName: 'font-bold text-gray-700',
       render: (row) => formatCurrency(row.commercials?.expectedValue)
     },
     {

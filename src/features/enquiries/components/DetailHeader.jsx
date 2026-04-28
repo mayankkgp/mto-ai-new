@@ -1,9 +1,10 @@
 import React from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { Badge } from '@/components/ui/badge.jsx';
 import { cn } from '@/lib/utils.js';
 import PaneHeader from '@/components/ui/pane-header.jsx';
+import { Spinner } from '@/components/ui/spinner.jsx';
 
 /**
  * DetailHeader Component
@@ -77,10 +78,10 @@ const DetailHeader = ({
               variant={action.variant || "default"}
               onClick={action.onClick}
               disabled={action.disabled || action.isLoading}
-              className={cn("gap-1.5", action.className)}
+              className={action.className}
             >
               {action.isLoading 
-                ? <Loader2 size={14} className="animate-spin" /> 
+                ? <Spinner size={14} /> 
                 : Icon && <Icon size={14} />
               }
               <span>{action.isLoading ? action.loadingText : action.label}</span>

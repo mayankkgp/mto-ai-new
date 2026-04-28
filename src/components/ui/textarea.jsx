@@ -35,6 +35,23 @@ const Textarea = React.forwardRef(({ className, size = "default", onChange, ...p
     adjustHeight();
   }, [adjustHeight, props.value, props.defaultValue]);
 
+  React.useEffect(() => {
+    const textarea = internalRef.current;
+    if (!textarea) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.requestAnimationFrame(() => {
+        adjustHeight();
+      });
+    });
+
+    resizeObserver.observe(textarea);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [adjustHeight]);
+
   const handleInput = (e) => {
     adjustHeight();
     if (onChange) onChange(e);

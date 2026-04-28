@@ -50,10 +50,7 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
 
       {/* Task Boards */}
       <div className="flex-1 overflow-y-auto no-scrollbar bg-gray-50/30">
-        <div className={cn(
-          "grid h-full",
-          isCreating ? "grid-cols-1 gap-0" : "grid-cols-2 gap-0"
-        )}>
+        <div className="grid h-full grid-cols-1 @[500px]:grid-cols-2 gap-0">
           <TaskBoard 
             title="Revenue Tasks" 
             type="revenue" 

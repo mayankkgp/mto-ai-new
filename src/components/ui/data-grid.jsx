@@ -54,12 +54,14 @@ const DataGrid = ({
                   className={cn(resolvedHeaderClass, "group")}
                 >
                   <div className={cn(
-                    "flex items-center gap-1",
+                    "flex items-center",
                     resolvedHeaderClass?.includes('text-center') && "justify-center",
                     resolvedHeaderClass?.includes('text-right') && "justify-end"
                   )}>
-                    {column.label}
-                    <ArrowUpDown size={12} className="opacity-0 group-hover:opacity-50 transition-opacity" />
+                    <span className="relative inline-flex items-center">
+                      {column.label}
+                      <ArrowUpDown size={12} className="absolute -right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-50 transition-opacity" />
+                    </span>
                   </div>
                 </TableHead>
               );

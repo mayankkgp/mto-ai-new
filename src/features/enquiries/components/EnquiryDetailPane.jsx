@@ -59,7 +59,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
           <motion.div 
             layout 
             animate={{ width: isCreating ? "70%" : "35%" }}
-            className="@container overflow-y-auto no-scrollbar bg-white min-w-[300px] p-1.5 min-[height:801px]:p-3"
+            className="@container overflow-y-auto no-scrollbar bg-white min-w-[300px] p-1.5"
           >
             <ContextColumn 
               isCreating={isCreating} 
@@ -71,7 +71,7 @@ const EnquiryDetailPane = ({ activeEnquiryId, isCreating, onClose }) => {
           <motion.div 
             layout 
             animate={{ width: isCreating ? "30%" : "65%" }}
-            className="flex flex-col bg-gray-50/50 overflow-hidden border-l border-gray-100"
+            className="@container flex flex-col bg-gray-50/50 overflow-hidden border-l border-gray-100"
           >
             <ActionColumn 
               isCreating={isCreating} 
