@@ -5,8 +5,8 @@ import { paneVariants } from '@/components/ui/pane.jsx';
 import { cn } from '@/lib/utils.js';
 import { useEnquiryForm } from '../hooks/useEnquiryForm.js';
 import DetailHeader from './DetailHeader.jsx';
-import ContextColumn from './form/ContextColumn.jsx';
-import ActionColumn from './form/ActionColumn.jsx';
+import ContextColumn from './form/context/ContextColumn.jsx';
+import ActionColumn from './form/tasks/ActionColumn.jsx';
 
 /**
  * EnquiryDetailPane Component

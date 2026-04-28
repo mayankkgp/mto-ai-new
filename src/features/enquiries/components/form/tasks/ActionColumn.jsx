@@ -3,8 +3,8 @@ import { useFormContext } from 'react-hook-form';
 import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import { cn } from '@/lib/utils.js';
 import { CheckCircle2, Truck } from 'lucide-react';
-import TaskComposer from './tasks/TaskComposer.jsx';
-import TaskBoard from './tasks/TaskBoard.jsx';
+import TaskComposer from './TaskComposer.jsx';
+import TaskBoard from './TaskBoard.jsx';
 
 const ActionColumn = ({ isCreating, isReadOnly }) => {
   const { watch, setValue } = useFormContext();
