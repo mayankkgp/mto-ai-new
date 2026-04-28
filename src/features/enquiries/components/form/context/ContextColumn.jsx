@@ -35,7 +35,7 @@ const ContextColumn = ({ isCreating, isReadOnly }) => {
   };
 
   return (
-    <div className="flex flex-col gap-1.5 min-[height:801px]:gap-3">
+    <div className="flex flex-col gap-1.5">
       <CustomerBlock 
         isCreating={isCreating} 
         isReadOnly={isReadOnly} 

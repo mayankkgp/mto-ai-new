@@ -31,11 +31,11 @@ const ActionColumn = ({ isCreating, isReadOnly }) => {
   return (
     <div className="flex flex-col h-full overflow-hidden">
       {formData.status === 'Dropped' && formData.dropReason && (
-        <div className="bg-[#FEF2F2] border-b border-[#FECACA] p-3 min-[height:801px]:p-4 shrink-0">
-          <label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-[#991B1B] uppercase tracking-wider mb-1">
+        <div className="bg-destructive/10 border-b border-destructive/20 p-3 shrink-0">
+          <label className="block text-[10px] min-[resolution:1.5dppx]:text-[9px] font-bold text-destructive uppercase tracking-wider mb-1">
             Drop Reason
           </label>
-          <p className="text-[11px] text-[#7F1D1D] leading-relaxed whitespace-pre-wrap break-words">
+          <p className="text-[11px] text-destructive/90 leading-relaxed whitespace-pre-wrap break-words">
             {formData.dropReason}
           </p>
         </div>

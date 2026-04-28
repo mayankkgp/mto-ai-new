@@ -2,29 +2,18 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useReferenceData } from '@/contexts/ReferenceDataContext.jsx';
 import { Input } from '@/components/ui/input.jsx';
+import { Combobox } from '@/components/ui/combobox.jsx';
 import FormField from '@/components/ui/form-field.jsx';
 import { cn } from '@/lib/utils.js';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const CustomerBlock = ({ isCreating, isReadOnly }) => {
-  const { register, setValue, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
   const { customers } = useReferenceData();
   const [isExpanded, setIsExpanded] = React.useState(isCreating);
-  const [isOpen, setIsOpen] = React.useState(false);
-  const containerRef = React.useRef(null);
 
   const customerName = watch('customer.name') || '';
-
-  React.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
   const handleCustomerNameChange = (value) => {
     setValue('customer.name', value);
@@ -41,12 +30,15 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
     }
   };
 
-  const filteredCustomers = customers.filter(c => 
-    c.name.toLowerCase().includes(customerName.toLowerCase())
-  );
+  const handleCustomerSelect = (customer) => {
+    setValue('customer.name', customer.name);
+    setValue('customer.poc', customer.poc);
+    setValue('customer.city', customer.city);
+    setValue('customer.contact', customer.contact);
+  };
 
   return (
-    <div ref={containerRef}>
+    <div>
       <div className="flex flex-col gap-0.5">
         <div className="relative w-full">
           <FormField 
@@ -63,44 +55,14 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
               </button>
             }
           >
-            <Input 
-              size="micro"
-              className="font-semibold"
-              {...(() => {
-                const { onChange, ...rest } = register('customer.name');
-                return {
-                  ...rest,
-                  onChange: (e) => {
-                    onChange(e);
-                    handleCustomerNameChange(e.target.value);
-                  }
-                };
-              })()}
-              onFocus={() => setIsOpen(true)}
+            <Combobox
+              value={customerName}
+              onChange={handleCustomerNameChange}
+              onSelect={handleCustomerSelect}
+              options={customers}
               disabled={isReadOnly}
             />
           </FormField>
-          
-          {isOpen && filteredCustomers.length > 0 && (
-            <div className="absolute z-50 w-full bg-popover border rounded-md shadow-md max-h-48 overflow-y-auto mt-1">
-              {filteredCustomers.map(customer => (
-                <div
-                  key={customer.id}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => {
-                    setValue('customer.name', customer.name);
-                    setValue('customer.poc', customer.poc);
-                    setValue('customer.city', customer.city);
-                    setValue('customer.contact', customer.contact);
-                    setIsOpen(false);
-                  }}
-                  className="px-2 py-1.5 text-[11px] cursor-pointer hover:bg-accent"
-                >
-                  {customer.name}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
@@ -120,7 +82,8 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
                 <FormField name="customer.poc" label="POC Name" isRequired>
                   <Input 
                     size="micro"
-                    {...register('customer.poc')}
+                    value={watch('customer.poc') || ''}
+                    onChange={(e) => setValue('customer.poc', e.target.value)}
                     disabled={isReadOnly}
                   />
                 </FormField>
@@ -128,14 +91,16 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
               <FormField name="customer.city" label="City" isRequired>
                 <Input 
                   size="micro"
-                  {...register('customer.city')}
+                  value={watch('customer.city') || ''}
+                  onChange={(e) => setValue('customer.city', e.target.value)}
                   disabled={isReadOnly}
                 />
               </FormField>
               <FormField name="customer.contact" label="Contact" isRequired>
                 <Input 
                   size="micro"
-                  {...register('customer.contact')}
+                  value={watch('customer.contact') || ''}
+                  onChange={(e) => setValue('customer.contact', e.target.value)}
                   disabled={isReadOnly}
                 />
               </FormField>
