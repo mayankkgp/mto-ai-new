@@ -14,9 +14,16 @@ const toggleGroupVariants = cva(
         default: "w-fit gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)]",
         flat: "gap-0 rounded-lg border border-gray-200 divide-x divide-gray-200 overflow-hidden bg-white focus-within:border-[#1E40AF] transition-colors",
       },
+      size: {
+        default: "",
+        sm: "",
+        lg: "",
+        micro: "h-[26px]",
+      },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   }
 );
@@ -45,7 +52,7 @@ function ToggleGroup({
       data-spacing={spacing}
       data-orientation={orientation}
       style={{ "--gap": spacing }}
-      className={cn(toggleGroupVariants({ variant }), className)}
+      className={cn(toggleGroupVariants({ variant, size }), className)}
       {...props}
     >
       <ToggleGroupContext.Provider
