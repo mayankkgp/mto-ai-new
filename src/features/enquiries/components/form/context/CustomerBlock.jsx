@@ -39,32 +39,28 @@ const CustomerBlock = ({ isCreating, isReadOnly }) => {
 
   return (
     <div>
-      <div className="flex flex-col gap-0.5">
-        <div className="relative w-full">
-          <FormField 
-            name="customer.name" 
-            label="Customer Name" 
-            isRequired 
-            action={
-              <button 
-                type="button"
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="text-gray-400 hover:text-primary transition-colors pr-1"
-              >
-                {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-              </button>
-            }
+      <FormField 
+        name="customer.name" 
+        label="Customer Name" 
+        isRequired 
+        action={
+          <button 
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-gray-400 hover:text-primary transition-colors pr-1"
           >
-            <Combobox
-              value={customerName}
-              onChange={handleCustomerNameChange}
-              onSelect={handleCustomerSelect}
-              options={customers}
-              disabled={isReadOnly}
-            />
-          </FormField>
-        </div>
-      </div>
+            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+          </button>
+        }
+      >
+        <Combobox
+          value={customerName}
+          onChange={handleCustomerNameChange}
+          onSelect={handleCustomerSelect}
+          options={customers}
+          disabled={isReadOnly}
+        />
+      </FormField>
 
       <AnimatePresence>
         {isExpanded && (
