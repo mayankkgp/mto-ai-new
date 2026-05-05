@@ -7,9 +7,9 @@ import FileThumbnail from './file-thumbnail.jsx';
 
 const AttachmentTray = ({ 
   files = [], 
-  onUploadAction, 
-  onDeleteAction, 
-  uploadProgress, 
+  onUploadAction = () => {}, 
+  onDeleteAction = () => {}, 
+  uploadProgress = 0, 
   isReadOnly 
 }) => {
   const { openModal } = useModals();
@@ -25,7 +25,7 @@ const AttachmentTray = ({
     return true;
   };
 
-  const attachments = files;
+  const attachments = files || [];
 
   const handleFileChange = async (e) => {
     const selectedFiles = Array.from(e.target.files);
