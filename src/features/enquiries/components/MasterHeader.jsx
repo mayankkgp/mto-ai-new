@@ -3,6 +3,7 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
 import { useEnquiryList } from '@/contexts/EnquiryListContext.jsx';
+import { useEnquiryDetail } from '@/contexts/EnquiryDetailContext.jsx';
 import PaneHeader from '@/components/ui/pane-header.jsx';
 import SegmentedControl from '@/components/ui/segmented-control.jsx';
 
@@ -13,11 +14,17 @@ import SegmentedControl from '@/components/ui/segmented-control.jsx';
 const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
   const { enquiries } = useEnquiryList();
   const { startCreating } = useUIState();
+  const { closePane } = useEnquiryDetail();
 
   const counts = {
     Active: enquiries.filter(e => e.status === 'Active').length,
     Converted: enquiries.filter(e => e.status === 'Converted').length,
     Dropped: enquiries.filter(e => e.status === 'Dropped').length,
+  };
+
+  const handleCreateNew = () => {
+    closePane();
+    startCreating();
   };
 
   return (
@@ -33,7 +40,7 @@ const MasterHeader = ({ isCompact, statusTab, setStatusTab }) => {
       />
 
       <Button 
-        onClick={startCreating}
+        onClick={handleCreateNew}
         size={isCompact ? "icon" : "default"}
         className="gap-2"
       >

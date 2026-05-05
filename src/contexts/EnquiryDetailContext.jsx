@@ -88,10 +88,17 @@ export const EnquiryDetailProvider = ({ children }) => {
   const handleFileUpload = async (file) => {
     setUploadProgress(0);
     try {
-      const fileData = await api.uploadAttachment(file, (progress) => {
+      const response = await api.uploadAttachment(file, (progress) => {
         setUploadProgress(progress);
       });
-      fileData.url = URL.createObjectURL(file);
+      
+      const fileData = {
+        ...response,
+        url: URL.createObjectURL(file),
+        name: file.name,
+        type: file.type,
+        size: file.size
+      };
       
       if (activeEnquiryId) {
         setEnquiries(prev => {
