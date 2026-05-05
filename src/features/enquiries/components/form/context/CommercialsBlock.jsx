@@ -50,15 +50,13 @@ const CommercialsBlock = ({ isReadOnly }) => {
         <Label variant="micro">
           Order Value (₹)
         </Label>
-        <div className="relative">
-          <Input 
-            size="micro"
-            className="w-full font-bold tracking-tight"
-            value={displayValue}
-            onChange={handleOrderValueChange}
-            disabled={isReadOnly}
-          />
-        </div>
+        <Input 
+          size="micro"
+          className="w-full font-bold tracking-tight"
+          value={displayValue}
+          onChange={handleOrderValueChange}
+          disabled={isReadOnly}
+        />
       </div>
 
       <div className="flex flex-col gap-0.5">
