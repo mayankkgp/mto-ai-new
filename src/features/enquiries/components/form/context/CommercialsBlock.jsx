@@ -77,13 +77,14 @@ const CommercialsBlock = ({ isReadOnly }) => {
                 setValue('commercials.expectedValue', Math.round(orderValue * (prob / 100)));
               }}
               disabled={isReadOnly}
+              size="micro"
             >
-              <SelectTrigger size="micro" className="w-full tracking-tight">
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={1}>
                 {[10, 30, 50, 70, 90].map(p => (
-                  <SelectItem key={p} value={String(p)} className="text-[11px]">{p}%</SelectItem>
+                  <SelectItem key={p} value={String(p)}>{p}%</SelectItem>
                 ))}
               </SelectContent>
             </Select>

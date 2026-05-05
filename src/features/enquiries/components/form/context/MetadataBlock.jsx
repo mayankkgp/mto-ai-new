@@ -92,13 +92,14 @@ const MetadataBlock = ({ isReadOnly }) => {
               value={field.value} 
               onValueChange={field.onChange}
               disabled={isReadOnly}
+              size="micro"
             >
-              <SelectTrigger size="micro" className="w-full tracking-tight">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select channel" />
               </SelectTrigger>
               <SelectContent position="popper" sideOffset={1}>
                 {channels.map(channel => (
-                  <SelectItem key={channel} value={channel} className="text-[11px]">
+                  <SelectItem key={channel} value={channel}>
                     {channel}
                   </SelectItem>
                 ))}
