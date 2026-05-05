@@ -3,7 +3,7 @@ import { Paperclip } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils.js';
 import { useModals } from '@/contexts/ModalContext.jsx';
-import FileThumbnail from './FileThumbnail.jsx';
+import FileThumbnail from './file-thumbnail.jsx';
 
 const AttachmentTray = ({ 
   files = [], 

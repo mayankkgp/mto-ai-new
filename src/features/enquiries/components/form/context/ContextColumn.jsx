@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import CustomerBlock from './CustomerBlock.jsx';
 import LeadBlock from './LeadBlock.jsx';
 import MetadataBlock from './MetadataBlock.jsx';
-import AttachmentTray from './AttachmentTray.jsx';
+import AttachmentTray from '@/components/ui/attachment-tray.jsx';
 import CommercialsBlock from './CommercialsBlock.jsx';
 import RolesBlock from './RolesBlock.jsx';
 import { useUIState } from '@/contexts/UIStateContext.jsx';
